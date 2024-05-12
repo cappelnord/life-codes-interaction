@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhgams4dad5a2"]
+
+[ext_resource type="Script" path="res://interaction/scripts/websocket_controller.gd" id="1_sem6k"]
+[ext_resource type="Texture2D" uid="uid://dnh80j7shpx7e" path="res://interaction/graphics/qr_placeholder.png" id="2_oyg0d"]
+[ext_resource type="Script" path="res://interaction/scripts/qr_code_slot.gd" id="3_fiq1s"]
+[ext_resource type="Script" path="res://interaction/scripts/cursor_manager.gd" id="4_mivvh"]
+[ext_resource type="Script" path="res://interaction/scripts/mouse_cursor_controller.gd" id="5_c3jn7"]
+
+[node name="InteractionRoot" type="Node2D"]
+
+[node name="Interaction" type="Node" parent="."]
+
+[node name="WebSocketController" type="Node" parent="Interaction"]
+script = ExtResource("1_sem6k")
+
+[node name="QR-a" type="Sprite2D" parent="Interaction/WebSocketController"]
+texture_filter = 1
+position = Vector2(1087.91, 190)
+scale = Vector2(4.86, 4.86)
+texture = ExtResource("2_oyg0d")
+script = ExtResource("3_fiq1s")
+id = "a"
+target_size = 180
+
+[node name="QR-b" type="Sprite2D" parent="Interaction/WebSocketController"]
+texture_filter = 1
+position = Vector2(800, 190)
+scale = Vector2(4.86, 4.86)
+texture = ExtResource("2_oyg0d")
+script = ExtResource("3_fiq1s")
+id = "b"
+target_size = 180
+
+[node name="QR-c" type="Sprite2D" parent="Interaction/WebSocketController"]
+texture_filter = 1
+position = Vector2(1087.91, 496.91)
+scale = Vector2(4.86, 4.86)
+texture = ExtResource("2_oyg0d")
+script = ExtResource("3_fiq1s")
+id = "c"
+target_size = 180
+
+[node name="QR-d" type="Sprite2D" parent="Interaction/WebSocketController"]
+texture_filter = 1
+position = Vector2(800, 496.91)
+scale = Vector2(4.86, 4.86)
+texture = ExtResource("2_oyg0d")
+script = ExtResource("3_fiq1s")
+id = "d"
+target_size = 180
+
+[node name="CursorManager" type="Node" parent="Interaction"]
+script = ExtResource("4_mivvh")
+
+[node name="MouseCursorController" type="Node" parent="Interaction"]
+script = ExtResource("5_c3jn7")
