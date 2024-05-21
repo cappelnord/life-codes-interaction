@@ -22,7 +22,7 @@ func _process(delta):
 	for id in _slots:
 		var slot: CodeBlockSlot = _slots[id]
 		if slot.should_spawn():
-			slot.block = _code_block_node.instantiate()
+			slot.block = _code_block_node.instantiate() as CodeBlock
 			slot.block.slot = slot # the codeblock will take care of reading everything from the slot
 			add_child(slot.block)
 

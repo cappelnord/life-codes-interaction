@@ -10,6 +10,7 @@ var _time_when_reset = -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	z_index = InteractionConfig.Z_INDEX_MOUSE_CURSOR
 	_manager = (get_parent() as CursorManager)
 
 

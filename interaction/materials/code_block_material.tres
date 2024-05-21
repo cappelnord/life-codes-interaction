@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dbx4ce7p4f04u"]
+
+[ext_resource type="Shader" path="res://interaction/materials/code_block_material.gdshader" id="1_wl4un"]
+
+[resource]
+shader = ExtResource("1_wl4un")
+shader_parameter/hsv = Vector3(1, 1, 1)

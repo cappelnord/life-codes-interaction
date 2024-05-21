@@ -8,19 +8,19 @@ func _init(path: String):
 func load(manager: CodeBlockManager):
 	var universal_family = manager.add_family(CodeBlockFamily.new(
 		&"universal",
-		Color.WHITE,
+		Color.DARK_GRAY,
 		[&"*"]
 	))
 	
 	var clock_family = manager.add_family(CodeBlockFamily.new(
 		&"clock",
-		Color.AQUAMARINE,
+		Color.DARK_SLATE_GRAY,
 		[&"clock"]
 	))
 
 	var bowl_family = manager.add_family(CodeBlockFamily.new(
 		&"bowl",
-		Color.CORAL,
+		Color.DARK_ORANGE,
 		[&"bowl"]
 	))
 	
