@@ -1,6 +1,7 @@
 shader_type canvas_item;
 
 uniform vec3 hsv;
+uniform vec3 rgb_add;
 
 const float THREESIXTY_DEG = 1.0;
 const float SIXTY_DEG = 0.166666667;
@@ -74,5 +75,5 @@ vec3 hsv2rgb(vec3 inc) {
 void fragment() {
 	vec4 c = texture(TEXTURE, UV);
 	vec3 cHSV = rgb2hsv(c.rgb);
-	COLOR = vec4(hsv2rgb(vec3(hsv.x, cHSV.y * hsv.y, cHSV.z * hsv.z)), c.a);
+	COLOR = vec4(hsv2rgb(vec3(hsv.x, cHSV.y * hsv.y, cHSV.z * hsv.z)) + rgb_add, c.a);
 }

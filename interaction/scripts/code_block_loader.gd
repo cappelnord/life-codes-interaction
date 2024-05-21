@@ -32,11 +32,27 @@ func load(manager: CodeBlockManager):
 		[]
 	))
 	
-	var play_spec = manager.add_spec(CodeBlockSpec.new(
+	var clock_play_spec = manager.add_spec(CodeBlockSpec.new(
 		&"play",
 		"play",
 		CodeBlock.Type.ACTION,
 		clock_family,
+		[]
+	))
+	
+	var bowl_spec = manager.add_spec(CodeBlockSpec.new(
+		&"bowl",
+		"bowl",
+		CodeBlock.Type.SUBJECT,
+		bowl_family,
+		[]
+	))
+	
+	var bowl_play_spec = manager.add_spec(CodeBlockSpec.new(
+		&"play",
+		"play",
+		CodeBlock.Type.ACTION,
+		bowl_family,
 		[]
 	))
 	
@@ -62,8 +78,18 @@ func load(manager: CodeBlockManager):
 	))
 	
 	manager.add_slot(CodeBlockSlot.new(
-		play_spec,
+		clock_play_spec,
 		Vector2(200, 200)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		bowl_spec,
+		Vector2(600, 100)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		bowl_play_spec,
+		Vector2(700, 200)
 	))
 	
 	manager.add_slot(CodeBlockSlot.new(

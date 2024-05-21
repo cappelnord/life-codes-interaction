@@ -18,12 +18,14 @@ func init_with_block(block: CodeBlock):
 
 func _update_material():
 	var rgb = block.slot.spec.family.color
-	var _hsv_mod = Vector3(1, 1, 1)
+	var hsv_mod = Vector3(1, 1, 1)
+	var rgb_add = Vector3(0, 0, 0)
 	
 	if _hover:
-		_hsv_mod = Vector3(1, 1, 1.15)
+		rgb_add = Vector3(0.1, 0.1, 0.1)
 	
-	background_material.set_shader_parameter("hsv", Vector3(rgb.h, rgb.s, rgb.v) * _hsv_mod)
+	background_material.set_shader_parameter("hsv", Vector3(rgb.h, rgb.s, rgb.v) * hsv_mod)
+	background_material.set_shader_parameter("rgb_add", rgb_add)
 		
 
 # Called every frame. 'delta' is the elapsed time sinc e the previous frame.

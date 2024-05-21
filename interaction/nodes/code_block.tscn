@@ -10,6 +10,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kkdvp"]
 shader = ExtResource("3_wfl8u")
 shader_parameter/hsv = Vector3(0.8, 1, 1)
+shader_parameter/rgb_add = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eu6dc"]
 
