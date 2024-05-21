@@ -15,11 +15,16 @@ var code_string
 var text_box_size: Vector2
 
 var _visual: CodeBlockVisual
+var _collider: CodeBlockCollider
+var _active_cursor: Cursor
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	z_index = InteractionConfig.Z_INDEX_CODE_BLOCK
 	position = slot.start_position
+	
+	_collider = ($"CodeBlockCollider"  as CodeBlockCollider)
+	_collider.block = self
 	
 	_visual = ($"CodeBlockVisual" as CodeBlockVisual)
 	_visual.init_with_block(self)
@@ -52,8 +57,11 @@ func _update_strings():
 	
 	_visual.set_size(text_box_size)
 	
-	# we apply it here to CodeBlockVisual which will deal with all the sizing of visual elements
-	# TODO: scale the collider
+	var collision_shape = RectangleShape2D.new()
+	collision_shape.size = text_box_size
+	($"CodeBlockCollider/CollisionShape2D" as CollisionShape2D).set_shape(collision_shape)
+	
+	_collider.position = text_box_size * 0.5
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -62,3 +70,17 @@ func _process(delta):
 
 func move(new_position: Vector2):
 	position = new_position
+
+
+func on_cursor_entered(cursor: Cursor):
+	if cursor == _active_cursor: return true
+	if _active_cursor == null:
+		_active_cursor = cursor
+		_visual.begin_hover()
+		return true
+	return false
+
+func on_cursor_exited(cursor: Cursor):
+	if _active_cursor == cursor:
+		_active_cursor = null
+		_visual.end_hover()

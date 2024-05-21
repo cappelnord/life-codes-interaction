@@ -20,6 +20,7 @@ func spawn(id: String, position: Vector2):
 
 func despawn(id: String):
 	if cursors.has(id):
+		cursors[id].cleanup()
 		cursors[id].queue_free()
 		cursors.erase(id)
 
