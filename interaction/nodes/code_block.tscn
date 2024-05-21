@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6km55bfwr8m1"]
+
+[ext_resource type="Script" path="res://interaction/scripts/code_block.gd" id="1_i2y0i"]
+[ext_resource type="Texture2D" uid="uid://dv31sb6e87klr" path="res://interaction/graphics/red.png" id="2_aem6l"]
+
+[node name="CodeBlock" type="Node2D"]
+script = ExtResource("1_i2y0i")
+
+[node name="CodeBlockVisual" type="Node2D" parent="."]
+
+[node name="CodeBlockBackground" type="Sprite2D" parent="CodeBlockVisual"]
+texture = ExtResource("2_aem6l")
+centered = false

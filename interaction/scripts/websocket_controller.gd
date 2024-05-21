@@ -73,7 +73,7 @@ func _process_slots():
 
 func _refresh_current_slot():
 	_slots[_current_slot_index].pending = true
-	_socket.send_text(JSON.stringify({"cmd": "request", "slot": _slots[_current_slot_index].id}))
+	_socket.send_text(JSON.stringify({"cmd": "request", "slot": _slots[_current_slot_index].id, "scheme": _slots[_current_slot_index].scheme}))
 
 
 func _attempt_connect_websocket():

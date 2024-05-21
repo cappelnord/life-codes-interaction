@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dhgams4dad5a2"]
+[gd_scene load_steps=7 format=3 uid="uid://dhgams4dad5a2"]
 
 [ext_resource type="Script" path="res://interaction/scripts/websocket_controller.gd" id="1_sem6k"]
 [ext_resource type="Texture2D" uid="uid://dnh80j7shpx7e" path="res://interaction/graphics/qr_placeholder.png" id="2_oyg0d"]
 [ext_resource type="Script" path="res://interaction/scripts/qr_code_slot.gd" id="3_fiq1s"]
 [ext_resource type="Script" path="res://interaction/scripts/cursor_manager.gd" id="4_mivvh"]
 [ext_resource type="Script" path="res://interaction/scripts/mouse_cursor_controller.gd" id="5_c3jn7"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block_manager.gd" id="6_deg0t"]
 
 [node name="InteractionRoot" type="Node2D"]
 
@@ -49,8 +50,20 @@ script = ExtResource("3_fiq1s")
 id = "d"
 target_size = 180
 
+[node name="QR-d2" type="Sprite2D" parent="Interaction/WebSocketController"]
+texture_filter = 1
+position = Vector2(477, 325)
+scale = Vector2(4.86, 4.86)
+texture = ExtResource("2_oyg0d")
+script = ExtResource("3_fiq1s")
+id = "e"
+target_size = 180
+
 [node name="CursorManager" type="Node" parent="Interaction"]
 script = ExtResource("4_mivvh")
 
 [node name="MouseCursorController" type="Node" parent="Interaction"]
 script = ExtResource("5_c3jn7")
+
+[node name="CodeBlockManager" type="Node2D" parent="Interaction"]
+script = ExtResource("6_deg0t")

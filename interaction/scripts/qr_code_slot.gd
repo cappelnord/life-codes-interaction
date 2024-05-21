@@ -2,6 +2,7 @@ extends Sprite2D
 class_name QRCodeSlot
 
 @export var id: String
+@export var scheme: String = "default"
 @export var target_size: int = 120
 @export var time_until_refresh: float = 15
 

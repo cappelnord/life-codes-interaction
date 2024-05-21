@@ -19,6 +19,9 @@ func _process(delta):
 		texture = _manager.cursor_image_base
 		_time_when_reset = -1 
 
+func move(new_position: Vector2):
+	position = new_position
+
 func move_delta(delta: Vector2):
 	var new_position : Vector2 = position + delta
 	

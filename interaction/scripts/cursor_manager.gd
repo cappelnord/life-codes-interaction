@@ -23,6 +23,10 @@ func despawn(id: String):
 		cursors[id].queue_free()
 		cursors.erase(id)
 
+func move(id: String, new_position: Vector2):
+	if cursors.has(id):
+		cursors[id].move(new_position)	
+
 func move_delta(id: String, delta: Vector2):
 	if cursors.has(id):
 		cursors[id].move_delta(delta)
