@@ -101,7 +101,8 @@ func load(manager: CodeBlockManager):
 	manager.add_slot(CodeBlockSlot.new(
 		faster_spec,
 		Vector2(400, 400),
-		[CodeBlockArgument.new(faster_spec.get_parameter(&"speed"), CodeBlockArgument.Type.CONSTANT, 4)]
+		[CodeBlockArgument.new(faster_spec.get_parameter(&"speed"), CodeBlockArgument.Type.CONSTANT, 4)],
+		clock_family
 	))
 	
 	manager.add_slot(CodeBlockSlot.new(

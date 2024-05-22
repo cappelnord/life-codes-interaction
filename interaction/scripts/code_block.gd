@@ -13,6 +13,7 @@ var arguments = {}
 var display_string
 var code_string
 var text_box_size: Vector2
+var grabbed = false
 
 var _visual: CodeBlockVisual
 var _collider: CodeBlockCollider
@@ -70,17 +71,39 @@ func _process(delta):
 
 func move(new_position: Vector2):
 	position = new_position
+	
+func move_delta(delta: Vector2):
+	position = position + delta	
 
-
-func on_cursor_entered(cursor: Cursor):
-	if cursor == _active_cursor: return true
+func attempt_hover(cursor: Cursor):
 	if _active_cursor == null:
 		_active_cursor = cursor
-		_visual.begin_hover()
+		_visual.z_index = 10
+		_visual.update_material()
+		move_to_front()
 		return true
 	return false
 
-func on_cursor_exited(cursor: Cursor):
+func release_hover(cursor: Cursor):
 	if _active_cursor == cursor:
+		_visual.z_index = 0
 		_active_cursor = null
-		_visual.end_hover()
+		_visual.update_material()
+
+# TODO: do more thorough checks  if the block can actually be grabbed
+func attempt_grab(cursor: Cursor):
+	if grabbed: return false
+	if cursor != _active_cursor:
+		return false
+	else:
+		grabbed = true
+		_visual.update_material()
+		move_to_front()
+		return true
+	
+func release_grab(cursor: Cursor):
+	grabbed = false
+	_visual.update_material()
+
+func is_hovered():
+	return _active_cursor != null

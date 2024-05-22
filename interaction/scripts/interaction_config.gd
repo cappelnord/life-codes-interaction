@@ -10,3 +10,6 @@ const Z_INDEX_ACTIVE_CODE_BLOCK: int = 2100
 const Z_INDEX_QR_CODE: int = 2300
 const Z_INDEX_GRABBED_CODE_BLOCK: int = 2400
 const Z_INDEX_MOUSE_CURSOR: int = 2500
+
+# constantly these are not set via script and only for documentation
+const COLLISION_LAYER_BLOCK: int = 25
