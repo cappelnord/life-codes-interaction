@@ -12,7 +12,7 @@ func _ready():
 
 func init_with_block(block: CodeBlock):
 	self.block = block
-	var background = ($"CodeBlockBackground" as Sprite2D)
+	var background = ($CodeBlockBackground as Sprite2D)
 	background_material = background.material.duplicate()
 	background.material = background_material
 	update_material_and_zindex()
@@ -24,8 +24,6 @@ func update_position_offset():
 		position = _snap_position - block.position
 
 func update_material_and_zindex():
-	
-	
 	var rgb: Color 
 	if block.group_candidate != null: 
 		rgb = block.group_candidate.family.color
@@ -34,8 +32,8 @@ func update_material_and_zindex():
 	else:
 		rgb = block.slot.family.color
 		
-	var hsv_mod = Vector3(1, 1, 1)
-	var rgb_add = Vector3(0, 0, 0)
+	var hsv_mod := Vector3(1, 1, 1)
+	var rgb_add := Vector3(0, 0, 0)
 	
 	if block.is_hovered():
 		rgb_add = Vector3(0.1, 0.1, 0.1)
@@ -54,13 +52,14 @@ func _process(delta):
 	pass
 
 func set_size(size: Vector2):
-	($"CodeBlockBackground" as Sprite2D).scale = size
-	($"CodeBlockText" as Label).position = Vector2(InteractionConfig.CODE_BLOCK_PADDING_X, InteractionConfig.CODE_BLOCK_PADDING_Y)
+	($CodeBlockBackground as Sprite2D).scale = size
+	($CodeBlockText as Label).position = Vector2(InteractionConfig.CODE_BLOCK_PADDING_X, InteractionConfig.CODE_BLOCK_PADDING_Y)
 	
-	var oversize = Vector2(1.5, 1.25) * 1.05
-	var shadow_size = size * oversize
-	($"CodeBlockShadow" as Sprite2D).position = (size - shadow_size) * 0.5
-	($"CodeBlockShadow" as Sprite2D).scale = shadow_size / Vector2(128, 64)
+	var oversize := Vector2(1.5, 1.25) * 1.05
+	var shadow_size := size * oversize
+	
+	($CodeBlockShadow as Sprite2D).position = (size - shadow_size) * 0.5
+	($CodeBlockShadow as Sprite2D).scale = shadow_size / Vector2(128, 64)
 
 func snap(position: Vector2):
 	_snap_position = position

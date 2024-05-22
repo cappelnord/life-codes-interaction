@@ -7,13 +7,12 @@ var _specs: Dictionary = {}
 var _slots: Dictionary = {}
 var _families: Dictionary = {}
 
-
+@onready var _osc: OSCManager = $"../OSCManager"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# load all specs
 	CodeBlockLoader.new("..").load(self)
-
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -41,8 +40,18 @@ func get_family(id: StringName):
 	return _families[id]
 
 func add_slot(slot: CodeBlockSlot):
+	slot.manager = self
 	_slots[slot.id] = slot
 	return slot
 	
 func get_slot(id: StringName):
 	return _slots[id]
+
+func compile_code_string(group: CodeBlockGroup)->String:
+	var ret: String = group.head.slot.id + ":" + group.head.code_string
+	if group.action != null:
+		ret = ret + ";" + group.action.code_string
+	for modifer in group.modifiers:
+		ret = ret + ";" + group.action.code_string
+	print("Compiled code string: " + ret)
+	return ret

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://va4wuo30obpa"]
+
+[ext_resource type="PackedScene" uid="uid://dhgams4dad5a2" path="res://interaction/interaction_root.tscn" id="1_hd1ur"]
+
+[node name="InteractionTestBench" type="Node2D"]
+
+[node name="InteractionRoot" parent="." instance=ExtResource("1_hd1ur")]

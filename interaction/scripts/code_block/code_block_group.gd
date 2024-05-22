@@ -4,7 +4,7 @@ class_name CodeBlockGroup
 var family: CodeBlockFamily
 var head: CodeBlock
 var action: CodeBlock
-var modifiers: Array = []
+var modifiers: Array[CodeBlock] = []
 var _add_candidate: CodeBlock
 var _candidate_target: CodeBlock
 
@@ -28,7 +28,7 @@ func set_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	
 	block.group_candidate = self
 	
-	var snap_position = head.position
+	var snap_position := head.position
 	
 	for member in all_members_candidate():
 		member.snap(snap_position)
@@ -49,17 +49,17 @@ func release_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	
 	print(all_members_candidate())
 
-func all_members()->Array:
-	var ret = []
+func all_members()->Array[CodeBlock]:
+	var ret: Array[CodeBlock] = []
 	ret.append(head)
 	if action != null: ret.append(action)
 	ret.append_array(modifiers)
 	return ret
 
-func all_members_candidate()->Array:
+func all_members_candidate()->Array[CodeBlock]:
 	if _add_candidate == null: return all_members()
 	
-	var ret = []
+	var ret: Array[CodeBlock] = []
 	ret.append(head)
 	if _add_candidate.slot.spec.action_role():
 		ret.append(_add_candidate)
@@ -70,8 +70,8 @@ func all_members_candidate()->Array:
 	
 	return ret
 	
-func _updated_modifiers_array(block: CodeBlock, target_block: CodeBlock)->Array:
-	var ret = []
+func _updated_modifiers_array(block: CodeBlock, target_block: CodeBlock)->Array[CodeBlock]:
+	var ret: Array[CodeBlock] = []
 	if target_block.slot.spec.action_role(): ret.append(block)
 	for old_block in modifiers:
 		ret.append(old_block)

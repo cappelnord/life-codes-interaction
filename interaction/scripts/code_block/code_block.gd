@@ -21,10 +21,10 @@ var group_candidate: CodeBlockGroup
 
 var _active_cursor: Cursor
 
-@onready var _visual: CodeBlockVisual = $"CodeBlockVisual"
-@onready var _collider: CodeBlockCollider = $"CodeBlockCollider"
-@onready var _top_connection_collider: CodeBlockConnectionCollider = $"TopConnectionCollider"
-@onready var _bottom_connection_collider: CodeBlockConnectionCollider = $"BottomConnectionCollider"
+@onready var _visual: CodeBlockVisual = $CodeBlockVisual
+@onready var _collider: CodeBlockCollider = $CodeBlockCollider
+@onready var _top_connection_collider: CodeBlockConnectionCollider = $TopConnectionCollider
+@onready var _bottom_connection_collider: CodeBlockConnectionCollider = $BottomConnectionCollider
 @onready var _label: Label = $"CodeBlockVisual/CodeBlockText"
 
 # Called when the node enters the scene tree for the first time.
@@ -46,30 +46,13 @@ func _ready():
 		arguments[key] = slot.arguments[key].duplicate()
 	
 	_update_strings()
+	_update_sizes()
 	
 	if slot.spec.head_role():
 		head_of_group = true
 		group = CodeBlockGroup.new(self)
 
-func _update_strings():
-	# build the display_string and code_string and set it
-	display_string = slot.display_string
-	code_string = slot.spec.id
-	
-	# we should iterate over parameters and then see if we have one set; otherwise use default parameters
-	# for now we only havew constant parameters/arguments
-	for parameter in slot.spec.parameters:
-		var value = parameter.default
-		if parameter.id in arguments:
-			value = arguments[parameter.id].value
-		display_string = display_string + " " + str(value)
-		code_string = code_string + "," + str(value)
-	
-	_label.add_theme_font_size_override("font_size", InteractionConfig.CODE_BLOCK_FONT_SIZE)
-	_label.text = display_string
-	text_box_size = _label.get_theme_font("font").get_string_size(display_string, HORIZONTAL_ALIGNMENT_LEFT, -1,  InteractionConfig.CODE_BLOCK_FONT_SIZE)
-	text_box_size = text_box_size + Vector2(2 * InteractionConfig.CODE_BLOCK_PADDING_X, 2 * InteractionConfig.CODE_BLOCK_PADDING_Y)
-	
+func _update_sizes():
 	_visual.set_size(text_box_size)
 	
 	var collision_shape = RectangleShape2D.new()
@@ -86,7 +69,27 @@ func _update_strings():
 	var collision_shape_bottom = RectangleShape2D.new()
 	collision_shape_bottom.size = connection_collider_size
 	_bottom_connection_collider.collision_shape.set_shape(collision_shape_bottom)
-	_bottom_connection_collider.position = connection_collider_size * 0.5 + Vector2(0, text_box_size.y * 0.6666666)
+	_bottom_connection_collider.position = connection_collider_size * 0.5 + Vector2(0, text_box_size.y * 0.6666666)	
+
+func _update_strings():
+	# build the display_string and code_string and set it
+	display_string = slot.display_string
+	code_string = slot.spec.id
+	
+	# we should iterate over parameters and then see if we have one set; otherwise use default parameters
+	# for now we only havew constant parameters/arguments
+	for parameter in slot.spec.parameters:
+		var value = parameter.default
+		if parameter.id in arguments:
+			value = arguments[parameter.id].value
+		display_string = display_string + " " + str(value)
+		code_string = code_string + "," + parameter.type_tag() + str(value)
+	
+		
+	_label.add_theme_font_size_override("font_size", InteractionConfig.CODE_BLOCK_FONT_SIZE)
+	_label.text = display_string
+	text_box_size = _label.get_theme_font("font").get_string_size(display_string, HORIZONTAL_ALIGNMENT_LEFT, -1,  InteractionConfig.CODE_BLOCK_FONT_SIZE)
+	text_box_size = text_box_size + Vector2(2 * InteractionConfig.CODE_BLOCK_PADDING_X, 2 * InteractionConfig.CODE_BLOCK_PADDING_Y)
 	
 
 
@@ -138,11 +141,11 @@ func is_hovered():
 
 func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 	if collider.block == self: return false
-	print("Check for Connection: " + display_string + "->" + collider.block.display_string)
+	print("Attempt to connect: " + display_string + "->" + collider.block.display_string)
 	if collider.block.can_connect(self):
 		collider.block.group.set_add_candidate(self, collider.block)
 	else:
-		print("Cannot connect!")
+		pass
 	
 func _on_connection_area_exited(collider: CodeBlockConnectionCollider):
 	if collider.block == self: return
