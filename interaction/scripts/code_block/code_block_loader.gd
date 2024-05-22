@@ -3,7 +3,7 @@ class_name CodeBlockLoader
 
 func _init(path: String):
 	pass
-	# initialize stuff
+	# initialize loader and get ready to feed the CodeBlockManager
 	
 func load(manager: CodeBlockManager):
 	var universal_family = manager.add_family(CodeBlockFamily.new(

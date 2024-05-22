@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://b6km55bfwr8m1"]
+[gd_scene load_steps=13 format=3 uid="uid://b6km55bfwr8m1"]
 
-[ext_resource type="Script" path="res://interaction/scripts/code_block.gd" id="1_i2y0i"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block.gd" id="1_toyex"]
 [ext_resource type="Texture2D" uid="uid://dv31sb6e87klr" path="res://interaction/graphics/red.png" id="2_aem6l"]
-[ext_resource type="Script" path="res://interaction/scripts/code_block_visual.gd" id="2_jakhy"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_visual.gd" id="2_l73pt"]
+[ext_resource type="Texture2D" uid="uid://cugvsinxuyvb8" path="res://interaction/graphics/shadow_block.png" id="3_63k1k"]
 [ext_resource type="FontFile" uid="uid://blc6yv0xumbp4" path="res://interaction/fonts/SourceCodePro-Medium.ttf" id="3_q0m4f"]
 [ext_resource type="Shader" path="res://interaction/materials/code_block_material.gdshader" id="3_wfl8u"]
-[ext_resource type="Script" path="res://interaction/scripts/code_block_collider.gd" id="6_0xoyg"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_collider.gd" id="7_8y5jo"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_connection_collider.gd" id="8_omrar"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kkdvp"]
 shader = ExtResource("3_wfl8u")
@@ -14,11 +16,20 @@ shader_parameter/rgb_add = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eu6dc"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hd8g0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wwsww"]
+
 [node name="CodeBlock" type="Node2D"]
-script = ExtResource("1_i2y0i")
+script = ExtResource("1_toyex")
 
 [node name="CodeBlockVisual" type="Node2D" parent="."]
-script = ExtResource("2_jakhy")
+script = ExtResource("2_l73pt")
+
+[node name="CodeBlockShadow" type="Sprite2D" parent="CodeBlockVisual"]
+z_index = -50
+texture = ExtResource("3_63k1k")
+centered = false
 
 [node name="CodeBlockBackground" type="Sprite2D" parent="CodeBlockVisual"]
 material = SubResource("ShaderMaterial_kkdvp")
@@ -38,7 +49,26 @@ text = "This is a test, OK?"
 collision_layer = 16777216
 collision_mask = 0
 input_pickable = false
-script = ExtResource("6_0xoyg")
+script = ExtResource("7_8y5jo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CodeBlockCollider"]
 shape = SubResource("RectangleShape2D_eu6dc")
+
+[node name="TopConnectionCollider" type="Area2D" parent="."]
+collision_layer = 33554432
+collision_mask = 0
+input_pickable = false
+script = ExtResource("8_omrar")
+top = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopConnectionCollider"]
+shape = SubResource("RectangleShape2D_hd8g0")
+
+[node name="BottomConnectionCollider" type="Area2D" parent="."]
+collision_layer = 67108864
+collision_mask = 0
+input_pickable = false
+script = ExtResource("8_omrar")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomConnectionCollider"]
+shape = SubResource("RectangleShape2D_wwsww")

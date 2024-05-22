@@ -18,3 +18,12 @@ func get_parameter(id: StringName):
 	for parameter in parameters:
 		if parameter.id == id: return parameter
 	return null
+
+func head_role() -> bool:
+	return type == CodeBlock.Type.SUBJECT
+
+func action_role() -> bool:
+	return type == CodeBlock.Type.ACTION
+	
+func modifier_role() -> bool:
+	return type == CodeBlock.Type.MODIFIER

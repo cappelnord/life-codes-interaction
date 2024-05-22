@@ -50,6 +50,7 @@ func release():
 	_pressed = false
 	_release_grab()
 	_update_cursor_texture()
+	if _hover_block == null: _attempt_rehover()
 
 func _update_cursor_texture():
 	if _grab_block != null:
@@ -82,6 +83,7 @@ func _release_grab():
 	_grab_block = null
 
 func _on_area_entered(collider: CodeBlockCollider):
+	if _pressed: return false
 	if _hover_block != null: return false
 	var success = collider.block.attempt_hover(self)
 	if success:
