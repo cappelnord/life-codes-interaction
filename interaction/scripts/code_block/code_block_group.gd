@@ -5,12 +5,49 @@ var family: CodeBlockFamily
 var head: CodeBlock
 var action: CodeBlock
 var modifiers: Array[CodeBlock] = []
+var active_block: CodeBlock
 var _add_candidate: CodeBlock
 var _candidate_target: CodeBlock
 
 func _init(head: CodeBlock):
 	self.head = head
 	self.family = head.slot.family
+
+func comit(new_block: CodeBlock)->bool:
+	var success := false
+	
+	print(_add_candidate)
+	print(_candidate_target)
+	
+	if new_block == _add_candidate:
+		if _candidate_target == head:
+			if action != null:
+				action.resign()
+			action = _add_candidate
+
+		else:
+			modifiers = _updated_modifiers_array(_add_candidate, _candidate_target)
+		
+		_add_candidate = null
+		_candidate_target = null
+		
+		head.slot.manager.on_group_comitted.call_deferred(self)
+		
+		success = true
+	update_positions()
+
+	return success
+
+func update_visual():
+	for block in all_members():
+		block.update_visual()
+
+func update_positions():
+	var pos := head.position
+	for member in all_members():
+		member.unsnap()
+		member.move(pos, false)
+		pos = pos + Vector2(0, member.text_box_size.y)
 
 func can_connect(new_block: CodeBlock, target_block: CodeBlock):
 	# these must be dealt with in some way but not now
@@ -37,6 +74,8 @@ func set_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	print(all_members_candidate())
 
 func release_add_candidate(block: CodeBlock, target_block: CodeBlock):
+	if _add_candidate == null: return
+	
 	if(block == _add_candidate):
 		_add_candidate = null
 		_candidate_target = null
@@ -78,3 +117,10 @@ func _updated_modifiers_array(block: CodeBlock, target_block: CodeBlock)->Array[
 		if(old_block == target_block):
 			ret.append(block)
 	return ret
+
+func block_is_glued(block: CodeBlock)->bool:
+	return block == head or block == action
+
+func active_block_is_glued():
+	if active_block == null: return false
+	return block_is_glued(active_block)

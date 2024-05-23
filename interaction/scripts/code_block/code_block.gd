@@ -97,26 +97,42 @@ func _update_strings():
 func _process(delta):
 	pass
 
-func move(new_position: Vector2):
+func move(new_position: Vector2, propage_to_group: bool=true):
 	position = new_position
 	if _visual.snapped: _visual.update_position_offset()
+	if group != null and self == group.head and propage_to_group:
+		group.update_positions()
 	
 func move_delta(delta: Vector2):
-	move(position + delta)
+	if group != null and group.active_block_is_glued() and group.head != self:
+		group.head.move(group.head.position + delta)
+	else:
+		move(position + delta)
 	
-func attempt_hover(cursor: Cursor):
+func attempt_hover(cursor: Cursor):	
+	if group != null and group.active_block != null: return false
+	
 	if _active_cursor == null:
 		_active_cursor = cursor
-		_visual.update_material_and_zindex()
-		_visual.z_index = 10
+		
+		if group != null:
+			group.active_block = self
+			
+		_update_visual_or_group_visual()
+			
 		return true
+		
 	return false
 
 func release_hover(cursor: Cursor):
 	if _active_cursor == cursor:
 		_visual.z_index = 0
 		_active_cursor = null
-		_visual.update_material_and_zindex()
+		
+		if group != null:
+			group.active_block = null # TODO: Check if this can create issues
+		
+		_update_visual_or_group_visual()
 
 # TODO: do more thorough checks  if the block can actually be grabbed
 func attempt_grab(cursor: Cursor):
@@ -125,18 +141,33 @@ func attempt_grab(cursor: Cursor):
 		return false
 	else:
 		grabbed = true
-		_visual.update_material_and_zindex()
+		
+		_update_visual_or_group_visual()
+			
 		_collider.set_collision_mask_value(InteractionConfig.COLLISION_LAYER_BOTTOM_CONNECTION, true)
 		move_to_front()
 		return true
 	
 func release_grab(cursor: Cursor):
+	# if we release while we are a candidate then we comit
+	if group_candidate != null:
+		var success: bool = group_candidate.comit(self)
+	
+		if success:
+			# TODO: make sure that we leave the old group
+			group = group_candidate
+			group_candidate = null
+		
 	grabbed = false
 	_collider.set_collision_mask_value(InteractionConfig.COLLISION_LAYER_BOTTOM_CONNECTION, false)
-	_visual.update_material_and_zindex()
+	
+	_update_visual_or_group_visual()
 
 func is_hovered():
-	return _active_cursor != null
+	var group_hover = false
+	if group != null:
+		group_hover = group.active_block_is_glued()
+	return _active_cursor != null or group_hover
 
 
 func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
@@ -175,3 +206,15 @@ func unsnap():
 
 func _to_string():
 	return "<" + slot.id + "/" + display_string + ">"
+
+func resign():
+	pass
+
+func update_visual():
+	_visual.update_material_and_zindex()
+
+func _update_visual_or_group_visual():
+	if group == null:
+		_visual.update_material_and_zindex()
+	else:
+		group.update_visual()

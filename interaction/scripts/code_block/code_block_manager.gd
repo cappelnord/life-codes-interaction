@@ -47,11 +47,14 @@ func add_slot(slot: CodeBlockSlot):
 func get_slot(id: StringName):
 	return _slots[id]
 
-func compile_code_string(group: CodeBlockGroup)->String:
+func on_group_comitted(group: CodeBlockGroup):
+	_compile_code_string(group)
+
+func _compile_code_string(group: CodeBlockGroup)->String:
 	var ret: String = group.head.slot.id + ":" + group.head.code_string
 	if group.action != null:
 		ret = ret + ";" + group.action.code_string
 	for modifer in group.modifiers:
-		ret = ret + ";" + group.action.code_string
+		ret = ret + ";" + modifer.code_string
 	print("Compiled code string: " + ret)
 	return ret

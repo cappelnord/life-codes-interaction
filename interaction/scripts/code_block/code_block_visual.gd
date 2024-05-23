@@ -37,7 +37,7 @@ func update_material_and_zindex():
 	
 	if block.is_hovered():
 		rgb_add = Vector3(0.1, 0.1, 0.1)
-	if block.grabbed or snapped:
+	if block.grabbed or snapped or (block.group != null and block.group.active_block != null and block.group.active_block.grabbed):
 		rgb_add = Vector3(0.15, 0.15, 0.15)
 		z_index = InteractionConfig.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK
 	else:
