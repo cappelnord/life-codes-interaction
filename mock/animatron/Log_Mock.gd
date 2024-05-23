@@ -6,7 +6,7 @@ static func error(string):
 	print(string)
 
 static func verbose(string):
-	print(string)
+	pass
 
 static func info(string):
 	print(string)

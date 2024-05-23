@@ -48,13 +48,13 @@ func get_slot(id: StringName):
 	return _slots[id]
 
 func on_group_comitted(group: CodeBlockGroup):
-	_compile_code_string(group)
+	_osc.send_code_command(group.head.slot.id, _compile_code_string(group))
 
 func _compile_code_string(group: CodeBlockGroup)->String:
-	var ret: String = group.head.slot.id + ":" + group.head.code_string
+	var ret: String = group.head.code_string
 	if group.action != null:
 		ret = ret + ";" + group.action.code_string
 	for modifer in group.modifiers:
 		ret = ret + ";" + modifer.code_string
-	print("Compiled code string: " + ret)
+	# print("Compiled code string: " + ret)
 	return ret

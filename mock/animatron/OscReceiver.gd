@@ -13,6 +13,7 @@ var senderIP: String
 var senderPort: int
 enum {OSC_ARG_TYPE_NULL, OSC_ARG_TYPE_FLOAT=102, OSC_ARG_TYPE_INT=105, OSC_ARG_TYPE_STRING=115}
 var observers: Dictionary = Dictionary()
+var lastSentTarget
 
 # osc server
 var serverPort: int = 56101 :
@@ -150,10 +151,14 @@ func sendMessage(target: String, oscAddr: String, oscArgs: Array):
 	addString(oscBuf, argTags)
 	oscBuf.put_data(oscArgBuf.data_array)
 	
-	var addrPort := target.split("/")
-	if addrPort.size() == 2:
-		Log.verbose("Replying %s to %s/%s" % [oscAddr, addrPort[0], addrPort[1] as int])
-		socketUdp.set_dest_address(addrPort[0], addrPort[1] as int)
+	if target != lastSentTarget:
+		var addrPort := target.split("/")
+		if addrPort.size() == 2:
+			Log.verbose("Replying %s to %s/%s" % [oscAddr, addrPort[0], addrPort[1] as int])
+			socketUdp.set_dest_address(addrPort[0], addrPort[1] as int)
+			lastSentTarget = target
+	
+	if lastSentTarget != null:
 		socketUdp.put_packet(oscBuf.data_array)
 
 #func _thread_function(userdata):

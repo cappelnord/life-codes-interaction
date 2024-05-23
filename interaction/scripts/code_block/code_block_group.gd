@@ -19,12 +19,14 @@ func comit(new_block: CodeBlock)->bool:
 	
 	# shortcut in case we did not change anything
 	# TODO: we must also check that it is the same position
+	"""
 	if _rem_candidate == new_block:
 		_add_candidate = null
 		_candidate_target = null
 		_rem_candidate = null
 		update_positions()
 		return true
+	"""
 	
 	if _rem_candidate != null:
 		modifiers = _updated_modifiers_array_rem(_rem_candidate)
