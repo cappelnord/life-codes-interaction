@@ -27,7 +27,7 @@ func update_material_and_zindex():
 	var rgb: Color 
 	if block.group_candidate != null: 
 		rgb = block.group_candidate.family.color
-	elif block.group != null:
+	elif block.group != null and not block.is_rem_candidate:
 		rgb = block.group.family.color
 	else:
 		rgb = block.slot.family.color
@@ -37,6 +37,7 @@ func update_material_and_zindex():
 	
 	if block.is_hovered():
 		rgb_add = Vector3(0.1, 0.1, 0.1)
+		z_index = InteractionConfig.Z_INDEX_HOVERED_CODE_BLOCK
 	if block.grabbed or snapped or (block.group != null and block.group.active_block != null and block.group.active_block.grabbed):
 		rgb_add = Vector3(0.15, 0.15, 0.15)
 		z_index = InteractionConfig.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK

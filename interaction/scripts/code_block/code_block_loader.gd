@@ -110,3 +110,8 @@ func load(manager: CodeBlockManager):
 		Vector2(500, 500)
 	))
 	
+	manager.add_slot(CodeBlockSlot.new(
+		mute_spec,
+		Vector2(600, 600)
+	))
+	

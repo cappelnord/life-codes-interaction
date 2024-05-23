@@ -18,6 +18,7 @@ var grabbed = false
 var head_of_group: bool = false
 var group: CodeBlockGroup
 var group_candidate: CodeBlockGroup
+var is_rem_candidate = false
 
 var _active_cursor: Cursor
 
@@ -69,7 +70,7 @@ func _update_sizes():
 	var collision_shape_bottom = RectangleShape2D.new()
 	collision_shape_bottom.size = connection_collider_size
 	_bottom_connection_collider.collision_shape.set_shape(collision_shape_bottom)
-	_bottom_connection_collider.position = connection_collider_size * 0.5 + Vector2(0, text_box_size.y * 0.6666666)	
+	_bottom_connection_collider.position = connection_collider_size * 0.5 + Vector2(0, text_box_size.y * 0.666666)	
 
 func _update_strings():
 	# build the display_string and code_string and set it
@@ -126,7 +127,6 @@ func attempt_hover(cursor: Cursor):
 
 func release_hover(cursor: Cursor):
 	if _active_cursor == cursor:
-		_visual.z_index = 0
 		_active_cursor = null
 		
 		if group != null:
@@ -142,23 +142,40 @@ func attempt_grab(cursor: Cursor):
 	else:
 		grabbed = true
 		
-		_update_visual_or_group_visual()
+		if group != null and not group.block_is_glued(self):
+			is_rem_candidate = true
+			group.set_rem_candidate(self)
 			
+		_update_visual_or_group_visual()
 		_collider.set_collision_mask_value(InteractionConfig.COLLISION_LAYER_BOTTOM_CONNECTION, true)
-		move_to_front()
+		_move_to_front_or_group_to_front()
 		return true
 	
 func release_grab(cursor: Cursor):
 	# if we release while we are a candidate then we comit
+	
+	if is_rem_candidate:
+		# if they are the same it will be dealt with in the group_candidate_comit
+		if group != group_candidate:
+			group.comit(null)
+			group.active_block = null
+			move_to_front()
+			var old_group := group
+			group = null
+			old_group.update_visual()
+			_update_visual_or_group_visual()
+			
 	if group_candidate != null:
 		var success: bool = group_candidate.comit(self)
 	
 		if success:
-			# TODO: make sure that we leave the old group
 			group = group_candidate
-			group_candidate = null
+			group.move_all_to_front()
 		
+	group_candidate = null
+	is_rem_candidate = false
 	grabbed = false
+	
 	_collider.set_collision_mask_value(InteractionConfig.COLLISION_LAYER_BOTTOM_CONNECTION, false)
 	
 	_update_visual_or_group_visual()
@@ -212,6 +229,12 @@ func resign():
 
 func update_visual():
 	_visual.update_material_and_zindex()
+	
+func _move_to_front_or_group_to_front():
+	if group == null:
+		move_to_front()
+	else:
+		group.move_all_to_front()
 
 func _update_visual_or_group_visual():
 	if group == null:
