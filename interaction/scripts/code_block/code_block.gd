@@ -152,12 +152,13 @@ func attempt_grab(cursor: Cursor):
 		return true
 	
 func release_grab(cursor: Cursor):
-	# if we release while we are a candidate then we comit
+	# if we release while we are a candidate then we commit
 	
 	if is_rem_candidate:
 		# if they are the same it will be dealt with in the group_candidate_comit
+		# TODO: This seems to be a mess somehow
 		if group != group_candidate:
-			group.comit(null)
+			group.commit(null)
 			group.active_block = null
 			move_to_front()
 			var old_group := group
@@ -166,7 +167,7 @@ func release_grab(cursor: Cursor):
 			_update_visual_or_group_visual()
 			
 	if group_candidate != null:
-		var success: bool = group_candidate.comit(self)
+		var success: bool = group_candidate.commit(self)
 	
 		if success:
 			group = group_candidate

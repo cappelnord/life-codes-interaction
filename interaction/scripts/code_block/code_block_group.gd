@@ -14,7 +14,7 @@ func _init(head: CodeBlock):
 	self.head = head
 	self.family = head.slot.family
 
-func comit(new_block: CodeBlock)->bool:
+func commit(new_block: CodeBlock)->bool:
 	var success := false
 	
 	# shortcut in case we did not change anything
