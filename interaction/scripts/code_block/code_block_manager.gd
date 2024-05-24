@@ -26,8 +26,7 @@ func _process(delta):
 			slot.block.slot = slot # the codeblock will take care of reading everything from the slot
 			add_child(slot.block)
 	
-	# TODO: for long term operation this might not be safe
-	CodeBlockVisual.oscillation_phase = CodeBlockVisual.oscillation_phase + InteractionConfig.CODE_BLOCK_OSCILLATON_PHI * delta
+	CodeBlockVisual.oscillation_phase = fmod(CodeBlockVisual.oscillation_phase + InteractionConfig.CODE_BLOCK_OSCILLATON_PHI * delta, TAU)
 
 func add_spec(spec: CodeBlockSpec):
 	_specs[spec.id] = spec
@@ -78,7 +77,6 @@ func _compile_code_string(group: CodeBlockGroup)->String:
 	return ret
 
 func on_received_commit_executed(id: String, commit_id: int):
-	print("Received Commit Executed: " + str(id) + "/" + str(commit_id))
 	var group := get_group(id)
 	if group != null:
 		group.on_commit_executed(commit_id)
