@@ -2,16 +2,15 @@ extends Node
 
 @onready var _manager: CursorManager = $"../CursorManager"
 
-@export var enabled: bool = true
 @export var id: String = "mouse"
 @export var delta_multiplier: float = 1.0
 
 var _active = false
-var _lastPosition : Vector2 =  Vector2(100, 100)
+var _last_position : Vector2 =  Vector2(100, 100)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if not enabled:
+	if not InteractionConfig.MOUSE_CURSOR_CONTROLLER_ENABLED:
 		print("Removed MouseCursorController")
 		queue_free()
 		return
@@ -26,6 +25,9 @@ func _unhandled_input(event):
 					_manager.press(id)
 				else:
 					_manager.release(id)
+	else:
+		if event is InputEventMouseMotion:
+			_last_position = event.position * InteractionConfig.MOUSE_CURSOR_CONTROLLER_VIEWPORT_POSITION_MODIFIER
 
 func _process(delta):
 	if Input.is_action_just_pressed("toggle_mouse_cursor") or (Input.is_action_just_pressed("escape") and _active):
@@ -33,7 +35,7 @@ func _process(delta):
 		else: _deactivate()
 
 func _activate():
-	_manager.spawn(id, _lastPosition)
+	_manager.spawn(id, _last_position)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_active = true
 
@@ -42,6 +44,6 @@ func _deactivate():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if cursor != null:
 		# _lastPosition = cursor.position
-		_lastPosition = Vector2(100, 100)
+		_last_position = Vector2(100, 100)
 	_manager.despawn(id)
 	_active = false

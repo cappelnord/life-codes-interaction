@@ -17,7 +17,7 @@ script = ExtResource("1_sem6k")
 
 [node name="QR-a" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
-position = Vector2(1087.91, 190)
+position = Vector2(5033.82, 426.91)
 scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
@@ -26,7 +26,7 @@ target_size = 180
 
 [node name="QR-b" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
-position = Vector2(800, 190)
+position = Vector2(4745.91, 426.91)
 scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
@@ -35,7 +35,7 @@ target_size = 180
 
 [node name="QR-c" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
-position = Vector2(1087.91, 496.91)
+position = Vector2(5033.82, 733.82)
 scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
@@ -44,20 +44,11 @@ target_size = 180
 
 [node name="QR-d" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
-position = Vector2(800, 496.91)
+position = Vector2(4745.91, 733.82)
 scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
 id = "d"
-target_size = 180
-
-[node name="QR-d2" type="Sprite2D" parent="Interaction/WebSocketController"]
-texture_filter = 1
-position = Vector2(477, 325)
-scale = Vector2(4.86, 4.86)
-texture = ExtResource("2_oyg0d")
-script = ExtResource("3_fiq1s")
-id = "e"
 target_size = 180
 
 [node name="CursorManager" type="Node" parent="Interaction"]
@@ -71,3 +62,6 @@ script = ExtResource("6_deg0t")
 
 [node name="OSCManager" type="Node" parent="Interaction"]
 script = ExtResource("7_ssv5t")
+sender_host = null
+sender_port = null
+receive_port = null
