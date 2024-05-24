@@ -40,7 +40,9 @@ func update_material_and_zindex():
 	var hsv_mod := Vector3(1, 1, 1)
 	var rgb_add := Vector3(0, 0, 0)
 	
-	if block.grabbed:
+	# wowowieeee 
+	
+	if block.grabbed or (block.group != null and block.group.head.grabbed) or (block.group != null and block.group.action != null and block.group.action.grabbed):
 		rgb_add = Vector3(0.25, 0.25, 0.25)
 		z_index = InteractionConfig.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK
 	elif snapped or (block.group != null and block.group.active_block != null and block.group.active_block.grabbed):
