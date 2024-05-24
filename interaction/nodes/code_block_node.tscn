@@ -1,16 +1,16 @@
 [gd_scene load_steps=13 format=3 uid="uid://b6km55bfwr8m1"]
 
-[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block.gd" id="1_toyex"]
-[ext_resource type="Texture2D" uid="uid://dv31sb6e87klr" path="res://interaction/graphics/red.png" id="2_aem6l"]
-[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_visual.gd" id="2_l73pt"]
-[ext_resource type="Texture2D" uid="uid://cugvsinxuyvb8" path="res://interaction/graphics/shadow_block.png" id="3_63k1k"]
-[ext_resource type="FontFile" uid="uid://blc6yv0xumbp4" path="res://interaction/fonts/SourceCodePro-Medium.ttf" id="3_q0m4f"]
-[ext_resource type="Shader" path="res://interaction/materials/code_block_material.gdshader" id="3_wfl8u"]
-[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_collider.gd" id="7_8y5jo"]
-[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_connection_collider.gd" id="8_omrar"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block.gd" id="1_4tiqi"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_visual.gd" id="2_jbgps"]
+[ext_resource type="Texture2D" uid="uid://cugvsinxuyvb8" path="res://interaction/graphics/shadow_block.png" id="3_cvutx"]
+[ext_resource type="Shader" path="res://interaction/materials/code_block_material.gdshader" id="4_qrhsk"]
+[ext_resource type="Texture2D" uid="uid://dv31sb6e87klr" path="res://interaction/graphics/red.png" id="5_khabq"]
+[ext_resource type="FontFile" uid="uid://blc6yv0xumbp4" path="res://interaction/fonts/SourceCodePro-Medium.ttf" id="6_g02q6"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_collider.gd" id="7_0j81k"]
+[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_connection_collider.gd" id="8_dch7u"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kkdvp"]
-shader = ExtResource("3_wfl8u")
+shader = ExtResource("4_qrhsk")
 shader_parameter/hsv = Vector3(0.8, 1, 1)
 shader_parameter/rgb_add = null
 
@@ -21,19 +21,19 @@ shader_parameter/rgb_add = null
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wwsww"]
 
 [node name="CodeBlock" type="Node2D"]
-script = ExtResource("1_toyex")
+script = ExtResource("1_4tiqi")
 
 [node name="CodeBlockVisual" type="Node2D" parent="."]
-script = ExtResource("2_l73pt")
+script = ExtResource("2_jbgps")
 
 [node name="CodeBlockShadow" type="Sprite2D" parent="CodeBlockVisual"]
 z_index = -50
-texture = ExtResource("3_63k1k")
+texture = ExtResource("3_cvutx")
 centered = false
 
 [node name="CodeBlockBackground" type="Sprite2D" parent="CodeBlockVisual"]
 material = SubResource("ShaderMaterial_kkdvp")
-texture = ExtResource("2_aem6l")
+texture = ExtResource("5_khabq")
 centered = false
 
 [node name="CodeBlockText" type="Label" parent="CodeBlockVisual"]
@@ -41,7 +41,7 @@ offset_right = 40.0
 offset_bottom = 23.0
 auto_translate = false
 localize_numeral_system = false
-theme_override_fonts/font = ExtResource("3_q0m4f")
+theme_override_fonts/font = ExtResource("6_g02q6")
 theme_override_font_sizes/font_size = 26
 text = "This is a test, OK?"
 
@@ -49,7 +49,7 @@ text = "This is a test, OK?"
 collision_layer = 16777216
 collision_mask = 0
 input_pickable = false
-script = ExtResource("7_8y5jo")
+script = ExtResource("7_0j81k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CodeBlockCollider"]
 shape = SubResource("RectangleShape2D_eu6dc")
@@ -58,7 +58,7 @@ shape = SubResource("RectangleShape2D_eu6dc")
 collision_layer = 33554432
 collision_mask = 0
 input_pickable = false
-script = ExtResource("8_omrar")
+script = ExtResource("8_dch7u")
 top = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopConnectionCollider"]
@@ -68,7 +68,7 @@ shape = SubResource("RectangleShape2D_hd8g0")
 collision_layer = 67108864
 collision_mask = 0
 input_pickable = false
-script = ExtResource("8_omrar")
+script = ExtResource("8_dch7u")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomConnectionCollider"]
 shape = SubResource("RectangleShape2D_wwsww")

@@ -62,6 +62,3 @@ script = ExtResource("6_deg0t")
 
 [node name="OSCManager" type="Node" parent="Interaction"]
 script = ExtResource("7_ssv5t")
-sender_host = null
-sender_port = null
-receive_port = null

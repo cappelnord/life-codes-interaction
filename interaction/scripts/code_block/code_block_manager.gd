@@ -1,7 +1,7 @@
 extends Node2D
 class_name CodeBlockManager
 
-var _code_block_node = preload("res://interaction/nodes/code_block.tscn")
+var _code_block_node = preload("res://interaction/nodes/code_block_node.tscn")
 
 var _specs: Dictionary = {}
 var _slots: Dictionary = {}

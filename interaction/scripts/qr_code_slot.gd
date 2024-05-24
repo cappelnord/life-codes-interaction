@@ -12,7 +12,7 @@ var loading = false
 var under_control = false
 
 var _loading_node_instance = null
-var _loading_node = preload("res://interaction/nodes/loading_rotate.tscn")
+var _loading_node = preload("res://interaction/nodes/loading_rotate_node.tscn")
 
 
 var _last_refresh : int = -1

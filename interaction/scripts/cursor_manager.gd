@@ -1,7 +1,7 @@
 extends Node
 class_name CursorManager
 
-var _cursor_node = preload("res://interaction/nodes/cursor.tscn")
+var _cursor_node = preload("res://interaction/nodes/cursor_node.tscn")
 
 var cursor_image_base = preload("res://interaction/graphics/cursors/cursor_base.png")
 var cursor_image_attempt_grab = preload("res://interaction/graphics/cursors/cursor_attempt_grab.png")
