@@ -6,6 +6,9 @@ var head: CodeBlock
 var action: CodeBlock
 var modifiers: Array[CodeBlock] = []
 var active_block: CodeBlock
+var last_commit_id: int
+var all_members: Array[CodeBlock] = []
+
 var _add_candidate: CodeBlock
 var _rem_candidate: CodeBlock
 var _candidate_target: CodeBlock
@@ -13,6 +16,7 @@ var _candidate_target: CodeBlock
 func _init(head: CodeBlock):
 	self.head = head
 	self.family = head.slot.family
+	_update_all_members()
 
 func commit(new_block: CodeBlock)->bool:
 	var success := false
@@ -47,19 +51,23 @@ func commit(new_block: CodeBlock)->bool:
 		success = true
 		
 	if success:
+		_update_all_members()
+		last_commit_id = InteractionHelpers.random_int_id()
 		head.slot.manager.on_group_comitted.call_deferred(self)
 	
 	update_positions()
+	
+	
 
 	return success
 
 func update_visual():
-	for block in all_members():
+	for block in all_members:
 		block.update_visual()
 
 func update_positions():
 	var pos := head.position
-	for member in all_members():
+	for member in all_members:
 		member.unsnap()
 		member.move(pos, false)
 		pos = pos + Vector2(0, member.text_box_size.y)
@@ -104,20 +112,13 @@ func release_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	block.group_candidate = null
 	
 	block.unsnap()
-	for member in all_members():
+	for member in all_members:
 		member.unsnap()
 	
 	print(all_members_candidate())
 
-func all_members()->Array[CodeBlock]:
-	var ret: Array[CodeBlock] = []
-	ret.append(head)
-	if action != null: ret.append(action)
-	ret.append_array(modifiers)
-	return ret
-
 func all_members_candidate()->Array[CodeBlock]:
-	if _add_candidate == null: return all_members()
+	if _add_candidate == null: return all_members
 	
 	var ret: Array[CodeBlock] = []
 	ret.append(head)
@@ -147,6 +148,12 @@ func _updated_modifiers_array_rem(block: CodeBlock)->Array[CodeBlock]:
 			ret.append(old_block)
 	return ret
 
+func _update_all_members():
+	all_members.clear()
+	all_members.append(head)
+	if action != null: all_members.append(action)
+	all_members.append_array(modifiers)
+
 func block_is_glued(block: CodeBlock)->bool:
 	return block == head or block == action
 
@@ -155,5 +162,5 @@ func active_block_is_glued():
 	return block_is_glued(active_block)
 
 func move_all_to_front():
-	for member in all_members():
+	for member in all_members:
 		member.move_to_front()
