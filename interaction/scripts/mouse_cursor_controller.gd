@@ -43,7 +43,6 @@ func _deactivate():
 	var cursor : Cursor = _manager.get_cursor(id)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if cursor != null:
-		# _lastPosition = cursor.position
-		_last_position = Vector2(100, 100)
+		_last_position = cursor.position
 	_manager.despawn(id)
 	_active = false
