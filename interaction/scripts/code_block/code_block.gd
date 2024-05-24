@@ -65,12 +65,12 @@ func _update_sizes():
 	_top_connection_collider.monitorable = false
 	_top_connection_collider.monitoring = false
 	
-	var connection_collider_size = text_box_size * Vector2(1.0, 0.333333)
+	var connection_collider_size = text_box_size * Vector2(1.0, 0.3333333)
 	
 	var collision_shape_bottom = RectangleShape2D.new()
 	collision_shape_bottom.size = connection_collider_size
 	_bottom_connection_collider.collision_shape.set_shape(collision_shape_bottom)
-	_bottom_connection_collider.position = connection_collider_size * 0.5 + Vector2(0, text_box_size.y * 0.666666)	
+	_bottom_connection_collider.position = connection_collider_size * 0.5 + Vector2(0, text_box_size.y * 0.6666666)	
 
 func _update_strings():
 	# build the display_string and code_string and set it
@@ -193,13 +193,16 @@ func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 	print("Attempt to connect: " + display_string + "->" + collider.block.display_string)
 	if collider.block.can_connect(self):
 		collider.block.group.set_add_candidate(self, collider.block)
+		return true
 	else:
-		pass
+		return false
 	
 func _on_connection_area_exited(collider: CodeBlockConnectionCollider):
 	if collider.block == self: return
 	if collider.block.group != null:
 		collider.block.group.release_add_candidate(self, collider.block)
+		_attempt_reconnect()
+		
 
 func can_connect(other: CodeBlock):
 	# in case the other block has a head role we can never connect
@@ -242,3 +245,8 @@ func _update_visual_or_group_visual():
 		_visual.update_material_and_zindex()
 	else:
 		group.update_visual()
+
+func _attempt_reconnect():
+	var areas = _collider.get_overlapping_areas()
+	for area in areas:
+		if _on_connection_area_entered(area): return 

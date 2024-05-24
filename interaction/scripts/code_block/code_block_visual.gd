@@ -35,12 +35,15 @@ func update_material_and_zindex():
 	var hsv_mod := Vector3(1, 1, 1)
 	var rgb_add := Vector3(0, 0, 0)
 	
-	if block.is_hovered():
-		rgb_add = Vector3(0.1, 0.1, 0.1)
-		z_index = InteractionConfig.Z_INDEX_HOVERED_CODE_BLOCK
-	if block.grabbed or snapped or (block.group != null and block.group.active_block != null and block.group.active_block.grabbed):
+	if block.grabbed:
+		rgb_add = Vector3(0.25, 0.25, 0.25)
+		z_index = InteractionConfig.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK
+	elif snapped or (block.group != null and block.group.active_block != null and block.group.active_block.grabbed):
 		rgb_add = Vector3(0.15, 0.15, 0.15)
 		z_index = InteractionConfig.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK
+	elif block.is_hovered():
+		rgb_add = Vector3(0.1, 0.1, 0.1)
+		z_index = InteractionConfig.Z_INDEX_HOVERED_CODE_BLOCK
 	else:
 		z_index = InteractionConfig.Z_INDEX_CODE_BLOCK
 	
