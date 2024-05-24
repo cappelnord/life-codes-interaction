@@ -1,10 +1,15 @@
 extends Node2D
 class_name CodeBlockVisual
 
+static var oscillation_phase: float = 0
+
 var block: CodeBlock
 var background_material: Material
 var snapped = false
+
 var _snap_position: Vector2
+var _flash_ramp: float = 0.0
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -46,6 +51,13 @@ func update_material_and_zindex():
 		z_index = InteractionConfig.Z_INDEX_HOVERED_CODE_BLOCK
 	else:
 		z_index = InteractionConfig.Z_INDEX_CODE_BLOCK
+		
+	if block.group != null and block.group.pending_action:
+		hsv_mod = hsv_mod * Vector3(1, 1, 1.0 - ((sin(oscillation_phase) + 1.0) * 0.1))
+		
+	if _flash_ramp > 0:
+		var flash_value := _flash_ramp * InteractionConfig.CODE_BLOCK_FLASH_STRENGTH
+		rgb_add = rgb_add + Vector3(flash_value, flash_value, flash_value)
 	
 	background_material.set_shader_parameter("hsv", Vector3(rgb.h, rgb.s, rgb.v) * hsv_mod)
 	background_material.set_shader_parameter("rgb_add", rgb_add)
@@ -53,7 +65,11 @@ func update_material_and_zindex():
 
 # Called every frame. 'delta' is the elapsed time sinc e the previous frame.
 func _process(delta):
-	pass
+	if (block.group != null and block.group.pending_action) or _flash_ramp > 0:
+		if _flash_ramp > 0:
+			_flash_ramp -= InteractionConfig.CODE_BLOCK_FLASH_RAMP_SPEED * delta;
+			if _flash_ramp < 0: _flash_ramp = 0
+		update_material_and_zindex()
 
 func set_size(size: Vector2):
 	($CodeBlockBackground as Sprite2D).scale = size
@@ -75,3 +91,6 @@ func unsnap():
 	snapped = false
 	update_position_offset()
 	update_material_and_zindex()
+
+func flash(strength: float=1):
+	_flash_ramp = strength

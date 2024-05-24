@@ -29,7 +29,8 @@ func load(manager: CodeBlockManager):
 		"clock",
 		CodeBlock.Type.SUBJECT,
 		clock_family,
-		[]
+		[],
+		true
 	))
 	
 	var clock_play_spec = manager.add_spec(CodeBlockSpec.new(
@@ -45,7 +46,8 @@ func load(manager: CodeBlockManager):
 		"bowl",
 		CodeBlock.Type.SUBJECT,
 		bowl_family,
-		[]
+		[],
+		true
 	))
 	
 	var bowl_play_spec = manager.add_spec(CodeBlockSpec.new(

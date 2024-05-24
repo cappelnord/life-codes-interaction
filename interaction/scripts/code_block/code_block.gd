@@ -22,7 +22,8 @@ var is_rem_candidate = false
 
 var _active_cursor: Cursor
 
-@onready var _visual: CodeBlockVisual = $CodeBlockVisual
+@onready var visual: CodeBlockVisual = $CodeBlockVisual
+
 @onready var _collider: CodeBlockCollider = $CodeBlockCollider
 @onready var _top_connection_collider: CodeBlockConnectionCollider = $TopConnectionCollider
 @onready var _bottom_connection_collider: CodeBlockConnectionCollider = $BottomConnectionCollider
@@ -40,7 +41,7 @@ func _ready():
 	_top_connection_collider.block = self
 	_bottom_connection_collider.block = self
 	
-	_visual.init_with_block(self)
+	visual.init_with_block(self)
 	
 	# copy arguments over from the slot - duplication is likely more manual than it needs to be
 	for key in slot.arguments:
@@ -54,7 +55,7 @@ func _ready():
 		group = CodeBlockGroup.new(self)
 
 func _update_sizes():
-	_visual.set_size(text_box_size)
+	visual.set_size(text_box_size)
 	
 	var collision_shape = RectangleShape2D.new()
 	collision_shape.size = text_box_size
@@ -94,13 +95,12 @@ func _update_strings():
 	
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
 func move(new_position: Vector2, propage_to_group: bool=true):
 	position = new_position
-	if _visual.snapped: _visual.update_position_offset()
+	if visual.snapped: visual.update_position_offset()
 	if group != null and self == group.head and propage_to_group:
 		group.update_positions()
 	
@@ -219,11 +219,6 @@ func can_connect(other: CodeBlock):
 	# basic tests done, let's see what the group is thinking
 	return group.can_connect(other, self)
 
-func snap(snap_position: Vector2):
-	_visual.snap(snap_position)
-
-func unsnap():
-	_visual.unsnap()
 
 func _to_string():
 	return "<" + slot.id + "/" + display_string + ">"
@@ -231,8 +226,6 @@ func _to_string():
 func resign():
 	pass
 
-func update_visual():
-	_visual.update_material_and_zindex()
 	
 func _move_to_front_or_group_to_front():
 	if group == null:
@@ -242,7 +235,7 @@ func _move_to_front_or_group_to_front():
 
 func _update_visual_or_group_visual():
 	if group == null:
-		_visual.update_material_and_zindex()
+		visual.update_material_and_zindex()
 	else:
 		group.update_visual()
 

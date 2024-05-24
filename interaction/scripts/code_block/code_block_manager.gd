@@ -11,6 +11,7 @@ var _families: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_osc.init_with_code_block_manager(self)
 	# load all specs
 	CodeBlockLoader.new("..").load(self)
 
@@ -24,19 +25,22 @@ func _process(delta):
 			slot.block = _code_block_node.instantiate() as CodeBlock
 			slot.block.slot = slot # the codeblock will take care of reading everything from the slot
 			add_child(slot.block)
+	
+	# TODO: for long term operation this might not be safe
+	CodeBlockVisual.oscillation_phase = CodeBlockVisual.oscillation_phase + InteractionConfig.CODE_BLOCK_OSCILLATON_PHI * delta
 
 func add_spec(spec: CodeBlockSpec):
 	_specs[spec.id] = spec
 	return spec
 
-func get_spec(id: StringName):
+func get_spec(id: StringName)->CodeBlockSpec:
 	return _specs[id]
 
 func add_family(family: CodeBlockFamily):
 	_families[family.id] = family
 	return family
 
-func get_family(id: StringName):
+func get_family(id: StringName)->CodeBlockFamily:
 	return _families[id]
 
 func add_slot(slot: CodeBlockSlot):
@@ -44,11 +48,25 @@ func add_slot(slot: CodeBlockSlot):
 	_slots[slot.id] = slot
 	return slot
 	
-func get_slot(id: StringName):
+func get_slot(id: StringName)->CodeBlockSlot:
 	return _slots[id]
 
+func get_block(id: StringName)->CodeBlock:
+	var slot = get_slot(id)
+	if slot != null:
+		return slot.block
+	else:
+		return null
+
+func get_group(id: StringName)->CodeBlockGroup:
+	var block = get_block(id)
+	if block != null and block.group != null:
+		return block.group
+	else:
+		return null
+
 func on_group_comitted(group: CodeBlockGroup):
-	_osc.send_code_command(group.head.slot.id, _compile_code_string(group))
+	_osc.send_code_command(group.head.slot.id, _compile_code_string(group), group.last_commit_id)
 
 func _compile_code_string(group: CodeBlockGroup)->String:
 	var ret: String = group.head.code_string
@@ -58,3 +76,9 @@ func _compile_code_string(group: CodeBlockGroup)->String:
 		ret = ret + ";" + modifer.code_string
 	# print("Compiled code string: " + ret)
 	return ret
+
+func on_received_commit_executed(id: String, commit_id: int):
+	print("Received Commit Executed: " + str(id) + "/" + str(commit_id))
+	var group := get_group(id)
+	if group != null:
+		group.on_commit_executed(commit_id)

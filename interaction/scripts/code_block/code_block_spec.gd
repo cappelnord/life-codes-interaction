@@ -5,16 +5,18 @@ var id: StringName
 var display_string: String
 var type: CodeBlock.Type
 var family: CodeBlockFamily
-var parameters: Array
+var parameters: Array[CodeBlockParameter]
+var quant: bool
 
-func _init(id: StringName, display_string: String, type: CodeBlock.Type, family: CodeBlockFamily, parameters: Array):
+func _init(id: StringName, display_string: String, type: CodeBlock.Type, family: CodeBlockFamily, parameters: Array[CodeBlockParameter], quant:bool=false):
 	self.id = id
 	self.display_string = display_string
 	self.type = type
 	self.family = family
 	self.parameters = parameters
+	self.quant = quant
 
-func get_parameter(id: StringName):
+func get_parameter(id: StringName)->CodeBlockParameter:
 	for parameter in parameters:
 		if parameter.id == id: return parameter
 	return null

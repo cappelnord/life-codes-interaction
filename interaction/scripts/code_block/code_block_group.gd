@@ -8,6 +8,7 @@ var modifiers: Array[CodeBlock] = []
 var active_block: CodeBlock
 var last_commit_id: int
 var all_members: Array[CodeBlock] = []
+var pending_action: bool = false
 
 var _add_candidate: CodeBlock
 var _rem_candidate: CodeBlock
@@ -52,23 +53,29 @@ func commit(new_block: CodeBlock)->bool:
 		
 	if success:
 		_update_all_members()
-		last_commit_id = InteractionHelpers.random_int_id()
+		last_commit_id = InteractionHelpers.random_int32_id()
 		head.slot.manager.on_group_comitted.call_deferred(self)
+		
+		if head.slot.spec.quant:
+			pending_action = true
+		flash(1)
 	
 	update_positions()
-	
-	
 
 	return success
 
 func update_visual():
 	for block in all_members:
-		block.update_visual()
+		block.visual.update_material_and_zindex()
+
+func flash(strength: float=1):
+	for block in all_members:
+		block.visual.flash(strength)
 
 func update_positions():
 	var pos := head.position
 	for member in all_members:
-		member.unsnap()
+		member.visual.unsnap()
 		member.move(pos, false)
 		pos = pos + Vector2(0, member.text_box_size.y)
 
@@ -93,7 +100,7 @@ func set_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	var snap_position := head.position
 	
 	for member in all_members_candidate():
-		member.snap(snap_position)
+		member.visual.snap(snap_position)
 		snap_position = snap_position + Vector2(0, member.text_box_size.y)
 	
 	print(all_members_candidate())
@@ -111,9 +118,9 @@ func release_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	
 	block.group_candidate = null
 	
-	block.unsnap()
+	block.visual.unsnap()
 	for member in all_members:
-		member.unsnap()
+		member.visual.unsnap()
 	
 	print(all_members_candidate())
 
@@ -164,3 +171,10 @@ func active_block_is_glued():
 func move_all_to_front():
 	for member in all_members:
 		member.move_to_front()
+
+func on_commit_executed(commit_id: int):
+	print("on_commit_executed")
+	if commit_id == last_commit_id:
+		pending_action = false
+		flash(0.75)
+		update_visual()
