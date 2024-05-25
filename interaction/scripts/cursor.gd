@@ -25,8 +25,9 @@ func _process(delta):
 		_update_cursor_texture()
 		_time_when_reset = -1 
 
+# effectively every move is a move_delta
 func move(new_position: Vector2):
-	position = new_position
+	move_delta(new_position - position);
 
 func move_delta(delta: Vector2):
 	var new_position : Vector2 = position + delta
