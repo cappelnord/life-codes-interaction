@@ -11,7 +11,7 @@ var _families: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_osc.init_with_code_block_manager(self)
+	_osc.set_code_block_manager(self)
 	# load all specs
 	CodeBlockLoader.new("..").load(self)
 

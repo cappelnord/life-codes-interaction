@@ -4,6 +4,7 @@ class_name OSCManager
 var _osc_impl: OscReceiver
 var _target_string: String
 var _code_block_manager: CodeBlockManager
+var _osc_cursor_controller: OSCCursorController
 
 func _ready():
 	_osc_impl = OscReceiver.new()
@@ -14,8 +15,11 @@ func _ready():
 	_osc_impl.startServer()
 	_osc_impl.osc_msg_received.connect(_on_osc_msg_received)
 	
-func init_with_code_block_manager(manager: CodeBlockManager):
+func set_code_block_manager(manager: CodeBlockManager):
 	_code_block_manager = manager
+	
+func set_osc_cursor_controller(controller: OSCCursorController):
+	_osc_cursor_controller = controller
 
 func _send(osc_addr: String, args: Array=[]):
 	if _osc_impl == null: return
@@ -27,10 +31,11 @@ func send_code_command(receiver: String, payload: String, commit_id: int):
 	print("Sent: /lc/command " + str(array))
 
 func _on_osc_msg_received(addr: String, args: Array, sender: String):
-	if _code_block_manager == null: return
 	
-	match addr:
-		"/lc/back/commitExecuted":
-			_code_block_manager.on_received_commit_executed(args[0] as String, args[1] as int)
-		_:
-			print("No OSC route for: " + addr)
+	if _code_block_manager != null:
+		match addr:
+			"/lc/back/commitExecuted":
+				_code_block_manager.on_received_commit_executed(args[0] as String, args[1] as int)
+	
+	if _osc_cursor_controller != null and addr.begins_with(OSCCursorController.ADDR_PATTERN_ROOT):
+		_osc_cursor_controller.on_osc_msg_received(addr, args, sender)
