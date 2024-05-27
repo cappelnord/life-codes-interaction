@@ -152,7 +152,6 @@ func attempt_grab(cursor: Cursor):
 		return true
 	
 func release_grab(cursor: Cursor):
-	# if we release while we are a candidate then we commit
 	
 	if is_rem_candidate:
 		# if they are the same it will be dealt with in the group_candidate_comit
@@ -170,6 +169,7 @@ func release_grab(cursor: Cursor):
 		var success: bool = group_candidate.commit(self)
 	
 		if success:
+			_active_cursor.notify_connect_block_successful()
 			group = group_candidate
 			group.move_all_to_front()
 		

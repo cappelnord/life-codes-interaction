@@ -1,7 +1,16 @@
 extends Sprite2D
 class_name Cursor
 
+enum Feedback {
+	HOVER,
+	GRAB,
+	CONNECT_BLOCK
+}
+
+signal feedback(cursor_id: String, feedback: Feedback)
+
 var id: String
+var user_progress: CursorUserProgress
 var _manager: CursorManager
 var _time_when_reset = -1
 
@@ -14,6 +23,8 @@ var _pressed: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	user_progress = CursorUserProgress.new(id)
+	
 	z_index = InteractionConfig.Z_INDEX_MOUSE_CURSOR
 	_manager = (get_parent() as CursorManager)
 	_collider.area_entered.connect(_on_area_entered)
@@ -38,6 +49,8 @@ func move_delta(delta: Vector2):
 	
 	if _grab_block != null:
 		_grab_block.move_delta(delta)
+	
+	user_progress.cursor_did_move()
 
 # a cursor control scheme should either do one or the other - do not mix these up!
 # in the end it should translate to attach/unattach if feasible
@@ -75,6 +88,7 @@ func _attempt_grab():
 	var success = _hover_block.attempt_grab(self)
 	if success:
 		_grab_block = _hover_block
+		notify_grab_successful()
 		return true
 	return false
 	
@@ -83,12 +97,24 @@ func _release_grab():
 		_grab_block.release_grab(self)
 	_grab_block = null
 
+func notify_hover():
+	feedback.emit(id, Feedback.HOVER)
+
+func notify_grab_successful():
+	user_progress.cursor_did_grab()
+	feedback.emit(id, Feedback.GRAB)
+
+func notify_connect_block_successful():
+	user_progress.cursor_did_connect_block()
+	feedback.emit(id, Feedback.CONNECT_BLOCK)
+
 func _on_area_entered(collider: CodeBlockCollider):
 	if _pressed: return false
 	if _hover_block != null: return false
 	var success = collider.block.attempt_hover(self)
 	if success:
 		_hover_block = collider.block
+		notify_hover()
 	_update_cursor_texture()
 	return success
 	
@@ -107,5 +133,3 @@ func _attempt_rehover():
 	var areas = _collider.get_overlapping_areas()
 	for area in areas:
 		if _on_area_entered(area): return 
-
-	

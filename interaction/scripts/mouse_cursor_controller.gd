@@ -35,7 +35,9 @@ func _process(delta):
 		else: _deactivate()
 
 func _activate():
-	_manager.spawn(id, _last_position)
+	var cursor := _manager.spawn(id, _last_position)
+	cursor.user_progress.progress.connect(_on_user_progress)
+	cursor.feedback.connect(_on_cursor_feedback)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_active = true
 
@@ -46,3 +48,9 @@ func _deactivate():
 		_last_position = cursor.position
 	_manager.despawn(id)
 	_active = false
+
+func _on_user_progress(cursor_id: String, progress: CursorUserProgress.Progress):
+	print("User Progress: " + str(CursorUserProgress.Progress.keys()[progress]))
+
+func _on_cursor_feedback(cursor_id: String, feedback: Cursor.Feedback):
+	print("Cursor Feedback: " + str(Cursor.Feedback.keys()[feedback]))

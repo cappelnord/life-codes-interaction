@@ -10,13 +10,14 @@ var cursor_image_grab = preload("res://interaction/graphics/cursors/cursor_grab.
 
 var cursors = {}
 
-func spawn(id: String, position: Vector2):
+func spawn(id: String, position: Vector2)->Cursor:
 	# TODO: make sure that we don't duplicate a cursor
 	var cursor = _cursor_node.instantiate()
 	add_child(cursor)
 	cursor.position = position
 	cursor.id = id
 	cursors[id] = cursor
+	return cursor
 
 func despawn(id: String):
 	if cursors.has(id):
