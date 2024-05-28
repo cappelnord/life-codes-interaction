@@ -10,6 +10,7 @@ var pending: bool = false
 var requires_action: bool = true
 var loading = false
 var under_control = false
+var spawned = false
 
 var _loading_node_instance = null
 var _loading_node = preload("res://interaction/nodes/loading_rotate_node.tscn")
@@ -44,6 +45,10 @@ func update_qr_code(texture: ImageTexture):
 func slot_control_issued():
 	under_control = true
 	start_loading()
+
+func spawn():
+	stop_loading()
+	spawned = true
 
 func start_loading():
 	stop_loading() # to be sure that any old node is removed

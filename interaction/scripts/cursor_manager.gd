@@ -45,7 +45,7 @@ func release(id: String):
 
 func attempt_toggle_grab(id: String):
 	if cursors.has(id):
-		cursors[id].toggle_grab()
+		cursors[id].attempt_toggle_grab()
 
 func get_cursor(id: String) -> Cursor:
 	if cursors.has(id):

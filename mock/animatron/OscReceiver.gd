@@ -40,7 +40,8 @@ func startServerOn(listenPort: int):
 
 # 'delta' is the elapsed time since the previous update.
 func _physics_process(_delta):
-	while socketUdp.get_available_packet_count() > 0:
+	var num_available_packets := socketUdp.get_available_packet_count()
+	for i in num_available_packets:
 		var msg := parseOsc(socketUdp.get_packet())
 		var sender := "%s/%d" % [socketUdp.get_packet_ip(), socketUdp.get_packet_port()]
 		Log.verbose("OSC message received from %s: %s %s" % [sender, msg.addr, msg.args])

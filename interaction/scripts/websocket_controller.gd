@@ -13,10 +13,12 @@ var _authenticated = false
 var _json = JSON.new()
 var _server_run_id: String
 
-var _slots = []
-var _slots_lookup = {}
+var _qr_slots: Array[QRCodeSlot] = []
+var _qr_slots_lookup = {}
 var _current_slot_index = 0
 var _http_request
+
+@onready var _cursor_manager: CursorManager = $"../CursorManager"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,10 +32,10 @@ func _ready():
 	_http_request.request_completed.connect(self._qr_code_download_completed)
 
 
-func register_slot(slot: QRCodeSlot):
+func register_slot(qr_slot: QRCodeSlot):
 	# print(slot.slot_id)
-	_slots.append(slot)
-	_slots_lookup[slot.id] = slot
+	_qr_slots.append(qr_slot)
+	_qr_slots_lookup[qr_slot.id] = qr_slot
 
 func _process(delta):
 	if not _socket and _attempt_connection:
@@ -60,20 +62,20 @@ func _process(delta):
 		_process_slots()
 
 func _process_slots():
-	if _slots.size() == 0: return
-	if _slots[_current_slot_index].pending: return
+	if _qr_slots.size() == 0: return
+	if _qr_slots[_current_slot_index].pending: return
 	var start_index = _current_slot_index
 
 	while true:
-		if _slots[_current_slot_index].requires_action:
+		if _qr_slots[_current_slot_index].requires_action:
 			_refresh_current_slot()
 			return
-		_current_slot_index = (_current_slot_index + 1) % _slots.size()
+		_current_slot_index = (_current_slot_index + 1) % _qr_slots.size()
 		if _current_slot_index == start_index: return
 
 func _refresh_current_slot():
-	_slots[_current_slot_index].pending = true
-	_socket.send_text(JSON.stringify({"cmd": "request", "slot": _slots[_current_slot_index].id, "scheme": _slots[_current_slot_index].scheme}))
+	_qr_slots[_current_slot_index].pending = true
+	_socket.send_text(JSON.stringify({"cmd": "request", "slot": _qr_slots[_current_slot_index].id, "scheme": _qr_slots[_current_slot_index].scheme}))
 
 
 func _attempt_connect_websocket():
@@ -91,8 +93,8 @@ func _clear_websocket():
 func _connection_established():
 	_connected = true
 
-	for slot in _slots:
-		slot.pending = false
+	for qr_slot in _qr_slots:
+		qr_slot.pending = false
 		
 	print("Connected to WebSocket")
 
@@ -108,7 +110,7 @@ func _process_packet(packet: PackedByteArray):
 		print("Could not decode JSON message from WebSocket: " + packet.get_string_from_ascii())
 
 func _process_msg(msg: Variant):
-	print(msg)
+	# print(msg)
 	
 	# messages that must be processed before auth
 	
@@ -128,6 +130,16 @@ func _process_msg(msg: Variant):
 			_process_qr_msg(msg)
 		"slotControlIssued":
 			_process_slot_control_issued_msg(msg)
+		"cursorSpawn":
+			_process_cursor_spawn(msg)
+		"cursorMoveDelta":
+			_process_cursor_move_delta(msg)
+		"cursorPress":
+			_process_cursor_press(msg)
+		"cursorRelease":
+			_process_cursor_release(msg)
+		"cursorAttemptToggleGrab":
+			_process_cursor_attempt_toggle_grab(msg)
 
 func _process_challenge_msg(msg: Variant):
 	# TODO: do the challenge
@@ -143,7 +155,7 @@ func _process_hello_msg(msg: Variant):
 	_server_run_id = msg.run_id
 
 func _process_qr_msg(msg: Variant):
-	if _slots[_current_slot_index].id != msg.slot:
+	if _qr_slots[_current_slot_index].id != msg.slot:
 		print("Received qr message that does not correspond to current slot.")
 		return
 	
@@ -152,17 +164,17 @@ func _process_qr_msg(msg: Variant):
 	var error = _http_request.request(msg.url)
 	if error != OK:
 		print("An error occurred in the HTTP request.")
-		_slots[_current_slot_index].pending = true
+		_qr_slots[_current_slot_index].pending = true
 
 func _qr_code_download_completed(result, response_code, headers, body):
 	if result != HTTPRequest.RESULT_SUCCESS:
 		print("Failed downloading QR code.")
-		_slots[_current_slot_index].pending = true
+		_qr_slots[_current_slot_index].pending = true
 		return		
 	
 	if response_code != 200:
 		print("Server did not respond with status code 200 - could not download QR code. Code: " + str(response_code))
-		_slots[_current_slot_index].pending = true
+		_qr_slots[_current_slot_index].pending = true
 		return
 	
 	var image = Image.new()
@@ -170,18 +182,44 @@ func _qr_code_download_completed(result, response_code, headers, body):
 	
 	if image_error != OK:
 		print("Couldn't load the image.")
-		_slots[_current_slot_index].pending = true
+		_qr_slots[_current_slot_index].pending = true
 		return
 
 	var texture = ImageTexture.create_from_image(image)
-	_slots[_current_slot_index].update_qr_code(texture)
+	_qr_slots[_current_slot_index].update_qr_code(texture)
 	
 func _process_slot_control_issued_msg(msg: Variant):
-	var slot = _slots_lookup[msg.slot]
+	var slot = _qr_slots_lookup[msg.slot]
 	if slot:
 		slot.slot_control_issued()
 
+func _process_cursor_spawn(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot and not slot.spawned:
+		slot.spawn()
+		_cursor_manager.spawn(slot.id, slot.position)
+
+func _process_cursor_move_delta(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot and slot.spawned:
+		_cursor_manager.move_delta(slot.id, Vector2(msg.x, msg.y))
+
+func _process_cursor_press(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot and slot.spawned:
+		_cursor_manager.press(slot.id)
+
+func _process_cursor_release(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot and slot.spawned:
+		_cursor_manager.release(slot.id)
+		
+func _process_cursor_attempt_toggle_grab(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot and slot.spawned:
+		_cursor_manager.attempt_toggle_grab(slot.id)
+
 func _server_has_restarted():
 	print("Server has restarted since last connection. Resetting data.")
-	for slot in _slots:
-		slot.reset()
+	for qr_slot in _qr_slots:
+		qr_slot.reset()
