@@ -29,10 +29,11 @@ func _unhandled_input(event):
 		if event is InputEventMouseMotion:
 			_last_position = event.position * InteractionConfig.MOUSE_CURSOR_CONTROLLER_VIEWPORT_POSITION_MODIFIER
 
-func _process(delta):
-	if Input.is_action_just_pressed("toggle_mouse_cursor") or (Input.is_action_just_pressed("escape") and _active):
-		if(not _active): _activate()
-		else: _deactivate()
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_M or event.keycode == KEY_ESCAPE and _active:
+			if(not _active): _activate()
+			else: _deactivate()
 
 func _activate():
 	var cursor := _manager.spawn(id, _last_position)
