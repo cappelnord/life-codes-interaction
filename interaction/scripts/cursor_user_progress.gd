@@ -2,6 +2,7 @@ extends Object
 class_name CursorUserProgress
 
 enum Progress {
+	HELLO,
 	DID_MOVE,
 	DID_GRAB,
 	DID_CONNECT_BLOCK

@@ -62,8 +62,8 @@ func _process(delta):
 	if _connected and _authenticated:
 		_process_slots()
 
-	if not _connected and _time_of_disconnect > 0 and (_time_of_disconnect + InteractionConfig.WEBSOCKETS_MSEC_UNTIL_LONG_DISCONNECT) < Time.get_ticks_msec():
-		print("Long disconnect")
+	if _time_of_disconnect > 0 and (_time_of_disconnect + InteractionConfig.WEBSOCKETS_MSEC_UNTIL_LONG_DISCONNECT) < Time.get_ticks_msec():
+		print("Disconnected to WebSocket server already for some time. Hard reset QR code slots.")
 		for qr_slot in _qr_slots:
 			_hard_reset_qr_slot(qr_slot)
 			qr_slot.start_loading()
@@ -272,14 +272,14 @@ func _hard_reset_qr_slot(qr_slot: QRCodeSlot):
 	qr_slot.reset()
 
 func _server_has_restarted():
-	print("Server has restarted since last connection. Resetting data.")
+	print("Server has restarted since last connection. Hard Reset.")
 	for qr_slot in _qr_slots:
 		_hard_reset_qr_slot(qr_slot)
 
 func _on_cursor_feedback(cursor_id: String, feedback: Cursor.Feedback):
 	if _connected:
-		_socket.send_text(JSON.stringify({"cmd": "feedbackCursor", "feedback": Cursor.Feedback.keys()[feedback]}))
+		_socket.send_text(JSON.stringify({"cmd": "feedbackCursor", "slot": cursor_id,  "feedback": Cursor.Feedback.keys()[feedback]}))
 
 func _on_user_progress(cursor_id: String, progress: CursorUserProgress.Progress):
 	if _connected:
-		_socket.send_text(JSON.stringify({"cmd": "feedbackUserProgress", "progress": CursorUserProgress.Progress.keys()[progress]}))
+		_socket.send_text(JSON.stringify({"cmd": "feedbackUserProgress", "slot": cursor_id, "userProgress": CursorUserProgress.Progress.keys()[progress]}))
