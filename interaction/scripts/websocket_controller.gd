@@ -74,6 +74,7 @@ func _process_slots():
 		if _current_slot_index == start_index: return
 
 func _refresh_current_slot():
+	_qr_slots[_current_slot_index].stop_loading()
 	_qr_slots[_current_slot_index].pending = true
 	_socket.send_text(JSON.stringify({"cmd": "request", "slot": _qr_slots[_current_slot_index].id, "scheme": _qr_slots[_current_slot_index].scheme}))
 
@@ -130,6 +131,12 @@ func _process_msg(msg: Variant):
 			_process_qr_msg(msg)
 		"slotControlIssued":
 			_process_slot_control_issued_msg(msg)
+		"slotControlReleased":
+			_process_slot_control_released_msg(msg)
+		"cursorUserConnected":
+			_process_cursor_user_connected(msg)
+		"cursorUserDisconnected":
+			_process_cursor_user_disconnected(msg)
 		"cursorSpawn":
 			_process_cursor_spawn(msg)
 		"cursorMoveDelta":
@@ -193,11 +200,20 @@ func _process_slot_control_issued_msg(msg: Variant):
 	if slot:
 		slot.slot_control_issued()
 
+func _process_slot_control_released_msg(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot:
+		if slot.spawned:
+			_cursor_manager.despawn(slot.id)
+		slot.slot_control_released()
+
 func _process_cursor_spawn(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
 	if slot and not slot.spawned:
 		slot.spawn()
-		_cursor_manager.spawn(slot.id, slot.position)
+		var cursor := _cursor_manager.spawn(slot.id, slot.position)
+		cursor.feedback.connect(_on_cursor_feedback)
+		cursor.user_progress.progress.connect(_on_user_progress)
 
 func _process_cursor_move_delta(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
@@ -219,7 +235,25 @@ func _process_cursor_attempt_toggle_grab(msg: Variant):
 	if slot and slot.spawned:
 		_cursor_manager.attempt_toggle_grab(slot.id)
 
+func _process_cursor_user_connected(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot and slot.spawned:
+		_cursor_manager.user_connected(slot.id)	
+
+func _process_cursor_user_disconnected(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot and slot.spawned:
+		_cursor_manager.user_disconnected(slot.id)	
+
 func _server_has_restarted():
 	print("Server has restarted since last connection. Resetting data.")
 	for qr_slot in _qr_slots:
 		qr_slot.reset()
+
+func _on_cursor_feedback(cursor_id: String, feedback: Cursor.Feedback):
+	if _connected:
+		_socket.send_text(JSON.stringify({"cmd": "feedbackCursor", "feedback": Cursor.Feedback.keys()[feedback]}))
+
+func _on_user_progress(cursor_id: String, progress: CursorUserProgress.Progress):
+	if _connected:
+		_socket.send_text(JSON.stringify({"cmd": "feedbackUserProgress", "progress": CursorUserProgress.Progress.keys()[progress]}))

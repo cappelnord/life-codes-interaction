@@ -17,6 +17,7 @@ var _time_when_reset = -1
 var _hover_block: CodeBlock = null
 var _grab_block: CodeBlock = null
 var _pressed: bool = false
+var _user_connected: bool = true
 
 @onready var _collider: Area2D = $"CursorCollider"
 
@@ -34,7 +35,13 @@ func _ready():
 func _process(delta):
 	if _time_when_reset > 0 and Time.get_ticks_msec() > _time_when_reset:
 		_update_cursor_texture()
-		_time_when_reset = -1 
+		_time_when_reset = -1
+		
+	if _user_connected:
+		self_modulate.a = 1
+	else:
+		print("user disconnected")
+		self_modulate.a = 0.7 + (sin(CodeBlockVisual.oscillation_phase) * 0.3)
 
 # effectively every move is a move_delta
 func move(new_position: Vector2):
@@ -54,6 +61,12 @@ func move_delta(delta: Vector2):
 
 # a cursor control scheme should either do one or the other - do not mix these up!
 # in the end it should translate to attach/unattach if feasible
+
+func user_connected():
+	_user_connected = true
+
+func user_disconnected():
+	_user_connected = false
 
 func press():
 	_pressed = true

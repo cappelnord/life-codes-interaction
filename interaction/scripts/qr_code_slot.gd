@@ -6,11 +6,11 @@ class_name QRCodeSlot
 @export var target_size: int = 120
 @export var time_until_refresh: float = 15
 
-var pending: bool = false
-var requires_action: bool = true
-var loading = false
-var under_control = false
-var spawned = false
+var pending := false
+var requires_action := true
+var loading := false
+var under_control := false
+var spawned := false
 
 var _loading_node_instance = null
 var _loading_node = preload("res://interaction/nodes/loading_rotate_node.tscn")
@@ -45,6 +45,13 @@ func update_qr_code(texture: ImageTexture):
 func slot_control_issued():
 	under_control = true
 	start_loading()
+
+func slot_control_released():
+	stop_loading()
+	spawned = false
+	under_control = false
+	pending = false
+	requires_action = true	
 
 func spawn():
 	stop_loading()
