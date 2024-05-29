@@ -6,11 +6,11 @@ class_name QRCodeSlot
 @export var target_size: int = 120
 @export var time_until_refresh: float = 15
 
-var pending := false
-var requires_action := true
-var loading := false
-var under_control := false
-var spawned := false
+var pending := false # if it is inbetween, waiting for an QR code to be assigned
+var requires_action := true # waiting to be in line to receive a new QR code
+var under_control := false # control was issued by the server
+var loading := false # waiting for the client to spawn the cursor
+var spawned := false # the cursor is spawned and represented by its own cursor object
 
 var _loading_node_instance = null
 var _loading_node = preload("res://interaction/nodes/loading_rotate_node.tscn")
@@ -75,3 +75,6 @@ func stop_loading():
 func reset():
 	pending = false
 	requires_action =  true
+	spawned = false
+	under_control = false
+	stop_loading()

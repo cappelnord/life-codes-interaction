@@ -40,7 +40,6 @@ func _process(delta):
 	if _user_connected:
 		self_modulate.a = 1
 	else:
-		print("user disconnected")
 		self_modulate.a = 0.7 + (sin(CodeBlockVisual.oscillation_phase) * 0.3)
 
 # effectively every move is a move_delta

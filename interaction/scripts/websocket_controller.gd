@@ -7,15 +7,16 @@ class_name WebSocketController
 static var run_id: String
 
 var _socket: WebSocketPeer
-var _attempt_connection = true
-var _connected = false
-var _authenticated = false
+var _attempt_connection := true
+var _connected := false
+var _time_of_disconnect := -1
+var _authenticated := false
 var _json = JSON.new()
 var _server_run_id: String
 
 var _qr_slots: Array[QRCodeSlot] = []
 var _qr_slots_lookup = {}
-var _current_slot_index = 0
+var _current_slot_index := 0
 var _http_request
 
 @onready var _cursor_manager: CursorManager = $"../CursorManager"
@@ -61,6 +62,13 @@ func _process(delta):
 	if _connected and _authenticated:
 		_process_slots()
 
+	if not _connected and _time_of_disconnect > 0 and (_time_of_disconnect + InteractionConfig.WEBSOCKETS_MSEC_UNTIL_LONG_DISCONNECT) < Time.get_ticks_msec():
+		print("Long disconnect")
+		for qr_slot in _qr_slots:
+			_hard_reset_qr_slot(qr_slot)
+			qr_slot.start_loading()
+		_time_of_disconnect = -1
+
 func _process_slots():
 	if _qr_slots.size() == 0: return
 	if _qr_slots[_current_slot_index].pending: return
@@ -89,13 +97,26 @@ func _attempt_connect_websocket():
 
 func _clear_websocket():
 	_socket = null
+
+	if _connected:
+		_time_of_disconnect = Time.get_ticks_msec()
+
 	_connected = false
+	
+	for qr_slot in _qr_slots:
+		if qr_slot.spawned:
+			_cursor_manager.user_disconnected(qr_slot.id)
 	
 func _connection_established():
 	_connected = true
+	_time_of_disconnect = -1
 
 	for qr_slot in _qr_slots:
-		qr_slot.pending = false
+		qr_slot.pending = false # if a new QR code is needed then they should now try to get it
+		
+		# see that the user_connected flag is set in case we recover from a disconnect
+		if qr_slot.spawned:
+			_cursor_manager.user_connected(qr_slot.id)
 		
 	print("Connected to WebSocket")
 
@@ -245,10 +266,15 @@ func _process_cursor_user_disconnected(msg: Variant):
 	if slot and slot.spawned:
 		_cursor_manager.user_disconnected(slot.id)	
 
+func _hard_reset_qr_slot(qr_slot: QRCodeSlot):
+	if qr_slot.spawned:
+		_cursor_manager.despawn(qr_slot.id)
+	qr_slot.reset()
+
 func _server_has_restarted():
 	print("Server has restarted since last connection. Resetting data.")
 	for qr_slot in _qr_slots:
-		qr_slot.reset()
+		_hard_reset_qr_slot(qr_slot)
 
 func _on_cursor_feedback(cursor_id: String, feedback: Cursor.Feedback):
 	if _connected:

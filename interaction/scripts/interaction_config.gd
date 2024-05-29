@@ -33,3 +33,6 @@ const OSC_RECEIVER_PORT = 57140
 # OSC Cursor Contgroller
 const OSC_CURSOR_CONTROLLER_ENABLED: bool = true
 
+# Websockts
+
+const WEBSOCKETS_MSEC_UNTIL_LONG_DISCONNECT = 10000
