@@ -3,7 +3,9 @@ class_name Cursor
 
 enum Feedback {
 	HOVER,
+	UNHOVER,
 	GRAB,
+	RELEASE,
 	CONNECT_BLOCK
 }
 
@@ -23,11 +25,11 @@ var _float_position := Vector2.ZERO
 @onready var _collider: Area2D = $"CursorCollider"
 
 func _init():
-	user_progress = CursorUserProgress.new(id)
 	_float_position = position
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	user_progress = CursorUserProgress.new(id)
 	z_index = InteractionConfig.Z_INDEX_MOUSE_CURSOR
 	_manager = (get_parent() as CursorManager)
 	_collider.area_entered.connect(_on_area_entered)
@@ -43,6 +45,9 @@ func _process(delta):
 		self_modulate.a = 1
 	else:
 		self_modulate.a = 0.7 + (sin(CodeBlockVisual.oscillation_phase) * 0.3)
+	
+	if user_progress:
+		user_progress.process(delta)
 
 # effectively every move is a move_delta
 func move(new_position: Vector2):
@@ -59,7 +64,8 @@ func move_delta(delta: Vector2):
 	if _grab_block != null:
 		_grab_block.move_delta(delta)
 	
-	user_progress.cursor_did_move()
+	if user_progress:
+		user_progress.cursor_did_move()
 
 # a cursor control scheme should either do one or the other - do not mix these up!
 # in the end it should translate to attach/unattach if feasible
@@ -110,14 +116,21 @@ func _attempt_grab():
 func _release_grab():
 	if _grab_block != null:
 		_grab_block.release_grab(self)
+		notify_release()
 	_grab_block = null
 
 func notify_hover():
 	feedback.emit(id, Feedback.HOVER)
 
+func notify_unhover():
+	feedback.emit(id, Feedback.UNHOVER)
+
 func notify_grab_successful():
 	user_progress.cursor_did_grab()
 	feedback.emit(id, Feedback.GRAB)
+
+func notify_release():
+	feedback.emit(id, Feedback.RELEASE)
 
 func notify_connect_block_successful():
 	user_progress.cursor_did_connect_block()
@@ -136,7 +149,10 @@ func _on_area_entered(collider: CodeBlockCollider):
 func _on_area_exited(collider: CodeBlockCollider):
 	collider.block.release_hover(self)
 	_hover_block = null
-	_attempt_rehover()
+	
+	if not _attempt_rehover():
+		notify_unhover()
+		
 	_update_cursor_texture()
 
 func cleanup():
@@ -144,7 +160,8 @@ func cleanup():
 	if _hover_block != null:
 		_hover_block.release_hover(self)
 
-func _attempt_rehover():
+func _attempt_rehover()->bool:
 	var areas = _collider.get_overlapping_areas()
 	for area in areas:
-		if _on_area_entered(area): return 
+		if _on_area_entered(area): return true
+	return false
