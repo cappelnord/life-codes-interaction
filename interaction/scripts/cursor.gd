@@ -12,20 +12,22 @@ signal feedback(cursor_id: String, feedback: Feedback)
 var id: String
 var user_progress: CursorUserProgress
 var _manager: CursorManager
-var _time_when_reset = -1
+var _time_when_reset := -1
 
 var _hover_block: CodeBlock = null
 var _grab_block: CodeBlock = null
-var _pressed: bool = false
-var _user_connected: bool = true
+var _pressed := false
+var _user_connected := true
+var _float_position := Vector2.ZERO
 
 @onready var _collider: Area2D = $"CursorCollider"
 
+func _init():
+	user_progress = CursorUserProgress.new(id)
+	_float_position = position
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	user_progress = CursorUserProgress.new(id)
-	
 	z_index = InteractionConfig.Z_INDEX_MOUSE_CURSOR
 	_manager = (get_parent() as CursorManager)
 	_collider.area_entered.connect(_on_area_entered)
@@ -44,14 +46,15 @@ func _process(delta):
 
 # effectively every move is a move_delta
 func move(new_position: Vector2):
-	move_delta(new_position - position);
+	move_delta(new_position - _float_position);
 
 func move_delta(delta: Vector2):
 	var new_position : Vector2 = position + delta
 	
 	# TODO: Limit in extends
 
-	position = new_position
+	_float_position = new_position
+	position = Vector2(round(_float_position.x), round(_float_position.y))
 	
 	if _grab_block != null:
 		_grab_block.move_delta(delta)
