@@ -4,7 +4,7 @@ class_name QRCodeSlot
 @export var id: String
 @export var scheme: String = "default"
 @export var target_size: int = 120
-@export var time_until_refresh: float = 15
+@export var time_until_refresh: float = 60
 
 var pending := false # if it is inbetween, waiting for an QR code to be assigned
 var requires_action := true # waiting to be in line to receive a new QR code
