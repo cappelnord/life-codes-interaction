@@ -192,6 +192,7 @@ func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 	if collider.block == self: return false
 	print("Attempt to connect: " + display_string + "->" + collider.block.display_string)
 	if collider.block.can_connect(self):
+		_active_cursor.notify_snap()
 		collider.block.group.set_add_candidate(self, collider.block)
 		return true
 	else:

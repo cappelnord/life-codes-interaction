@@ -6,6 +6,7 @@ enum Feedback {
 	UNHOVER,
 	GRAB,
 	RELEASE,
+	SNAP,
 	CONNECT_BLOCK
 }
 
@@ -131,6 +132,9 @@ func notify_grab_successful():
 
 func notify_release():
 	feedback.emit(id, Feedback.RELEASE)
+
+func notify_snap():
+	feedback.emit(id, Feedback.SNAP)
 
 func notify_connect_block_successful():
 	user_progress.cursor_did_connect_block()
