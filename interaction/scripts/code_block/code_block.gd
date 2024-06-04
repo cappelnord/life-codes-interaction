@@ -190,7 +190,7 @@ func is_hovered():
 
 func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 	if collider.block == self: return false
-	print("Attempt to connect: " + display_string + "->" + collider.block.display_string)
+	# print("Attempt to connect: " + display_string + "->" + collider.block.display_string)
 	if collider.block.can_connect(self):
 		_active_cursor.notify_snap()
 		collider.block.group.set_add_candidate(self, collider.block)
@@ -208,6 +208,9 @@ func _on_connection_area_exited(collider: CodeBlockConnectionCollider):
 func can_connect(other: CodeBlock):
 	# in case the other block has a head role we can never connect
 	if other.slot.spec.head_role(): return false
+	
+	# in case we are moving an action role that already is part of a group this can never connect
+	if other.slot.spec.action_role() and other.group != null: return false
 	
 	# in case the block is not yet part of a group it cannot connect
 	if group == null: return false
