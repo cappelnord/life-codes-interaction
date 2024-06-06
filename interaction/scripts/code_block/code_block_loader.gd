@@ -6,10 +6,13 @@ func _init(path: String):
 	# initialize loader and get ready to feed the CodeBlockManager
 	
 func load(manager: CodeBlockManager):
+	
+	# TODO: rethink how families are structured
+	
 	var universal_family = manager.add_family(CodeBlockFamily.new(
 		&"universal",
 		Color.DARK_GRAY,
-		[&"*"]
+		[&"clock", &"bowl"]
 	))
 	
 	var clock_family = manager.add_family(CodeBlockFamily.new(
@@ -22,6 +25,12 @@ func load(manager: CodeBlockManager):
 		&"bowl",
 		Color.DARK_ORANGE,
 		[&"bowl"]
+	))
+	
+	var life_family = manager.add_family(CodeBlockFamily.new(
+		&"life",
+		Color.DARK_SLATE_BLUE,
+		[&"life"]
 	))
 	
 	var clock_spec = manager.add_spec(CodeBlockSpec.new(
@@ -74,6 +83,22 @@ func load(manager: CodeBlockManager):
 		[]
 	))
 	
+	var life_spec = manager.add_spec(CodeBlockSpec.new(
+		&"life",
+		"life",
+		CodeBlock.Type.SUBJECT,
+		life_family,
+		[]	
+	))
+	
+	var emerge_spec = manager.add_spec(CodeBlockSpec.new(
+		&"emerge",
+		"emerge",
+		CodeBlock.Type.ACTION,
+		life_family,
+		[]
+	))
+	
 	manager.add_slot(CodeBlockSlot.new(
 		clock_spec,
 		Vector2(100, 100)
@@ -115,5 +140,15 @@ func load(manager: CodeBlockManager):
 	manager.add_slot(CodeBlockSlot.new(
 		mute_spec,
 		Vector2(600, 600)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		life_spec,
+		Vector2(800, 400)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		emerge_spec,
+		Vector2(900, 600)
 	))
 	
