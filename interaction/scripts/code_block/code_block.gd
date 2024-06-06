@@ -9,6 +9,7 @@ enum Type {
 }
 
 var slot: CodeBlockSlot
+var behaviour_host := CodeBlockBehaviourHost.new()
 var arguments = {}
 var display_string
 var code_string
@@ -92,16 +93,18 @@ func _update_strings():
 	_label.text = display_string
 	text_box_size = _label.get_theme_font("font").get_string_size(display_string, HORIZONTAL_ALIGNMENT_LEFT, -1,  InteractionConfig.CODE_BLOCK_FONT_SIZE)
 	text_box_size = text_box_size + Vector2(2 * InteractionConfig.CODE_BLOCK_PADDING_X, 2 * InteractionConfig.CODE_BLOCK_PADDING_Y)
+
+func _physics_process(delta):
+	var movement := behaviour_host.get_delta_movement(self, delta)
+	# --> why is move_delta breaking hovering/snapping?
+	# position = position + movement # --> this is not an issue
+	# move_delta(movement)
 	
 
-
-func _process(delta):
-	pass
-
-func move(new_position: Vector2, propage_to_group: bool=true):
+func move(new_position: Vector2, propagate_to_group: bool=true):
 	position = new_position
 	if visual.snapped: visual.update_position_offset()
-	if group != null and self == group.head and propage_to_group:
+	if group != null and self == group.head and propagate_to_group:
 		group.update_positions()
 	
 func move_delta(delta: Vector2):
