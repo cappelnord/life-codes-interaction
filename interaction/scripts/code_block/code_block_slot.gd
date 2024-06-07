@@ -8,17 +8,22 @@ var start_position: Vector2
 # should be copied when CodeBlock is spawned
 var arguments: Dictionary
 var family: CodeBlockFamily
+var behaviour: CodeBlockBehaviour
 
 var _should_respawn = true
 var block: CodeBlock = null
 var manager: CodeBlockManager
 
-func _init(spec: CodeBlockSpec, start_position: Vector2, arguments: Array[CodeBlockArgument] = [], family: CodeBlockFamily = null, id: StringName = &"", display_string: String = ""):
+# this has become a mess
+
+func _init(spec: CodeBlockSpec, start_position: Vector2, arguments: Array[CodeBlockArgument] = [], family: CodeBlockFamily = null, behaviour: CodeBlockBehaviour=null, id: StringName = &"", display_string: String = ""):
 	if display_string == "": display_string = spec.display_string
 	# TODO: check if this is actually a memory leak
 	if id == &"": id = StringName(str(spec.id) + "-" + InteractionHelpers.random_id())
 	
 	if family == null: family = spec.family
+	
+	if behaviour == null: behaviour = CodeBlockBehaviour.get_behaviour("default")
 	
 	self.id = id
 	self.display_string = display_string
@@ -26,6 +31,8 @@ func _init(spec: CodeBlockSpec, start_position: Vector2, arguments: Array[CodeBl
 	self.start_position = start_position
 	self.arguments = {}
 	self.family = family
+	self.behaviour = behaviour
+	
 	for argument in arguments:
 		self.arguments[argument.parameter.id] = argument	
 

@@ -32,6 +32,9 @@ var _active_cursor: Cursor
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	behaviour_host.replace_behaviour(slot.behaviour.clone())
+	
 	position = slot.start_position
 	
 	_collider.block = self
@@ -96,10 +99,11 @@ func _update_strings():
 
 func _physics_process(delta):
 	var movement := behaviour_host.get_delta_movement(self, delta)
-	# --> why is move_delta breaking hovering/snapping?
-	# position = position + movement # --> this is not an issue
-	# move_delta(movement)
-	
+	# we do not call move_delta and move directly as otherwise we
+	# got into a state where things are not higlighted properly .. it is important
+	# that this only happens when the block is not active, snapped or part of a group
+	position = position + movement
+
 
 func move(new_position: Vector2, propagate_to_group: bool=true):
 	position = new_position
