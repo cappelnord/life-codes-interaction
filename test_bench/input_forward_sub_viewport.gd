@@ -1,4 +1,4 @@
-extends SubViewportContainer
+extends Node2D
 
 @onready var _viewport = $"RenderViewport"
 
