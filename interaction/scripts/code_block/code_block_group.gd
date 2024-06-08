@@ -172,6 +172,9 @@ func move_all_to_front():
 	for member in all_members:
 		member.move_to_front()
 
+func has_action()->bool:
+	return action != null
+
 func on_commit_executed(commit_id: int):
 	print("on_commit_executed")
 	if commit_id == last_commit_id:

@@ -1,5 +1,5 @@
 extends Node2D
-class_name  CodeBlock
+class_name CodeBlock
 
 enum Type {
 	SUBJECT,
@@ -10,6 +10,7 @@ enum Type {
 
 var slot: CodeBlockSlot
 var behaviour_host := CodeBlockBehaviourHost.new()
+var behaviour_activity_ramp := 1.0
 var arguments = {}
 var display_string
 var code_string
@@ -98,11 +99,17 @@ func _update_strings():
 	text_box_size = text_box_size + Vector2(2 * InteractionConfig.CODE_BLOCK_PADDING_X, 2 * InteractionConfig.CODE_BLOCK_PADDING_Y)
 
 func _physics_process(delta):
+	
+	if is_involved():
+		behaviour_activity_ramp = 0	
+	else:
+		behaviour_activity_ramp = lerp(behaviour_activity_ramp, 1.0, delta * 0.1)
+	
 	var movement := behaviour_host.get_delta_movement(self, delta)
 	# we do not call move_delta and move directly as otherwise we
 	# got into a state where things are not higlighted properly .. it is important
 	# that this only happens when the block is not active, snapped or part of a group
-	position = position + movement
+	position = position + (movement * behaviour_activity_ramp)
 
 
 func move(new_position: Vector2, propagate_to_group: bool=true):
@@ -189,11 +196,14 @@ func release_grab(cursor: Cursor):
 	_update_visual_or_group_visual()
 
 func is_hovered():
-	var group_hover = false
+	var group_hover := false
 	if group != null:
 		group_hover = group.active_block_is_glued()
 	return _active_cursor != null or group_hover
 
+## Checks if the code block is involved in any activity. A code block that is involved in any activity should not move due to its own behaviour.
+func is_involved():
+	return _active_cursor != null or (group != null and group.has_action()) or visual.snapped
 
 func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 	if collider.block == self: return false

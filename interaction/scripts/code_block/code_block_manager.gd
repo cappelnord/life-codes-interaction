@@ -28,21 +28,21 @@ func _process(delta):
 	
 	CodeBlockVisual.oscillation_phase = fmod(CodeBlockVisual.oscillation_phase + InteractionConfig.CODE_BLOCK_OSCILLATON_PHI * delta, TAU)
 
-func add_spec(spec: CodeBlockSpec):
+func add_spec(spec: CodeBlockSpec)->CodeBlockSpec:
 	_specs[spec.id] = spec
 	return spec
 
 func get_spec(id: StringName)->CodeBlockSpec:
 	return _specs[id]
 
-func add_family(family: CodeBlockFamily):
+func add_family(family: CodeBlockFamily)->CodeBlockFamily:
 	_families[family.id] = family
 	return family
 
 func get_family(id: StringName)->CodeBlockFamily:
 	return _families[id]
 
-func add_slot(slot: CodeBlockSlot):
+func add_slot(slot: CodeBlockSlot)->CodeBlockSlot:
 	slot.manager = self
 	_slots[slot.id] = slot
 	return slot

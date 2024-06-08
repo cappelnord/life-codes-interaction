@@ -2,7 +2,13 @@ extends Object
 class_name CodeBlockBehaviour
 
 static var _template_dict = {
-	"default": CodeBlockNOPBehaviour.new()
+	"default": CodeBlockSmoothBrownianBehaviour.new(
+		Vector2(40.0, 40.0),
+		3.0, 4.0,
+		2.0, 4.0,
+		0.005
+	),
+	"nop": CodeBlockNOPBehaviour.new()
 }
 
 static func get_behaviour(key: String)->CodeBlockBehaviour:
