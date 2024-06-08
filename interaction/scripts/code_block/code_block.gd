@@ -100,7 +100,7 @@ func _update_strings():
 
 func _physics_process(delta):
 	
-	if is_involved():
+	if is_bound_or_active():
 		behaviour_activity_ramp = 0	
 	else:
 		behaviour_activity_ramp = lerp(behaviour_activity_ramp, 1.0, delta * 0.1)
@@ -201,8 +201,8 @@ func is_hovered():
 		group_hover = group.active_block_is_glued()
 	return _active_cursor != null or group_hover
 
-## Checks if the code block is involved in any activity. A code block that is involved in any activity should not move due to its own behaviour.
-func is_involved():
+## Checks if the code block is bound to a group.
+func is_bound_or_active():
 	return _active_cursor != null or (group != null and group.has_action()) or visual.snapped
 
 func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
