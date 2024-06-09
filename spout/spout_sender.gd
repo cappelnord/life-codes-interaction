@@ -3,13 +3,12 @@ extends Node
 var spout
 
 @export var viewport: Viewport
-@export var spout_name: String = "LifeCodes"
 
 func _ready():
-	if OS.get_name() == "Windows":
+	if OS.get_name() == "Windows" and InteractionConfig.SPOUT_ACTIVE:
 		RenderingServer.frame_post_draw.connect(_on_frame_post_draw)
 		spout = ClassDB.instantiate(&"Spout")
-		spout.set_sender_name(spout_name)
+		spout.set_sender_name(InteractionConfig.SPOUT_NAME)
 	
 func _on_frame_post_draw():
 	if spout != null:

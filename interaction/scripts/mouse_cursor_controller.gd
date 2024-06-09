@@ -1,9 +1,10 @@
 extends Node
+class_name MouseCursorController
 
 @onready var _manager: CursorManager = $"../CursorManager"
 
 @export var id: String = "mouse"
-@export var delta_multiplier: float = 1.0
+
 
 var _active = false
 var _last_position : Vector2 =  Vector2(100, 100)
@@ -18,7 +19,7 @@ func _ready():
 func _unhandled_input(event):
 	if _active:
 		if event is InputEventMouseMotion:
-			_manager.move_delta(id, event.relative * delta_multiplier)
+			_manager.move_delta(id, event.relative * InteractionConfig.MOUSE_CURSOR_CONTROLLER_SPEED)
 		if event is InputEventMouseButton:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if event.pressed:

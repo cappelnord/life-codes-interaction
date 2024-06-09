@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://va4wuo30obpa"]
 
 [ext_resource type="PackedScene" uid="uid://dhgams4dad5a2" path="res://interaction/interaction_root.tscn" id="1_hd1ur"]
-[ext_resource type="Script" path="res://test_bench/input_forward_sub_viewport.gd" id="1_oudhp"]
+[ext_resource type="Script" path="res://test_bench/forward_input.gd" id="1_oudhp"]
 [ext_resource type="PackedScene" uid="uid://be711cgcxokry" path="res://spout/spout_sender.tscn" id="3_ooqla"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_0mt2a"]

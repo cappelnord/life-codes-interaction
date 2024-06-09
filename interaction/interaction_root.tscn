@@ -57,6 +57,8 @@ script = ExtResource("4_mivvh")
 
 [node name="MouseCursorController" type="Node" parent="Interaction"]
 script = ExtResource("5_c3jn7")
+id = null
+delta_multiplier = null
 
 [node name="CodeBlockManager" type="Node2D" parent="Interaction"]
 script = ExtResource("6_deg0t")
