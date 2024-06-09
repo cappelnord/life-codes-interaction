@@ -16,6 +16,7 @@ var display_string
 var code_string
 var text_box_size: Vector2
 var grabbed = false
+var subpixel_position: Vector2
 
 var head_of_group: bool = false
 var group: CodeBlockGroup
@@ -37,6 +38,7 @@ func _ready():
 	behaviour_host.replace_behaviour(slot.behaviour.clone())
 	
 	position = slot.start_position
+	subpixel_position = position
 	
 	_collider.block = self
 	
@@ -109,20 +111,22 @@ func _physics_process(delta):
 	# we do not call move_delta and move directly as otherwise we
 	# got into a state where things are not higlighted properly .. it is important
 	# that this only happens when the block is not active, snapped or part of a group
-	position = position + (movement * behaviour_activity_ramp)
+	subpixel_position = subpixel_position + (movement * behaviour_activity_ramp)
+	position = Vector2(round(subpixel_position.x), round(subpixel_position.y))
 
 
 func move(new_position: Vector2, propagate_to_group: bool=true):
-	position = new_position
+	subpixel_position = new_position
+	position = Vector2(round(subpixel_position.x), round(subpixel_position.y))
 	if visual.snapped: visual.update_position_offset()
 	if group != null and self == group.head and propagate_to_group:
 		group.update_positions()
 	
 func move_delta(delta: Vector2):
 	if group != null and group.active_block_is_glued() and group.head != self:
-		group.head.move(group.head.position + delta)
+		group.head.move(group.head.subpixel_position + delta)
 	else:
-		move(position + delta)
+		move(subpixel_position + delta)
 	
 func attempt_hover(cursor: Cursor):	
 	if group != null and group.active_block != null: return false
