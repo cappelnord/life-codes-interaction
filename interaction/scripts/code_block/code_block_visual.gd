@@ -3,6 +3,7 @@ class_name CodeBlockVisual
 
 static var oscillation_phase: float = 0
 
+
 var block: CodeBlock
 var background_material: Material
 var snapped = false
@@ -13,7 +14,7 @@ var _flash_ramp: float = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	z_index = InteractionConfig.Z_INDEX_CODE_BLOCK
+	z_index = Config.Z_INDEX_CODE_BLOCK
 
 func init_with_block(block: CodeBlock):
 	self.block = block
@@ -44,21 +45,21 @@ func update_material_and_zindex():
 	
 	if block.grabbed or (block.group != null and block.group.head.grabbed) or (block.group != null and block.group.action != null and block.group.action.grabbed):
 		rgb_add = Vector3(0.25, 0.25, 0.25)
-		z_index = InteractionConfig.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK
+		z_index = Config.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK
 	elif snapped or (block.group != null and block.group.active_block != null and block.group.active_block.grabbed):
 		rgb_add = Vector3(0.15, 0.15, 0.15)
-		z_index = InteractionConfig.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK
+		z_index = Config.Z_INDEX_GRABBED_OR_SNAPPED_CODE_BLOCK
 	elif block.is_hovered():
 		rgb_add = Vector3(0.1, 0.1, 0.1)
-		z_index = InteractionConfig.Z_INDEX_HOVERED_CODE_BLOCK
+		z_index = Config.Z_INDEX_HOVERED_CODE_BLOCK
 	else:
-		z_index = InteractionConfig.Z_INDEX_CODE_BLOCK
+		z_index = Config.Z_INDEX_CODE_BLOCK
 		
 	if block.group != null and block.group.pending_action:
 		hsv_mod = hsv_mod * Vector3(1, 1, 1.0 - ((sin(oscillation_phase) + 1.0) * 0.1))
 		
 	if _flash_ramp > 0:
-		var flash_value := _flash_ramp * InteractionConfig.CODE_BLOCK_FLASH_STRENGTH
+		var flash_value := _flash_ramp * Config.code_blocks_flash_intensity
 		rgb_add = rgb_add + Vector3(flash_value, flash_value, flash_value)
 	
 	background_material.set_shader_parameter("hsv", Vector3(rgb.h, rgb.s, rgb.v) * hsv_mod)
@@ -69,13 +70,13 @@ func update_material_and_zindex():
 func _process(delta):
 	if (block.group != null and block.group.pending_action) or _flash_ramp > 0:
 		if _flash_ramp > 0:
-			_flash_ramp -= InteractionConfig.CODE_BLOCK_FLASH_RAMP_SPEED * delta;
+			_flash_ramp -= Config.code_blocks_flash_ramp_speed * delta;
 			if _flash_ramp < 0: _flash_ramp = 0
 		update_material_and_zindex()
 
 func set_size(size: Vector2):
 	($CodeBlockBackground as Sprite2D).scale = size
-	($CodeBlockText as Label).position = Vector2(InteractionConfig.CODE_BLOCK_PADDING_X, InteractionConfig.CODE_BLOCK_PADDING_Y)
+	($CodeBlockText as Label).position = Vector2(Config.code_blocks_padding_x, Config.code_blocks_padding_y)
 	
 	var oversize := Vector2(1.5, 1.25) * 1.05
 	var shadow_size := size * oversize

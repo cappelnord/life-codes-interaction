@@ -95,10 +95,10 @@ func _update_strings():
 		code_string = code_string + "," + parameter.type_tag() + str(value)
 	
 		
-	_label.add_theme_font_size_override("font_size", InteractionConfig.CODE_BLOCK_FONT_SIZE)
+	_label.add_theme_font_size_override("font_size", Config.code_blocks_font_size)
 	_label.text = display_string
-	text_box_size = _label.get_theme_font("font").get_string_size(display_string, HORIZONTAL_ALIGNMENT_LEFT, -1,  InteractionConfig.CODE_BLOCK_FONT_SIZE)
-	text_box_size = text_box_size + Vector2(2 * InteractionConfig.CODE_BLOCK_PADDING_X, 2 * InteractionConfig.CODE_BLOCK_PADDING_Y)
+	text_box_size = _label.get_theme_font("font").get_string_size(display_string, HORIZONTAL_ALIGNMENT_LEFT, -1,  Config.code_blocks_font_size)
+	text_box_size = text_box_size + Vector2(2 * Config.code_blocks_padding_x, 2 * Config.code_blocks_padding_y)
 
 func _physics_process(delta):
 	
@@ -113,7 +113,7 @@ func _physics_process(delta):
 	# that this only happens when the block is not active, snapped or part of a group
 	subpixel_position = subpixel_position + (movement * behaviour_activity_ramp)
 	
-	if InteractionConfig.CODE_BLOCK_QUANTIZE_POSITION:
+	if Config.code_blocks_quantize_position:
 		position = Vector2(round(subpixel_position.x), round(subpixel_position.y))
 	else:
 		position = subpixel_position
@@ -122,7 +122,7 @@ func _physics_process(delta):
 func move(new_position: Vector2, propagate_to_group: bool=true):
 	subpixel_position = new_position
 	
-	if InteractionConfig.CODE_BLOCK_QUANTIZE_POSITION:
+	if Config.code_blocks_quantize_position:
 		position = Vector2(round(subpixel_position.x), round(subpixel_position.y))
 	else:
 		position = subpixel_position
@@ -174,7 +174,7 @@ func attempt_grab(cursor: Cursor):
 			group.set_rem_candidate(self)
 			
 		_update_visual_or_group_visual()
-		_collider.set_collision_mask_value(InteractionConfig.COLLISION_LAYER_BOTTOM_CONNECTION, true)
+		_collider.set_collision_mask_value(Config.COLLISION_LAYER_BOTTOM_CONNECTION, true)
 		_move_to_front_or_group_to_front()
 		return true
 	
@@ -204,7 +204,7 @@ func release_grab(cursor: Cursor):
 	is_rem_candidate = false
 	grabbed = false
 	
-	_collider.set_collision_mask_value(InteractionConfig.COLLISION_LAYER_BOTTOM_CONNECTION, false)
+	_collider.set_collision_mask_value(Config.COLLISION_LAYER_BOTTOM_CONNECTION, false)
 	
 	_update_visual_or_group_visual()
 

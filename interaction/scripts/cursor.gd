@@ -31,7 +31,7 @@ func _init():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	user_progress = CursorUserProgress.new(id)
-	z_index = InteractionConfig.Z_INDEX_MOUSE_CURSOR
+	z_index = Config.Z_INDEX_MOUSE_CURSOR
 	_manager = (get_parent() as CursorManager)
 	_collider.area_entered.connect(_on_area_entered)
 	_collider.area_exited.connect(_on_area_exited)

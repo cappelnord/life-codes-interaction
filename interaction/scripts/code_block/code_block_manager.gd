@@ -1,6 +1,7 @@
 extends Node2D
 class_name CodeBlockManager
 
+
 var _code_block_node = preload("res://interaction/nodes/code_block_node.tscn")
 
 var _specs: Dictionary = {}
@@ -26,7 +27,7 @@ func _process(delta):
 			slot.block.slot = slot # the codeblock will take care of reading everything from the slot
 			add_child(slot.block)
 	
-	CodeBlockVisual.oscillation_phase = fmod(CodeBlockVisual.oscillation_phase + InteractionConfig.CODE_BLOCK_OSCILLATON_PHI * delta, TAU)
+	CodeBlockVisual.oscillation_phase = fmod(CodeBlockVisual.oscillation_phase + Config.code_blocks_oscillation_hz * TAU * delta, TAU)
 
 func add_spec(spec: CodeBlockSpec)->CodeBlockSpec:
 	_specs[spec.id] = spec

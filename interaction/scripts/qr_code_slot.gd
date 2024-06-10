@@ -20,7 +20,7 @@ var _last_refresh : int = -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	z_index = InteractionConfig.Z_INDEX_QR_CODE
+	z_index = Config.Z_INDEX_QR_CODE
 	(get_parent() as WebSocketController).register_slot(self)
 	_update_scale()
 	hide()

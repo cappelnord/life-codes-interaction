@@ -11,7 +11,7 @@ var _last_position : Vector2 =  Vector2(100, 100)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if not InteractionConfig.MOUSE_CURSOR_CONTROLLER_ENABLED:
+	if not Config.mouse_enable:
 		print("Removed MouseCursorController")
 		queue_free()
 		return
@@ -19,7 +19,7 @@ func _ready():
 func _unhandled_input(event):
 	if _active:
 		if event is InputEventMouseMotion:
-			_manager.move_delta(id, event.relative * InteractionConfig.MOUSE_CURSOR_CONTROLLER_SPEED)
+			_manager.move_delta(id, event.relative * Config.mouse_speed)
 		if event is InputEventMouseButton:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if event.pressed:
@@ -28,7 +28,7 @@ func _unhandled_input(event):
 					_manager.release(id)
 	else:
 		if event is InputEventMouseMotion:
-			_last_position = event.position * InteractionConfig.MOUSE_CURSOR_CONTROLLER_VIEWPORT_POSITION_MODIFIER
+			_last_position = event.position * Config.mouse_viewport_modifier
 
 func _input(event):
 	if event is InputEventKey and event.pressed:

@@ -5,10 +5,10 @@ var spout
 @export var viewport: Viewport
 
 func _ready():
-	if OS.get_name() == "Windows" and InteractionConfig.SPOUT_ACTIVE:
+	if OS.get_name() == "Windows" and Config.spout_enable:
 		RenderingServer.frame_post_draw.connect(_on_frame_post_draw)
 		spout = ClassDB.instantiate(&"Spout")
-		spout.set_sender_name(InteractionConfig.SPOUT_NAME)
+		spout.set_sender_name(Config.spout_name)
 	
 func _on_frame_post_draw():
 	if spout != null:

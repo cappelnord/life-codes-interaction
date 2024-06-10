@@ -3,7 +3,7 @@ extends Node2D
 var mouse_cursor_controller: MouseCursorController
 
 func _ready():
-	if InteractionConfig.MOUSE_CURSOR_CONTROLLER_ENABLED:
+	if Config.mouse_enable:
 		mouse_cursor_controller = find_child("MouseCursorController") as MouseCursorController
 
 func _unhandled_input(event):

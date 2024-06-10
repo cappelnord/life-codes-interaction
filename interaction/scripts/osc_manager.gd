@@ -10,8 +10,8 @@ func _ready():
 	_osc_impl = OscReceiver.new()
 	self.add_child.call_deferred(_osc_impl)
 	print("OSC: Spawned OscReceiver Node")
-	_target_string = InteractionConfig.OSC_SENDER_HOST + "/" + str(InteractionConfig.OSC_SENDER_PORT)
-	_osc_impl.setServerPort(InteractionConfig.OSC_RECEIVER_PORT)
+	_target_string = Config.osc_receiver_host + "/" + str(Config.osc_receiver_port)
+	_osc_impl.setServerPort(Config.osc_listen_port)
 	_osc_impl.startServer()
 	_osc_impl.osc_msg_received.connect(_on_osc_msg_received)
 	

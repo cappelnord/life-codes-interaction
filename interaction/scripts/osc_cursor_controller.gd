@@ -17,7 +17,7 @@ var _last_cursor_updates: Dictionary = {}
 var _last_cursor_positions: Dictionary = {}
 
 func _ready():
-	if not InteractionConfig.OSC_CURSOR_CONTROLLER_ENABLED:
+	if not Config.osc_enable_cursor_controller:
 		print("Removed OSCCursorController")
 		queue_free()
 		return
