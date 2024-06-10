@@ -10,6 +10,8 @@ const CODE_BLOCK_OSCILLATON_PHI: float = 1.5 * TAU
 const CODE_BLOCK_FLASH_RAMP_SPEED: float = 4
 const CODE_BLOCK_FLASH_STRENGTH: float = 0.4
 
+const CODE_BLOCK_QUANTIZE_POSITION := true
+
 # Constants controling functionality
 const Z_INDEX_CODE_BLOCK: int = 2000
 const Z_INDEX_HOVERED_CODE_BLOCK: int = 2010
