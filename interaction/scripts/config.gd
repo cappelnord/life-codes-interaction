@@ -23,6 +23,10 @@ static var mouse_viewport_modifier := 2.0
 static var spout_enable := true
 static var spout_name := "LifeCodes"
 
+static var websocket_base_url := "http://localhost:8000"
+static var websocket_installation_path := "/ws/installation"
+static var websocket_ms_until_long_disconnect := 10000
+
 
 # I hate, that there is so much manual stuff here, but I'd rather have things as
 # members here and not have a look-up structure ... this is very finicky unfortunately!
@@ -52,6 +56,10 @@ static func _static_init():
 	_config.set_value("spout", "enable", spout_enable)
 	_config.set_value("spout", "name", spout_name)
 	
+	_config.set_value("websocket", "base_url", websocket_base_url)
+	_config.set_value("websocket", "installation_path", websocket_installation_path)
+	_config.set_value("websocket", "ms_until_long_disconnect", websocket_ms_until_long_disconnect)
+	
 	# load values on top
 	_config.load("./lifecodes.ini")
 	
@@ -79,9 +87,14 @@ static func _static_init():
 	spout_enable = _config.get_value("spout", "enable") as bool
 	spout_name = _config.get_value("spout", "name") as String
 	
+	websocket_base_url = _config.get_value("websocket", "base_url") as String
+	websocket_installation_path = _config.get_value("websocket", "installation_path") as String
+	websocket_ms_until_long_disconnect = _config.get_value("websocket", "ms_until_long_disconnect") as int
+	
 
 
-# Constants controling functionality
+# real constants for things that should not be user-configurable
+
 const Z_INDEX_CODE_BLOCK: int = 2000
 const Z_INDEX_HOVERED_CODE_BLOCK: int = 2010
 const Z_INDEX_QR_CODE: int = 1900
@@ -91,7 +104,3 @@ const Z_INDEX_MOUSE_CURSOR: int = 2500
 const COLLISION_LAYER_BLOCK: int = 25
 const COLLISION_LAYER_TOP_CONNECTION: int = 26
 const COLLISION_LAYER_BOTTOM_CONNECTION: int = 27
-
-# Websockts
-const WEBSOCKETS_MSEC_UNTIL_LONG_DISCONNECT = 10000
-

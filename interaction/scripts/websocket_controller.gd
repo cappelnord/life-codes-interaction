@@ -1,9 +1,6 @@
 extends Node
 class_name WebSocketController
 
-@export var base_websocket_url: String = "http://localhost:8000"
-@export var installation_websocket_path: String = "/ws/installation"
-
 static var run_id: String
 
 var _socket: WebSocketPeer
@@ -62,7 +59,7 @@ func _process(delta):
 	if _connected and _authenticated:
 		_process_slots()
 
-	if _time_of_disconnect > 0 and (_time_of_disconnect + Config.WEBSOCKETS_MSEC_UNTIL_LONG_DISCONNECT) < Time.get_ticks_msec():
+	if _time_of_disconnect > 0 and (_time_of_disconnect + Config.websocket_ms_until_long_disconnect) < Time.get_ticks_msec():
 		print("Disconnected to WebSocket server already for some time. Hard reset QR code slots.")
 		for qr_slot in _qr_slots:
 			_hard_reset_qr_slot(qr_slot)
@@ -88,7 +85,7 @@ func _refresh_current_slot():
 
 
 func _attempt_connect_websocket():
-	var websocket_url = base_websocket_url + installation_websocket_path
+	var websocket_url = Config.websocket_base_url + Config.websocket_installation_path
 	websocket_url = websocket_url.replacen("http://", "ws://").replacen("https://", "wss://")
 	
 	_socket = WebSocketPeer.new()
