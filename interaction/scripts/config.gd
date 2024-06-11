@@ -27,6 +27,11 @@ static var websocket_base_url := "http://localhost:8000"
 static var websocket_installation_path := "/ws/installation"
 static var websocket_ms_until_long_disconnect := 10000
 
+static var app_render_width := 5380
+static var app_render_height := 1200
+static var app_window_width := app_render_width/2
+static var app_window_height := app_render_height/2
+
 
 # I hate, that there is so much manual stuff here, but I'd rather have things as
 # members here and not have a look-up structure ... this is very finicky unfortunately!
@@ -60,6 +65,13 @@ static func _static_init():
 	_config.set_value("websocket", "installation_path", websocket_installation_path)
 	_config.set_value("websocket", "ms_until_long_disconnect", websocket_ms_until_long_disconnect)
 	
+	_config.set_value("app", "render_width", app_render_width)
+	_config.set_value("app", "render_height", app_render_height)
+	_config.set_value("app", "window_width", app_window_width)
+	_config.set_value("app", "window_height", app_window_height)
+	
+	
+		
 	# load values on top
 	_config.load("./lifecodes.ini")
 	
@@ -91,6 +103,10 @@ static func _static_init():
 	websocket_installation_path = _config.get_value("websocket", "installation_path") as String
 	websocket_ms_until_long_disconnect = _config.get_value("websocket", "ms_until_long_disconnect") as int
 	
+	app_render_width = _config.get_value("app", "render_width") as int
+	app_render_height = _config.get_value("app", "render_height") as int	
+	app_window_width = _config.get_value("app", "window_width") as int
+	app_window_height = _config.get_value("app", "window_height") as int		
 
 
 # real constants for things that should not be user-configurable
