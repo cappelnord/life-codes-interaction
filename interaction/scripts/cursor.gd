@@ -22,6 +22,7 @@ var _grab_block: CodeBlock = null
 var _pressed := false
 var _user_connected := true
 var _float_position := Vector2.ZERO
+var _event_buffer := CursorEventBuffer.new()
 
 @onready var _collider: Area2D = $"CursorCollider"
 
@@ -36,8 +37,27 @@ func _ready():
 	_collider.area_entered.connect(_on_area_entered)
 	_collider.area_exited.connect(_on_area_exited)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+
+func _physics_process(delta):
+	# process pending move events before physics
+	
+	var event := _event_buffer.read_next_move_event()
+	while(event != null):
+		_apply_event(event)
+		event = _event_buffer.read_next_move_event()
+
 func _process(delta):
+	# process at most 1 action event, then all pending move events
+	var event := _event_buffer.read_next_action_event()
+	while(event != null):
+		_apply_event(event)
+		event = _event_buffer.read_next_action_event()
+	
+	event = _event_buffer.read_next_move_event()
+	while(event != null):
+		_apply_event(event)
+		event = _event_buffer.read_next_move_event()
+	
 	if _time_when_reset > 0 and Time.get_ticks_msec() > _time_when_reset:
 		_update_cursor_texture()
 		_time_when_reset = -1
@@ -49,12 +69,39 @@ func _process(delta):
 	
 	if user_progress:
 		user_progress.process(delta)
+		
+
+func user_connected():
+	_user_connected = true
+
+func user_disconnected():
+	_user_connected = false
+
+
+func _apply_event(event: CursorEvent):
+	match(event.type):
+		CursorEvent.Type.MOVE:
+			_do_move(event.vector)
+		CursorEvent.Type.MOVE_DELTA:
+			_do_move_delta(event.vector)
+		CursorEvent.Type.PRESS:
+			_do_press()
+		CursorEvent.Type.RELEASE:
+			_do_release()
+		CursorEvent.Type.ATTEMPT_TOGGLE_GRAB:
+			_do_attempt_toggle_grab()
+
+func move(new_position: Vector2):
+	_event_buffer.write_event(CursorEvent.Type.MOVE, new_position)
 
 # effectively every move is a move_delta
-func move(new_position: Vector2):
+func _do_move(new_position: Vector2):
 	move_delta(new_position - _float_position);
 
 func move_delta(delta: Vector2):
+	_event_buffer.write_event(CursorEvent.Type.MOVE_DELTA, delta)
+
+func _do_move_delta(delta: Vector2):
 	var new_position : Vector2 = position + delta
 	
 	# TODO: Limit in extends
@@ -71,22 +118,30 @@ func move_delta(delta: Vector2):
 # a cursor control scheme should either do one or the other - do not mix these up!
 # in the end it should translate to attach/unattach if feasible
 
-func user_connected():
-	_user_connected = true
-
-func user_disconnected():
-	_user_connected = false
-
 func press():
+	_event_buffer.write_event(CursorEvent.Type.PRESS)
+
+func _do_press():
 	_pressed = true
 	_attempt_grab()
 	_update_cursor_texture()
 
 func release():
+	_event_buffer.write_event(CursorEvent.Type.RELEASE)
+
+func _do_release():
 	_pressed = false
 	_release_grab()
 	_update_cursor_texture()
 	if _hover_block == null: _attempt_rehover()
+
+func attempt_toggle_grab():
+	_event_buffer.write_event(CursorEvent.Type.ATTEMPT_TOGGLE_GRAB)
+
+func _do_attempt_toggle_grab():
+	texture = _manager.cursor_image_attempt_grab
+	if not _attempt_grab(): _time_when_reset = Time.get_ticks_msec() + 500
+
 
 func _update_cursor_texture():
 	if _grab_block != null:
@@ -101,9 +156,6 @@ func _update_cursor_texture():
 		texture = _manager.cursor_image_base
 		
 
-func attempt_toggle_grab():
-	texture = _manager.cursor_image_attempt_grab
-	if not _attempt_grab(): _time_when_reset = Time.get_ticks_msec() + 500
 
 func _attempt_grab():
 	if _hover_block == null: return false

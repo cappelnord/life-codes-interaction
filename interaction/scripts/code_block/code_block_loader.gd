@@ -46,7 +46,7 @@ func load(manager: CodeBlockManager):
 		&"play",
 		"play",
 		CodeBlock.Type.ACTION,
-		clock_family,
+		universal_family,
 		[]
 	))
 	
@@ -63,7 +63,7 @@ func load(manager: CodeBlockManager):
 		&"play",
 		"play",
 		CodeBlock.Type.ACTION,
-		bowl_family,
+		universal_family,
 		[]
 	))
 	
