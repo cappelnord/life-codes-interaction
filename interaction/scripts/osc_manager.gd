@@ -30,7 +30,7 @@ func send_code_command(receiver: String, payload: String, commit_id: int):
 	_send("/lc/command", array)
 	print("Sent: /lc/command " + str(array))
 
-func _on_osc_msg_received(addr: String, args: Array, sender: String):
+func _on_osc_msg_received(addr: String, args: Array):
 	
 	if _code_block_manager != null:
 		match addr:
@@ -38,4 +38,4 @@ func _on_osc_msg_received(addr: String, args: Array, sender: String):
 				_code_block_manager.on_received_commit_executed(args[0] as String, args[1] as int)
 	
 	if _osc_cursor_controller != null and addr.begins_with(OSCCursorController.ADDR_PATTERN_ROOT):
-		_osc_cursor_controller.on_osc_msg_received(addr, args, sender)
+		_osc_cursor_controller.on_osc_msg_received(addr, args)

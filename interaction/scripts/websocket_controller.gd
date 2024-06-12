@@ -35,6 +35,11 @@ func register_slot(qr_slot: QRCodeSlot):
 	_qr_slots.append(qr_slot)
 	_qr_slots_lookup[qr_slot.id] = qr_slot
 
+# TODO: Should the packet processing be moved to physics_process?
+# --> Probably try! We can save a frame of input latency (at least if nothing is blocking)
+# --> Maybe monitor if things are blocking here; Websocket processing would be a good candidate
+#     to offload to another thread.
+
 func _process(delta):
 	if not _socket and _attempt_connection:
 		_attempt_connect_websocket()

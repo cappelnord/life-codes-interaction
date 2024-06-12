@@ -6,7 +6,7 @@ class OscMessage:
 	var args: Array
 	var semder: String # IP
 
-signal osc_msg_received(addr: String, args: Array, sender: String)
+signal osc_msg_received(addr: String, args: Array)
 
 var socketUdp := PacketPeerUDP.new()
 var senderIP: String
@@ -43,9 +43,9 @@ func _physics_process(_delta):
 	var num_available_packets := socketUdp.get_available_packet_count()
 	for i in num_available_packets:
 		var msg := parseOsc(socketUdp.get_packet())
-		var sender := "%s/%d" % [socketUdp.get_packet_ip(), socketUdp.get_packet_port()]
-		Log.verbose("OSC message received from %s: %s %s" % [sender, msg.addr, msg.args])
-		osc_msg_received.emit(msg.addr, msg.args, sender)
+		# var sender := "%s/%d" % [socketUdp.get_packet_ip(), socketUdp.get_packet_port()]
+		# Log.verbose("OSC message received from %s: %s %s" % [sender, msg.addr, msg.args])
+		osc_msg_received.emit(msg.addr, msg.args)
 
 func _exit_tree():
 	socketUdp.close()

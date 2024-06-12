@@ -34,7 +34,7 @@ func _process(delta):
 			_last_cursor_positions[cursor_id] = _cursor_manager.get_cursor(cursor_id).position
 			_cursor_manager.despawn(cursor_id)
 
-func on_osc_msg_received(addr: String, args: Array, sender: String):
+func on_osc_msg_received(addr: String, args: Array):
 	if _cursor_manager == null: return
 		
 	var cursor_id: String = "osc_" + args[0]

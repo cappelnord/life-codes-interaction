@@ -52,18 +52,18 @@ script = ExtResource("3_fiq1s")
 id = "d"
 target_size = 180
 
-[node name="CursorManager" type="Node" parent="Interaction"]
-script = ExtResource("4_mivvh")
-
-[node name="MouseCursorController" type="Node" parent="Interaction"]
-script = ExtResource("5_c3jn7")
-id = null
-
-[node name="CodeBlockManager" type="Node2D" parent="Interaction"]
-script = ExtResource("6_deg0t")
-
 [node name="OSCManager" type="Node" parent="Interaction"]
 script = ExtResource("7_ssv5t")
 
 [node name="OSCCursorController" type="Node" parent="Interaction"]
 script = ExtResource("8_fbsrd")
+
+[node name="MouseCursorController" type="Node" parent="Interaction"]
+script = ExtResource("5_c3jn7")
+id = null
+
+[node name="CursorManager" type="Node" parent="Interaction"]
+script = ExtResource("4_mivvh")
+
+[node name="CodeBlockManager" type="Node2D" parent="Interaction"]
+script = ExtResource("6_deg0t")
