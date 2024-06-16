@@ -17,9 +17,6 @@ class CodeBlockBehaviourReference:
 
 var _behaviours: Array[CodeBlockBehaviourReference] = []
 
-func _init():
-	pass
-
 func get_delta_movement(block: CodeBlock, delta: float) -> Vector2:
 	var ret := Vector2.ZERO
 	

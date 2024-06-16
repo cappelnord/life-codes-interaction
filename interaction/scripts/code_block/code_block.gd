@@ -34,11 +34,13 @@ var _active_cursor: Cursor
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	behaviour_host.replace_behaviour(slot.behaviour.clone())
-	
+		
 	position = slot.start_position
 	subpixel_position = position
+	
+	var behaviour_instance = slot.behaviour.clone()
+	behaviour_instance.initialize(self, behaviour_host)
+	behaviour_host.replace_behaviour(behaviour_instance)
 	
 	_collider.block = self
 	
