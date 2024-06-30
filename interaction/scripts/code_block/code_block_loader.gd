@@ -99,6 +99,14 @@ func load(manager: CodeBlockManager):
 		[]
 	))
 	
+	var softer_spec = manager.add_spec(CodeBlockSpec.new(
+		&"softer",
+		"softer",
+		CodeBlock.Type.MODIFIER,
+		universal_family,
+		[]
+	))
+	
 	var high_register_spec = manager.add_spec(CodeBlockSpec.new(
 		&"highRegister",
 		"highRegister",
@@ -223,7 +231,13 @@ func load(manager: CodeBlockManager):
 		mute_spec,
 		Vector2(600, 600)
 	))
+	
 
+	manager.add_slot(CodeBlockSlot.new(
+		softer_spec,
+		Vector2(1100, 1000)
+	))
+	
 	manager.add_slot(CodeBlockSlot.new(
 		mute_spec,
 		Vector2(700, 900)
