@@ -21,13 +21,13 @@ var _hover_block: CodeBlock = null
 var _grab_block: CodeBlock = null
 var _pressed := false
 var _user_connected := true
-var _float_position := Vector2.ZERO
+var _subpixel_position := Vector2.ZERO
 var _event_buffer := CursorEventBuffer.new()
 
 @onready var _collider: Area2D = $"CursorCollider"
 
 func _init():
-	_float_position = position
+	_subpixel_position = position
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -96,19 +96,19 @@ func move(new_position: Vector2):
 
 # effectively every move is a move_delta
 func _do_move(new_position: Vector2):
-	if _float_position == new_position: return
-	_do_move_delta(new_position - _float_position);
+	if _subpixel_position == new_position: return
+	_do_move_delta(new_position - _subpixel_position);
 
 func move_delta(delta: Vector2):
 	_event_buffer.write_event(CursorEvent.Type.MOVE_DELTA, delta)
 
 func _do_move_delta(delta: Vector2):
-	var new_position : Vector2 = position + delta
+	var new_position : Vector2 = _subpixel_position + delta
 	
 	# TODO: Limit in extends
 
-	_float_position = new_position
-	position = Vector2(round(_float_position.x), round(_float_position.y))
+	_subpixel_position = new_position
+	position = Vector2(round(_subpixel_position.x), round(_subpixel_position.y))
 	
 	if _grab_block != null:
 		_grab_block.move_delta(delta)
