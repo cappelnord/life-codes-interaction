@@ -196,11 +196,11 @@ func load(manager: CodeBlockManager):
 		[CodeBlockArgument.new(repeat_sample_spec.get_parameter(&"times"), CodeBlockArgument.Type.CONSTANT, 3)]
 	))
 
-	manager.add_slot(CodeBlockSlot.new(
-		repeat_sample_spec,
-		Vector2(900, 900),
-		[CodeBlockArgument.new(repeat_sample_spec.get_parameter(&"times"), CodeBlockArgument.Type.CONSTANT, 4)]
-	))
+	# manager.add_slot(CodeBlockSlot.new(
+	# 	repeat_sample_spec,
+	# 	Vector2(900, 900),
+	# 	[CodeBlockArgument.new(repeat_sample_spec.get_parameter(&"times"), CodeBlockArgument.Type.CONSTANT, 4)]
+	# ))
 	
 	manager.add_slot(CodeBlockSlot.new(
 		euclid_spec,
@@ -233,10 +233,10 @@ func load(manager: CodeBlockManager):
 	))
 	
 
-	manager.add_slot(CodeBlockSlot.new(
-		softer_spec,
-		Vector2(1100, 1000)
-	))
+	# manager.add_slot(CodeBlockSlot.new(
+	# 	softer_spec,
+	# 	Vector2(1100, 1000)
+	# ))
 	
 	manager.add_slot(CodeBlockSlot.new(
 		mute_spec,
