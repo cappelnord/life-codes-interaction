@@ -96,7 +96,8 @@ func move(new_position: Vector2):
 
 # effectively every move is a move_delta
 func _do_move(new_position: Vector2):
-	move_delta(new_position - _float_position);
+	if _float_position == new_position: return
+	_do_move_delta(new_position - _float_position);
 
 func move_delta(delta: Vector2):
 	_event_buffer.write_event(CursorEvent.Type.MOVE_DELTA, delta)
