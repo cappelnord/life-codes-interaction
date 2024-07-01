@@ -12,7 +12,7 @@ func load(manager: CodeBlockManager):
 	var universal_family = manager.add_family(CodeBlockFamily.new(
 		&"universal",
 		Color.DARK_GRAY,
-		[&"clock", &"bowl"]
+		[&"clock", &"bowl", &"djembes", &"boomwhacks"]
 	))
 	
 	var clock_family = manager.add_family(CodeBlockFamily.new(
@@ -25,6 +25,24 @@ func load(manager: CodeBlockManager):
 		&"bowl",
 		Color.DARK_ORANGE,
 		[&"bowl"]
+	))
+	
+	var djembes_family = manager.add_family(CodeBlockFamily.new(
+		&"djembes",
+		Color.DARK_RED,
+		[&"djembes"]
+	))
+	
+	var boomwhacks_family = manager.add_family(CodeBlockFamily.new(
+		&"boomwhacks",
+		Color.INDIAN_RED,
+		[&"boomwhacks"]
+	))
+	
+	var bowl_support_family = manager.add_family(CodeBlockFamily.new(
+		&"bowl_support",
+		Color.DARK_KHAKI,
+		[&"bowl", &"djembes", &"boomwhacks"]
 	))
 	
 	var life_family = manager.add_family(CodeBlockFamily.new(
@@ -59,6 +77,24 @@ func load(manager: CodeBlockManager):
 		true
 	))
 	
+	var djembes_spec = manager.add_spec(CodeBlockSpec.new(
+		&"djembes",
+		"djembes",
+		CodeBlock.Type.SUBJECT,
+		djembes_family,
+		[],
+		true
+	))
+	
+	var boomwhacks_spec = manager.add_spec(CodeBlockSpec.new(
+		&"boomwhacks",
+		"boomwhacks",
+		CodeBlock.Type.SUBJECT,
+		boomwhacks_family,
+		[],
+		true
+	))
+	
 	var faster_spec = manager.add_spec(CodeBlockSpec.new(
 		&"faster",
 		"faster",
@@ -79,7 +115,7 @@ func load(manager: CodeBlockManager):
 		&"repeatSample",
 		"repeatSample",
 		CodeBlock.Type.MODIFIER,
-		bowl_family,
+		bowl_support_family,
 		[CodeBlockParameter.new(&"times", CodeBlockParameter.Type.NUMBER, 2)]
 	))
 	
@@ -87,7 +123,7 @@ func load(manager: CodeBlockManager):
 		&"euclid",
 		"euclid",
 		CodeBlock.Type.MODIFIER,
-		bowl_family,
+		bowl_support_family,
 		[CodeBlockParameter.new(&"a", CodeBlockParameter.Type.NUMBER, 8), CodeBlockParameter.new(&"b", CodeBlockParameter.Type.NUMBER, 8)]
 	))
 	
@@ -180,8 +216,7 @@ func load(manager: CodeBlockManager):
 	manager.add_slot(CodeBlockSlot.new(
 		faster_spec,
 		Vector2(400, 400),
-		[CodeBlockArgument.new(faster_spec.get_parameter(&"speed"), CodeBlockArgument.Type.CONSTANT, 4)],
-		clock_family
+		[CodeBlockArgument.new(faster_spec.get_parameter(&"speed"), CodeBlockArgument.Type.CONSTANT, 4)]
 	))
 	
 	manager.add_slot(CodeBlockSlot.new(
@@ -218,6 +253,12 @@ func load(manager: CodeBlockManager):
 		euclid_spec,
 		Vector2(700, 1050),
 		[CodeBlockArgument.new(euclid_spec.get_parameter(&"a"), CodeBlockArgument.Type.CONSTANT, 7), CodeBlockArgument.new(euclid_spec.get_parameter(&"b"), CodeBlockArgument.Type.CONSTANT, 8)]
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		euclid_spec,
+		Vector2(1000, 1050),
+		[CodeBlockArgument.new(euclid_spec.get_parameter(&"a"), CodeBlockArgument.Type.CONSTANT, 7), CodeBlockArgument.new(euclid_spec.get_parameter(&"b"), CodeBlockArgument.Type.CONSTANT, 16)]
 	))
 	
 	
@@ -271,5 +312,36 @@ func load(manager: CodeBlockManager):
 	manager.add_slot(CodeBlockSlot.new(
 		low_register_spec,
 		Vector2(1150, 600)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		djembes_spec,
+		Vector2(1200, 100)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		play_spec,
+		Vector2(1400, 200)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		boomwhacks_spec,
+		Vector2(1200, 800)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		play_spec,
+		Vector2(1400, 900)
+	))
+	
+	
+	manager.add_slot(CodeBlockSlot.new(
+		mute_spec,
+		Vector2(1200, 900)
+	))
+	
+	manager.add_slot(CodeBlockSlot.new(
+		mute_spec,
+		Vector2(1000, 900)
 	))
 	
