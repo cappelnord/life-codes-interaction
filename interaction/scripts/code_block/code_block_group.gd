@@ -56,7 +56,7 @@ func commit(new_block: CodeBlock)->bool:
 		last_commit_id = InteractionHelpers.random_int32_id()
 		head.slot.manager.on_group_comitted.call_deferred(self)
 		
-		if head.slot.spec.quant:
+		if head.slot.family.quant:
 			pending_action = true
 		flash(1)
 	

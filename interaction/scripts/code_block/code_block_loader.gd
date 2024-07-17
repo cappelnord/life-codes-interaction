@@ -12,43 +12,50 @@ func load(manager: CodeBlockManager):
 	var universal_family = manager.add_family(CodeBlockFamily.new(
 		&"universal_pattern",
 		Color.DARK_GRAY,
-		[&"clock", &"bowl", &"djembes", &"boomwhacks"]
+		[&"clock", &"bowl", &"djembes", &"boomwhacks"],
+		false
 	))
 	
 	var clock_family = manager.add_family(CodeBlockFamily.new(
 		&"clock",
 		Color.DARK_SLATE_GRAY,
-		[&"clock"]
+		[&"clock"],
+		true
 	))
 
 	var bowl_family = manager.add_family(CodeBlockFamily.new(
 		&"bowl",
 		Color.DARK_ORANGE,
-		[&"bowl"]
+		[&"bowl"],
+		true
 	))
 	
 	var djembes_family = manager.add_family(CodeBlockFamily.new(
 		&"djembes",
 		Color.DARK_RED,
-		[&"djembes"]
+		[&"djembes"],
+		true
 	))
 	
 	var boomwhacks_family = manager.add_family(CodeBlockFamily.new(
 		&"boomwhacks",
 		Color.INDIAN_RED,
-		[&"boomwhacks"]
+		[&"boomwhacks"],
+		true
 	))
 	
 	var bowl_support_family = manager.add_family(CodeBlockFamily.new(
 		&"bowl_support",
 		Color.DARK_KHAKI,
-		[&"bowl", &"djembes", &"boomwhacks"]
+		[&"bowl", &"djembes", &"boomwhacks"],
+		false
 	))
 	
 	var life_family = manager.add_family(CodeBlockFamily.new(
 		&"life",
 		Color.DARK_SLATE_BLUE,
-		[&"life"]
+		[&"life"],
+		false
 	))
 	
 	var clock_spec = manager.add_spec(CodeBlockSpec.new(
@@ -57,8 +64,7 @@ func load(manager: CodeBlockManager):
 		"clock",
 		CodeBlock.Type.SUBJECT,
 		clock_family,
-		[],
-		true
+		[]
 	))
 	
 	var play_spec = manager.add_spec(CodeBlockSpec.new(
@@ -76,8 +82,7 @@ func load(manager: CodeBlockManager):
 		"bowl",
 		CodeBlock.Type.SUBJECT,
 		bowl_family,
-		[],
-		true
+		[]
 	))
 	
 	var djembes_spec = manager.add_spec(CodeBlockSpec.new(
@@ -86,8 +91,7 @@ func load(manager: CodeBlockManager):
 		"djembes",
 		CodeBlock.Type.SUBJECT,
 		djembes_family,
-		[],
-		true
+		[]
 	))
 	
 	var boomwhacks_spec = manager.add_spec(CodeBlockSpec.new(
@@ -96,8 +100,7 @@ func load(manager: CodeBlockManager):
 		"boomwhacks",
 		CodeBlock.Type.SUBJECT,
 		boomwhacks_family,
-		[],
-		true
+		[]
 	))
 	
 	var faster_spec = manager.add_spec(CodeBlockSpec.new(
