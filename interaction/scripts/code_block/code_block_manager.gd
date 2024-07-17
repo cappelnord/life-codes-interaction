@@ -13,9 +13,6 @@ var _families: Dictionary = {}
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_osc.set_code_block_manager(self)
-	# load all specs
-	CodeBlockLoader.new("..").load(self)
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -81,3 +78,17 @@ func on_received_commit_executed(id: String, commit_id: int):
 	var group := get_group(id)
 	if group != null:
 		group.on_commit_executed(commit_id)
+
+
+# this will be called when specs are (re)loaded to make sure that no old stuff is lingering around.
+# this will not call the gracious "dismiss" on the blocks but will terminate things quickly
+func wipe():
+	# let's start with slots/blocks
+	for key in _slots.keys():
+		_slots[key].delete()
+	_slots = {}
+	
+	# I assume here the GC should be sufficient
+	_specs = {}
+	_families = {}
+	

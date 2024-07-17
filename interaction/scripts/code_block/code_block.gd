@@ -25,6 +25,8 @@ var is_rem_candidate = false
 
 var _active_cursor: Cursor
 
+var deleted = false
+
 @onready var visual: CodeBlockVisual = $CodeBlockVisual
 
 @onready var _collider: CodeBlockCollider = $CodeBlockCollider
@@ -262,6 +264,14 @@ func _to_string():
 func resign():
 	pass
 
+# this is radical and does not check/care if the block is part of a group ...
+# ... it is also the last step of a more soft resign/dismiss process
+func delete():
+	deleted = true
+	if _active_cursor:
+		_active_cursor.cleanup()
+	queue_free()
+	
 	
 func _move_to_front_or_group_to_front():
 	if group == null:

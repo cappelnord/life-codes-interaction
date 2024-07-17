@@ -9,32 +9,46 @@ var start_position: Vector2
 var arguments: Dictionary
 var family: CodeBlockFamily
 var behaviour: CodeBlockBehaviour
+var context: String
 
 var _should_respawn = true
 var block: CodeBlock = null
 var manager: CodeBlockManager
 
+var deleted := false
+
 # this has become a mess
 
-func _init(spec: CodeBlockSpec, start_position: Vector2, arguments: Array[CodeBlockArgument] = [], family: CodeBlockFamily = null, behaviour: CodeBlockBehaviour=null, id: StringName = &"", display_string: String = ""):
-	if display_string == "": display_string = spec.display_string
-	# TODO: check if this is actually a memory leak
+# arguments: Array[CodeBlockArgument] = []
+# family: CodeBlockFamily = null
+# behaviour: CodeBlockBehaviour=null
+# display_string: String = ""
+# context: String = ""
+
+func _init(spec: CodeBlockSpec, start_position: Vector2, id: StringName = &"", options: Variant = {}):
+
 	if id == &"": id = StringName(str(spec.id) + "-" + InteractionHelpers.random_id())
-	
-	if family == null: family = spec.family
-	
-	if behaviour == null: behaviour = CodeBlockBehaviour.get_behaviour("default")
-	
+		
 	self.id = id
-	self.display_string = display_string
 	self.spec = spec
 	self.start_position = start_position
+
+	self.family = options.get("family", spec.family)
+	self.behaviour = options.get("behaviour", CodeBlockBehaviour.get_behaviour("default")) 
+	self.context = options.get("context", "")
+	self.display_string = options.get("display_string", spec.display_string)
+
+	var arguments = options.get("arguments", [])
+
 	self.arguments = {}
-	self.family = family
-	self.behaviour = behaviour
-	
 	for argument in arguments:
 		self.arguments[argument.parameter.id] = argument	
 
 func should_spawn() -> bool:
 	return block == null and _should_respawn
+
+func delete():
+	_should_respawn = false
+	deleted = true
+	if block:
+		block.delete()
