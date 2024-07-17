@@ -34,8 +34,10 @@ func _on_osc_msg_received(addr: String, args: Array):
 	
 	if _code_block_manager != null:
 		match addr:
-			"/lc/back/commitExecuted":
-				_code_block_manager.on_received_commit_executed(args[0] as String, args[1] as int)
+			"/lc/blocks/commandFeedback":
+				_code_block_manager.on_received_command_feedback(args[0] as String, args[1] as int)
+			"/lc/blocks/loadSpecs":
+				_code_block_manager.on_received_load_specs(args[0] as String)
 	
 	if _osc_cursor_controller != null and addr.begins_with(OSCCursorController.ADDR_PATTERN_ROOT):
 		_osc_cursor_controller.on_osc_msg_received(addr, args)

@@ -6,7 +6,7 @@ var head: CodeBlock
 var action: CodeBlock
 var modifiers: Array[CodeBlock] = []
 var active_block: CodeBlock
-var last_commit_id: int
+var last_command_id: int
 var all_members: Array[CodeBlock] = []
 var pending_action: bool = false
 
@@ -53,7 +53,7 @@ func commit(new_block: CodeBlock)->bool:
 		
 	if success:
 		_update_all_members()
-		last_commit_id = InteractionHelpers.random_int32_id()
+		last_command_id = InteractionHelpers.random_int32_id()
 		head.slot.manager.on_group_comitted.call_deferred(self)
 		
 		if head.slot.family.quant:
@@ -175,9 +175,9 @@ func move_all_to_front():
 func has_action()->bool:
 	return action != null
 
-func on_commit_executed(commit_id: int):
-	print("on_commit_executed")
-	if commit_id == last_commit_id:
+func on_command_feedback(command_id: int):
+	print("on_command_feedback")
+	if command_id == last_command_id:
 		pending_action = false
 		flash(0.75)
 		update_visual()

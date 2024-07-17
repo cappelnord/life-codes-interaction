@@ -74,21 +74,25 @@ func _compile_code_string(group: CodeBlockGroup)->String:
 	# print("Compiled code string: " + ret)
 	return ret
 
-func on_received_commit_executed(id: String, commit_id: int):
+func on_received_command_feedback(id: String, command_id: int):
 	var group := get_group(id)
 	if group != null:
-		group.on_commit_executed(commit_id)
+		group.on_command_feedback(command_id)
 
+func on_received_load_specs(path: String):
+	print("Loading specs from: " + path + " ...")
+	_wipe()
+	(CodeBlockLoader.new()).loadJSON(path, self)
 
 # this will be called when specs are (re)loaded to make sure that no old stuff is lingering around.
 # this will not call the gracious "dismiss" on the blocks but will terminate things quickly
-func wipe():
+func _wipe():
 	# let's start with slots/blocks
 	for key in _slots.keys():
 		_slots[key].delete()
 	_slots = {}
 	
-	# I assume here the GC should be sufficient
+	# I assume here the GC should be sufficient in dealing with things
 	_specs = {}
 	_families = {}
 	
