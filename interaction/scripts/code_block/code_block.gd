@@ -85,7 +85,7 @@ func _update_sizes():
 func _update_strings():
 	# build the display_string and code_string and set it
 	display_string = slot.display_string
-	code_string = slot.spec.id
+	code_string = slot.spec.code_string
 	
 	# we should iterate over parameters and then see if we have one set; otherwise use default parameters
 	# for now we only havew constant parameters/arguments

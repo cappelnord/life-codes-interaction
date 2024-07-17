@@ -10,7 +10,7 @@ func load(manager: CodeBlockManager):
 	# TODO: rethink how families are structured
 	
 	var universal_family = manager.add_family(CodeBlockFamily.new(
-		&"universal",
+		&"universal_pattern",
 		Color.DARK_GRAY,
 		[&"clock", &"bowl", &"djembes", &"boomwhacks"]
 	))
@@ -52,7 +52,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var clock_spec = manager.add_spec(CodeBlockSpec.new(
-		&"clock",
+		&"clock:clock",
+		"clock",
 		"clock",
 		CodeBlock.Type.SUBJECT,
 		clock_family,
@@ -61,7 +62,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var play_spec = manager.add_spec(CodeBlockSpec.new(
-		&"play",
+		&"universal_pattern:play",
+		"play",
 		"play",
 		CodeBlock.Type.ACTION,
 		universal_family,
@@ -69,7 +71,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var bowl_spec = manager.add_spec(CodeBlockSpec.new(
-		&"bowl",
+		&"bowl:bowl",
+		"bowl",
 		"bowl",
 		CodeBlock.Type.SUBJECT,
 		bowl_family,
@@ -78,7 +81,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var djembes_spec = manager.add_spec(CodeBlockSpec.new(
-		&"djembes",
+		&"djembes:djembes",
+		"djembes",
 		"djembes",
 		CodeBlock.Type.SUBJECT,
 		djembes_family,
@@ -87,7 +91,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var boomwhacks_spec = manager.add_spec(CodeBlockSpec.new(
-		&"boomwhacks",
+		&"boomwhacks:boomwhacks",
+		"boomwhacks",
 		"boomwhacks",
 		CodeBlock.Type.SUBJECT,
 		boomwhacks_family,
@@ -96,7 +101,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var faster_spec = manager.add_spec(CodeBlockSpec.new(
-		&"faster",
+		&"universal_pattern:faster",
+		"faster",
 		"faster",
 		CodeBlock.Type.MODIFIER,
 		universal_family,
@@ -104,7 +110,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var slower_spec = manager.add_spec(CodeBlockSpec.new(
-		&"slower",
+		&"universal_pattern:slower",
+		"slower",
 		"slower",
 		CodeBlock.Type.MODIFIER,
 		universal_family,
@@ -112,7 +119,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var repeat_sample_spec = manager.add_spec(CodeBlockSpec.new(
-		&"repeatSample",
+		&"bowl_support:repeatSample",
+		"repeatSample",
 		"repeatSample",
 		CodeBlock.Type.MODIFIER,
 		bowl_support_family,
@@ -120,7 +128,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var euclid_spec = manager.add_spec(CodeBlockSpec.new(
-		&"euclid",
+		&"bowl_support:euclid",
+		"euclid",
 		"euclid",
 		CodeBlock.Type.MODIFIER,
 		bowl_support_family,
@@ -128,7 +137,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var mute_spec = manager.add_spec(CodeBlockSpec.new(
-		&"mute",
+		&"universal_pattern:mute",
+		"mute",
 		"mute",
 		CodeBlock.Type.MODIFIER,
 		universal_family,
@@ -136,7 +146,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var softer_spec = manager.add_spec(CodeBlockSpec.new(
-		&"softer",
+		&"universal_pattern:softer",
+		"softer",
 		"softer",
 		CodeBlock.Type.MODIFIER,
 		universal_family,
@@ -144,7 +155,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var high_register_spec = manager.add_spec(CodeBlockSpec.new(
-		&"highRegister",
+		&"bowl:highRegister",
+		"highRegister",
 		"highRegister",
 		CodeBlock.Type.MODIFIER,
 		bowl_family,
@@ -152,7 +164,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var low_register_spec = manager.add_spec(CodeBlockSpec.new(
-		&"lowRegister",
+		&"bowl:lowRegister",
+		"lowRegister",
 		"lowRegister",
 		CodeBlock.Type.MODIFIER,
 		bowl_family,
@@ -160,7 +173,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var life_spec = manager.add_spec(CodeBlockSpec.new(
-		&"life",
+		&"life:life",
+		"life",
 		"life",
 		CodeBlock.Type.SUBJECT,
 		life_family,
@@ -168,7 +182,8 @@ func load(manager: CodeBlockManager):
 	))
 	
 	var emerge_spec = manager.add_spec(CodeBlockSpec.new(
-		&"emerge",
+		&"life:emerge",
+		"emerge",
 		"emerge",
 		CodeBlock.Type.ACTION,
 		life_family,
