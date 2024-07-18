@@ -27,8 +27,8 @@ func _send(osc_addr: String, args: Array=[]):
 
 func send_code_command(context: String, payload: String, head_id: String, command_id: String):
 	var array = [context, payload, head_id, command_id]
-	_send("/lc/command", array)
-	print("Sent: /lc/command " + str(array))
+	_send("/lc/executeCommand", array)
+	print("Sent: /lc/executeCommand " + str(array))
 
 func _on_osc_msg_received(addr: String, args: Array):
 	

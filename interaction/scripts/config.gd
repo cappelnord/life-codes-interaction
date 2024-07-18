@@ -4,7 +4,7 @@ class_name Config
 static var _config: ConfigFile
 
 static var osc_receiver_host := "127.0.0.1"
-static var osc_receiver_port := 57120
+static var osc_receiver_port := 57150
 static var osc_listen_port := 57140
 static var osc_enable_cursor_controller := true
 
