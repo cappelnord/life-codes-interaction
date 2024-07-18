@@ -19,11 +19,6 @@ var deleted := false
 
 # this has become a mess
 
-# arguments: Array[CodeBlockArgument] = []
-# family: CodeBlockFamily = null
-# behaviour: CodeBlockBehaviour=null
-# display_string: String = ""
-# context: String = ""
 
 func _init(spec: CodeBlockSpec, start_position: Vector2, id: StringName = &"", options: Variant = {}):
 
@@ -33,6 +28,7 @@ func _init(spec: CodeBlockSpec, start_position: Vector2, id: StringName = &"", o
 	self.spec = spec
 	self.start_position = start_position
 
+	# see here for options
 	self.family = options.get("family", spec.family)
 	self.behaviour = options.get("behaviour", CodeBlockBehaviour.get_behaviour("default")) 
 	self.context = options.get("context", "")
@@ -52,3 +48,40 @@ func delete():
 	deleted = true
 	if block:
 		block.delete()
+
+func get_command_context()->String:
+	if context != null and context != "":
+		return context
+	else:
+		return str(id)
+
+static func from_json(data: Variant, manager: CodeBlockManager) -> CodeBlockSlot:
+	var spec = manager.get_spec(StringName(data["spec"]))
+	var start_position = InteractionHelpers.position_to_pixel(Vector2(data["pos"]["x"], data["pos"]["y"]))
+	var id = StringName(data["id"])
+	
+	var do = data["options"]
+	var options = {}
+	
+	if do.has("family"):
+		options["family"] = manager.get_family(StringName(do["family"]))
+	
+	if do.has("context"):
+		options["context"] = do["context"]
+	
+	if do.has("behaviour"):
+		options["behaviour"] = CodeBlockBehaviour.from_json(do["behaviour"])
+	
+	if do.has("displayString"):
+		options["display_string"] = do["displayString"]
+	
+	if do.has("args"):	
+		var arguments = [] as Array[CodeBlockArgument]
+		var i := 0
+		for arg in do["args"]:
+			arguments.append(CodeBlockArgument.new(spec.parameters[i], CodeBlockArgument.Type.CONSTANT, arg))
+			i = i + 1
+		options["arguments"] = arguments
+	
+	return CodeBlockSlot.new(spec, start_position, id, options)
+	

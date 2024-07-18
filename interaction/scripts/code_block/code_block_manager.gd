@@ -63,7 +63,7 @@ func get_group(id: StringName)->CodeBlockGroup:
 		return null
 
 func on_group_comitted(group: CodeBlockGroup):
-	_osc.send_code_command(group.head.slot.id, _compile_code_string(group), group.last_commit_id)
+	_osc.send_code_command(group.head.slot.get_command_context(), _compile_code_string(group), group.head.slot.id, group.last_command_id)
 
 func _compile_code_string(group: CodeBlockGroup)->String:
 	var ret: String = group.head.code_string
@@ -74,7 +74,7 @@ func _compile_code_string(group: CodeBlockGroup)->String:
 	# print("Compiled code string: " + ret)
 	return ret
 
-func on_received_command_feedback(id: String, command_id: int):
+func on_received_command_feedback(id: String, command_id: String):
 	var group := get_group(id)
 	if group != null:
 		group.on_command_feedback(command_id)
@@ -83,6 +83,14 @@ func on_received_load_specs(path: String):
 	print("Loading specs from: " + path + " ...")
 	_wipe()
 	(CodeBlockLoader.new()).loadJSON(path, self)
+
+func on_received_add_slot(json_string: String):
+	var data = JSON.parse_string(json_string)
+	print(data)
+	var slot = CodeBlockSlot.from_json(data, self)
+	if slot:
+		add_slot(slot)
+	
 
 # this will be called when specs are (re)loaded to make sure that no old stuff is lingering around.
 # this will not call the gracious "dismiss" on the blocks but will terminate things quickly

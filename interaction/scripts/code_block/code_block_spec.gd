@@ -29,3 +29,34 @@ func action_role() -> bool:
 	
 func modifier_role() -> bool:
 	return type == CodeBlock.Type.MODIFIER
+
+
+static func from_json(dict, manager: CodeBlockManager) -> CodeBlockSpec:
+	var id = StringName(dict["id"])
+	var family = manager.get_family(StringName(dict["family"]))
+	
+	var type := CodeBlock.Type.SUBJECT
+	match dict["type"]:
+		"subject": type = CodeBlock.Type.SUBJECT
+		"modifier": type = CodeBlock.Type.MODIFIER
+		"action": type = CodeBlock.Type.ACTION
+		
+	var parameters := [] as Array[CodeBlockParameter]
+	
+	for parameter_dict in dict["parameters"]:
+		var default = parameter_dict["default"]
+		var parameter_type = CodeBlockParameter.Type.STRING		
+		match parameter_dict["type"]:
+			"number": 
+				parameter_type = CodeBlockParameter.Type.NUMBER
+				default = float(default)
+			"integer": 
+				parameter_type = CodeBlockParameter.Type.INTEGER
+				default = int(default)
+			"string":
+				parameter_type = CodeBlockParameter.Type.STRING
+				default = str(default)
+		
+		parameters.append(CodeBlockParameter.new(StringName(parameter_dict["id"]), parameter_type, default))
+	
+	return CodeBlockSpec.new(id, dict["code_string"], dict["display_string"], type, family, parameters)

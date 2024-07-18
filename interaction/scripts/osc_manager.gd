@@ -25,8 +25,8 @@ func _send(osc_addr: String, args: Array=[]):
 	if _osc_impl == null: return
 	_osc_impl.sendMessage(_target_string, osc_addr, args)
 
-func send_code_command(receiver: String, payload: String, commit_id: int):
-	var array = [receiver, payload, commit_id]
+func send_code_command(context: String, payload: String, head_id: String, command_id: String):
+	var array = [context, payload, head_id, command_id]
 	_send("/lc/command", array)
 	print("Sent: /lc/command " + str(array))
 
@@ -35,9 +35,11 @@ func _on_osc_msg_received(addr: String, args: Array):
 	if _code_block_manager != null:
 		match addr:
 			"/lc/blocks/commandFeedback":
-				_code_block_manager.on_received_command_feedback(args[0] as String, args[1] as int)
+				_code_block_manager.on_received_command_feedback(args[0] as String, args[1] as String)
 			"/lc/blocks/loadSpecs":
 				_code_block_manager.on_received_load_specs(args[0] as String)
+			"/lc/blocks/addSlot":
+				_code_block_manager.on_received_add_slot(args[0] as String)
 	
 	if _osc_cursor_controller != null and addr.begins_with(OSCCursorController.ADDR_PATTERN_ROOT):
 		_osc_cursor_controller.on_osc_msg_received(addr, args)

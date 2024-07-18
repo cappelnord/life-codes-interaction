@@ -26,6 +26,13 @@ static func _populate_templates():
 	
 	_template_dict_initialized = true
 
+static func from_json(data)->CodeBlockBehaviour:
+	if data is String:
+		return CodeBlockBehaviour.get_behaviour(data)
+	#TODO
+	else:
+		return CodeBlockBehaviour.get_behaviour("nop")
+
 static func get_behaviour(key: String)->CodeBlockBehaviour:
 	if not _template_dict_initialized: _populate_templates()
 	
