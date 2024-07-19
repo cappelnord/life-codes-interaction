@@ -20,7 +20,8 @@ func _process(delta):
 	for id in _slots:
 		var slot: CodeBlockSlot = _slots[id]
 		if slot.should_spawn():
-			slot.block = _code_block_node.instantiate() as CodeBlock
+			var block :=  _code_block_node.instantiate() as CodeBlock
+			slot.register_spawned_block(block)
 			slot.block.slot = slot # the codeblock will take care of reading everything from the slot
 			add_child(slot.block)
 	
@@ -86,21 +87,25 @@ func on_received_load_specs(path: String):
 
 func on_received_add_slot(json_string: String):
 	var data = JSON.parse_string(json_string)
-	print(data)
 	var slot = CodeBlockSlot.from_json(data, self)
 	if slot:
 		add_slot(slot)
-	
+
+func on_received_set_slot_properties(slot_id: String, json_string: String):
+	var slot = get_slot(StringName(slot_id))
+	if slot:
+		slot.set_properties_from_json(JSON.parse_string(json_string))
 
 # this will be called when specs are (re)loaded to make sure that no old stuff is lingering around.
 # this will not call the gracious "dismiss" on the blocks but will terminate things quickly
 func _wipe():
-	# let's start with slots/blocks
-	for key in _slots.keys():
-		_slots[key].delete()
-	_slots = {}
-	
+	self.clear_all_slots()
+
 	# I assume here the GC should be sufficient in dealing with things
 	_specs = {}
 	_families = {}
-	
+
+func clear_all_slots():
+	for key in _slots.keys():
+		_slots[key].delete()
+	_slots = {}

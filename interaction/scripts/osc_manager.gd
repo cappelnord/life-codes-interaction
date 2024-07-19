@@ -38,6 +38,8 @@ func _on_osc_msg_received(addr: String, args: Array):
 				_code_block_manager.on_received_command_feedback(args[0] as String, args[1] as String)
 			"/lc/blocks/loadSpecs":
 				_code_block_manager.on_received_load_specs(args[0] as String)
+			"/lc/blocks/setSlotProperties":
+				_code_block_manager.on_received_set_slot_properties(args[0] as String, args[1] as String)
 			"/lc/blocks/addSlot":
 				_code_block_manager.on_received_add_slot(args[0] as String)
 	

@@ -10,11 +10,14 @@ var arguments: Dictionary
 var family: CodeBlockFamily
 var behaviour: CodeBlockBehaviour
 var context: String
+var can_respawn: bool
 
-var _should_respawn = true
+var _spawn_counter = 0
+
 var block: CodeBlock = null
 var manager: CodeBlockManager
 
+# this
 var deleted := false
 
 # this has become a mess
@@ -33,6 +36,7 @@ func _init(spec: CodeBlockSpec, start_position: Vector2, id: StringName = &"", o
 	self.behaviour = options.get("behaviour", CodeBlockBehaviour.get_behaviour("default")) 
 	self.context = options.get("context", "")
 	self.display_string = options.get("display_string", spec.display_string)
+	self.can_respawn = options.get("can_respawn", false)
 
 	var arguments = options.get("arguments", [])
 
@@ -40,11 +44,15 @@ func _init(spec: CodeBlockSpec, start_position: Vector2, id: StringName = &"", o
 	for argument in arguments:
 		self.arguments[argument.parameter.id] = argument	
 
+func register_spawned_block(block: CodeBlock):
+	_spawn_counter = _spawn_counter + 1
+	self.block = block
+
 func should_spawn() -> bool:
-	return block == null and _should_respawn
+	return block == null and (can_respawn or _spawn_counter == 0)
 
 func delete():
-	_should_respawn = false
+	can_respawn = false
 	deleted = true
 	if block:
 		block.delete()
@@ -54,6 +62,15 @@ func get_command_context()->String:
 		return context
 	else:
 		return str(id)
+
+func set_properties_from_json(data: Variant):
+	if data.has("pos"):
+		start_position =  InteractionHelpers.position_to_pixel(Vector2(data["pos"]["x"], data["pos"]["y"]))
+	
+	if data.has("canRespawn"):
+		can_respawn = data["canRespawn"]
+	
+	# do others make sense here as well? who knows :)
 
 static func from_json(data: Variant, manager: CodeBlockManager) -> CodeBlockSlot:
 	var spec = manager.get_spec(StringName(data["spec"]))
@@ -74,6 +91,9 @@ static func from_json(data: Variant, manager: CodeBlockManager) -> CodeBlockSlot
 	
 	if do.has("displayString"):
 		options["display_string"] = do["displayString"]
+		
+	if do.has("canRespawn"):
+		options["can_respawn"] = do["canRespawn"]
 	
 	if do.has("args"):	
 		var arguments = [] as Array[CodeBlockArgument]
