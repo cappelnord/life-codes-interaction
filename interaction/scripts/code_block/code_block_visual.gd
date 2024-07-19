@@ -97,3 +97,6 @@ func unsnap():
 
 func flash(strength: float=1):
 	_flash_ramp = strength
+
+func update_fade(strength: float=1):
+	modulate = Color(1.0, 1.0, 1.0, max(0.0, strength))

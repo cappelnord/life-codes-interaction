@@ -19,6 +19,7 @@ func _process(delta):
 	# iterate over slots and instantiate blocks if needed
 	for id in _slots:
 		var slot: CodeBlockSlot = _slots[id]
+		slot.process(delta)
 		if slot.should_spawn():
 			var block :=  _code_block_node.instantiate() as CodeBlock
 			slot.register_spawned_block(block)
@@ -45,6 +46,11 @@ func add_slot(slot: CodeBlockSlot)->CodeBlockSlot:
 	slot.manager = self
 	_slots[slot.id] = slot
 	return slot
+
+# important: does not delete the block!
+# this will be generally called from the slot 
+func remove_slot(id: StringName):
+	_slots.erase(id)
 	
 func get_slot(id: StringName)->CodeBlockSlot:
 	return _slots[id]
@@ -87,14 +93,19 @@ func on_received_load_specs(path: String):
 
 func on_received_add_slot(json_string: String):
 	var data = JSON.parse_string(json_string)
-	var slot = CodeBlockSlot.from_json(data, self)
+	var slot := CodeBlockSlot.from_json(data, self)
 	if slot:
 		add_slot(slot)
 
 func on_received_set_slot_properties(slot_id: String, json_string: String):
-	var slot = get_slot(StringName(slot_id))
+	var slot := get_slot(StringName(slot_id))
 	if slot:
 		slot.set_properties_from_json(JSON.parse_string(json_string))
+
+func on_received_despawn_slot(slot_id: String, json_string: String):
+	var slot := get_slot(StringName(slot_id))
+	if slot:
+		slot.despawn_from_json(JSON.parse_string(json_string))
 
 # this will be called when specs are (re)loaded to make sure that no old stuff is lingering around.
 # this will not call the gracious "dismiss" on the blocks but will terminate things quickly

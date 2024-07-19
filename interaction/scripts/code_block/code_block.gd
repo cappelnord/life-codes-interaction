@@ -25,7 +25,12 @@ var is_rem_candidate = false
 
 var _active_cursor: Cursor
 
-var deleted = false
+var _marked_for_despawn := false
+var despawn_fade_time = 0.0
+var _despawn_timer = 0.0
+var despawning := false
+
+var deleted := false
 
 @onready var visual: CodeBlockVisual = $CodeBlockVisual
 
@@ -105,6 +110,12 @@ func _update_strings():
 	text_box_size = text_box_size + Vector2(2 * Config.code_blocks_padding_x, 2 * Config.code_blocks_padding_y)
 
 func _physics_process(delta):
+	_attempt_despawn()
+	
+	if despawning:
+		_process_despwaning(delta)
+	
+	if despawning or deleted: return
 	
 	if is_bound_or_active():
 		behaviour_activity_ramp = 0	
@@ -142,6 +153,7 @@ func move_delta(delta: Vector2):
 		move(subpixel_position + delta)
 	
 func attempt_hover(cursor: Cursor):	
+	if despawning or deleted: return false
 	if group != null and group.active_block != null: return false
 	
 	if _active_cursor == null:
@@ -167,6 +179,7 @@ func release_hover(cursor: Cursor):
 
 # TODO: do more thorough checks  if the block can actually be grabbed
 func attempt_grab(cursor: Cursor):
+	if despawning or deleted: return false
 	if grabbed: return false
 	if cursor != _active_cursor:
 		return false
@@ -240,6 +253,9 @@ func _on_connection_area_exited(collider: CodeBlockConnectionCollider):
 		
 
 func can_connect(other: CodeBlock):
+	if despawning or deleted:
+		return false
+	
 	# in case the other block has a head role we can never connect
 	if other.slot.spec.head_role(): return false
 	
@@ -261,8 +277,32 @@ func can_connect(other: CodeBlock):
 func _to_string():
 	return "<" + slot.id + "/" + display_string + ">"
 
-func resign():
-	pass
+func queue_despawn(despawn_fade_time: float):
+	if despawning or deleted: return
+	_marked_for_despawn = true
+	self.despawn_fade_time = despawn_fade_time
+
+func _attempt_despawn():
+	if _marked_for_despawn and not despawning:
+		# if the block is free then we can proceed with despawning
+		if group == null:
+			do_despawn()
+		
+		# if we are the head of the group then despawn the whole group
+		if head_of_group:
+			for block in group.all_members:
+				block.despawn_fade_time = despawn_fade_time
+				block.do_despawn()
+
+func do_despawn():
+	despawning = true
+	_despawn_timer = despawn_fade_time
+
+func _process_despwaning(delta: float):
+	_despawn_timer = _despawn_timer - delta
+	visual.update_fade(_despawn_timer / despawn_fade_time)
+	if _despawn_timer < 0:
+		delete()
 
 # this is radical and does not check/care if the block is part of a group ...
 # ... it is also the last step of a more soft resign/dismiss process
@@ -271,7 +311,8 @@ func delete():
 	if _active_cursor:
 		_active_cursor.cleanup()
 	queue_free()
-	
+	print("Delete Block: " + slot.id)
+	slot.block_was_deleted()
 	
 func _move_to_front_or_group_to_front():
 	if group == null:

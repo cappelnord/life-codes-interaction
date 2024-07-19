@@ -34,6 +34,8 @@ func _on_osc_msg_received(addr: String, args: Array):
 	
 	if _code_block_manager != null:
 		match addr:
+			"/lc/blocks/clearAllSlots":
+				_code_block_manager.clear_all_slots()
 			"/lc/blocks/commandFeedback":
 				_code_block_manager.on_received_command_feedback(args[0] as String, args[1] as String)
 			"/lc/blocks/loadSpecs":
@@ -42,6 +44,8 @@ func _on_osc_msg_received(addr: String, args: Array):
 				_code_block_manager.on_received_set_slot_properties(args[0] as String, args[1] as String)
 			"/lc/blocks/addSlot":
 				_code_block_manager.on_received_add_slot(args[0] as String)
+			"/lc/blocks/despawnSlot":
+				_code_block_manager.on_received_despawn_slot(args[0] as String, args[1] as String)
 	
 	if _osc_cursor_controller != null and addr.begins_with(OSCCursorController.ADDR_PATTERN_ROOT):
 		_osc_cursor_controller.on_osc_msg_received(addr, args)
