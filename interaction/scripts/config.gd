@@ -7,6 +7,7 @@ static var osc_receiver_host := "127.0.0.1"
 static var osc_receiver_port := 57150
 static var osc_listen_port := 57140
 static var osc_enable_cursor_controller := true
+static var osc_send_head_position := true
 
 static var code_blocks_font_size := 34
 static var code_blocks_padding_x := 24
@@ -15,6 +16,7 @@ static var code_blocks_oscillation_hz := 1.5
 static var code_blocks_flash_intensity := 0.4
 static var code_blocks_flash_ramp_speed := 4
 static var code_blocks_quantize_position := true
+
 
 static var mouse_enable := true
 static var mouse_speed := 2.0
@@ -45,6 +47,7 @@ static func _static_init():
 	_config.set_value("osc", "receiver_port", osc_receiver_port)
 	_config.set_value("osc", "listen_port", osc_listen_port)
 	_config.set_value("osc", "enable_cursor_controller", osc_enable_cursor_controller)
+	_config.set_value("osc", "send_head_position", osc_send_head_position)
 	
 	_config.set_value("code_blocks", "font_size", code_blocks_font_size)
 	_config.set_value("code_blocks", "padding_x", code_blocks_padding_x)
@@ -83,6 +86,7 @@ static func _static_init():
 	osc_receiver_port = _config.get_value("osc", "receiver_port") as int
 	osc_listen_port = _config.get_value("osc", "listen_port") as int
 	osc_enable_cursor_controller = _config.get_value("osc", "enable_cursor_controller") as bool
+	osc_send_head_position = _config.get_value("osc", "send_head_position") as bool
 	
 	code_blocks_font_size = _config.get_value("code_blocks", "font_size") as int
 	code_blocks_padding_x = _config.get_value("code_blocks", "padding_x") as int

@@ -30,6 +30,11 @@ func send_code_command(context: String, payload: String, head_id: String, comman
 	_send("/lc/executeCommand", array)
 	print("Sent: /lc/executeCommand " + str(array))
 
+func send_context_data_update(context: String, payload: String):
+	# var array = 
+	_send("/lc/contextDataUpdate", [context, payload])
+	# print("Sent: /lc/contextDataUpdate " + str(array))
+
 func _on_osc_msg_received(addr: String, args: Array):
 	
 	if _code_block_manager != null:

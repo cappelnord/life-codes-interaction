@@ -32,6 +32,8 @@ var despawning := false
 
 var deleted := false
 
+var _last_sent_position: Vector2
+
 @onready var visual: CodeBlockVisual = $CodeBlockVisual
 
 @onready var _collider: CodeBlockCollider = $CodeBlockCollider
@@ -133,6 +135,12 @@ func _physics_process(delta):
 	else:
 		position = subpixel_position
 
+func _process(delta):
+	# send position of the head (if context is known)
+	if head_of_group and Config.osc_send_head_position and slot.context != "":
+		if _last_sent_position != position:
+			slot.manager.on_context_data_update(slot.context, {"headPosX": position.x / Config.app_render_width, "headPosY": position.y / Config.app_render_height})
+			_last_sent_position = position
 
 func move(new_position: Vector2, propagate_to_group: bool=true):
 	subpixel_position = new_position
