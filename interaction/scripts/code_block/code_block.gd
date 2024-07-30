@@ -65,12 +65,13 @@ func _ready():
 	for key in slot.arguments:
 		arguments[key] = slot.arguments[key].duplicate()
 	
-	_update_strings()
 	_update_sizes()
 	
 	if slot.spec.head_role():
 		head_of_group = true
 		group = CodeBlockGroup.new(self)
+	
+	_update_strings()
 
 func _update_sizes():
 	visual.set_size(text_box_size)
@@ -94,7 +95,7 @@ func _update_sizes():
 func _update_strings():
 	# build the display_string and code_string and set it
 	display_string = slot.display_string
-	code_string = slot.spec.code_string 
+	code_string = slot.spec.code_string + "?" + slot.id
 	
 	# we should iterate over parameters and then see if we have one set; otherwise use default parameters
 	# for now we only havew constant parameters/arguments

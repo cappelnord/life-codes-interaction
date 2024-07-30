@@ -70,7 +70,7 @@ func get_group(id: StringName)->CodeBlockGroup:
 		return null
 
 func on_group_comitted(group: CodeBlockGroup):
-	_osc.send_code_command(group.head.slot.get_command_context(), _compile_code_string(group), group.head.slot.id, group.last_command_id)
+	_osc.send_code_command(group.head.slot.get_command_context(), _compile_code_string(group), group.last_command_id)
 
 func on_context_data_update(context: String, data: Variant):
 	_osc.send_context_data_update(context, InteractionHelpers.osc_encode_dictionary(data))
