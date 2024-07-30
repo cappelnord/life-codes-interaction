@@ -25,8 +25,8 @@ func _send(osc_addr: String, args: Array=[]):
 	if _osc_impl == null: return
 	_osc_impl.sendMessage(_target_string, osc_addr, args)
 
-func send_code_command(context: String, payload: String, head_id: String, command_id: String):
-	var array = [context, payload, head_id, command_id]
+func send_code_command(context: String, payload: String,  command_id: String):
+	var array = [context, payload, command_id]
 	_send("/lc/executeCommand", array)
 	print("Sent: /lc/executeCommand " + str(array))
 
