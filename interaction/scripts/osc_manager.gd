@@ -35,6 +35,9 @@ func send_context_data_update(context: String, payload: String):
 	_send("/lc/contextDataUpdate", [context, payload])
 	# print("Sent: /lc/contextDataUpdate " + str(array))
 
+func send_request_specs():
+	_send("/lc/requestSpecs", [])
+
 func _on_osc_msg_received(addr: String, args: Array):
 	
 	if _code_block_manager != null:

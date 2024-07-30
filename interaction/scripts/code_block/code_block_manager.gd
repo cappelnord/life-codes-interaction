@@ -13,6 +13,7 @@ var _families: Dictionary = {}
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_osc.set_code_block_manager(self)
+	_osc.send_request_specs()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
