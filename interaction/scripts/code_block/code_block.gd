@@ -64,14 +64,14 @@ func _ready():
 	# copy arguments over from the slot - duplication is likely more manual than it needs to be
 	for key in slot.arguments:
 		arguments[key] = slot.arguments[key].duplicate()
-	
-	_update_sizes()
-	
+		
 	if slot.spec.head_role():
 		head_of_group = true
 		group = CodeBlockGroup.new(self)
 	
 	_update_strings()
+	# always call _update_sizes() after _update_strings()
+	_update_sizes()
 
 func _update_sizes():
 	visual.set_size(text_box_size)
