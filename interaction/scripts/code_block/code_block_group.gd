@@ -83,6 +83,10 @@ func can_connect(new_block: CodeBlock, target_block: CodeBlock):
 	# special rule to allow moving blocks within the hierarchy
 	if active_block != null and active_block != new_block: return false
 	
+	# if we already have an action we don't want another one
+	# (this might change later, but then we also need to deal with it better!)
+	if action != null and new_block.slot.spec.action_role(): return false
+	
 	# these must be dealt with in some way but not now
 	if new_block == target_block: return false
 
