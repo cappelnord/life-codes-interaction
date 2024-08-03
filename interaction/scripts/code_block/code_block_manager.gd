@@ -54,7 +54,7 @@ func remove_slot(id: StringName):
 	_slots.erase(id)
 	
 func get_slot(id: StringName)->CodeBlockSlot:
-	return _slots[id]
+	return _slots.get(id)
 
 func get_block(id: StringName)->CodeBlock:
 	var slot = get_slot(id)
@@ -105,11 +105,15 @@ func on_received_set_slot_properties(slot_id: String, json_string: String):
 	var slot := get_slot(StringName(slot_id))
 	if slot:
 		slot.set_properties_from_json(JSON.parse_string(json_string))
+	else:
+		print("Received set slot properties message for unavailable slot: " + slot_id)
 
 func on_received_despawn_slot(slot_id: String, json_string: String):
 	var slot := get_slot(StringName(slot_id))
 	if slot:
 		slot.despawn_from_json(JSON.parse_string(json_string))
+	else:
+		print("Received despawn message for unavailable slot: " + slot_id)
 
 # this will be called when specs are (re)loaded to make sure that no old stuff is lingering around.
 # this will not call the gracious "dismiss" on the blocks but will terminate things quickly
