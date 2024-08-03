@@ -123,8 +123,8 @@ static func from_json(data: Variant, manager: CodeBlockManager) -> CodeBlockSlot
 	if do.has("behaviour"):
 		options["behaviour"] = CodeBlockBehaviour.from_json(do["behaviour"])
 	
-	if do.has("displayString"):
-		options["display_string"] = do["displayString"]
+	if do.has("display"):
+		options["display_string"] = do["display"]
 		
 	if do.has("canRespawn"):
 		options["can_respawn"] = do["canRespawn"]
