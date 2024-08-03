@@ -44,6 +44,12 @@ func get_family(id: StringName)->CodeBlockFamily:
 	return _families[id]
 
 func add_slot(slot: CodeBlockSlot)->CodeBlockSlot:
+	
+	# we don't want orphaned blocks
+	if _slots.has(slot.id):
+		print("Cannot add a block slot with an already used ID: " + slot.id)
+		return _slots[slot.id]
+	
 	slot.manager = self
 	_slots[slot.id] = slot
 	return slot
@@ -97,6 +103,7 @@ func on_received_load_specs(path: String):
 
 func on_received_add_slot(json_string: String):
 	var data = JSON.parse_string(json_string)
+		
 	var slot := CodeBlockSlot.from_json(data, self)
 	if slot:
 		add_slot(slot)
