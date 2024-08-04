@@ -170,6 +170,8 @@ func _process_msg(msg: Variant):
 			_process_cursor_release(msg)
 		"cursorAttemptToggleGrab":
 			_process_cursor_attempt_toggle_grab(msg)
+		"cursorDeviceOrientation":
+			_process_cursor_device_orientation(msg)
 
 func _process_challenge_msg(msg: Variant):
 	# TODO: do the challenge
@@ -267,6 +269,11 @@ func _process_cursor_user_disconnected(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
 	if slot and slot.spawned:
 		_cursor_manager.user_disconnected(slot.id)	
+
+func _process_cursor_device_orientation(msg: Variant):
+	var slot = _qr_slots_lookup[msg.slot]
+	if slot and slot.spawned:
+		_cursor_manager.device_orientation(slot.id, msg.absolute, msg.alpha, msg.beta, msg.gamma)
 
 func _hard_reset_qr_slot(qr_slot: QRCodeSlot):
 	if qr_slot.spawned:

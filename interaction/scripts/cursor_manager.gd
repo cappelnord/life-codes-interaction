@@ -55,6 +55,10 @@ func attempt_toggle_grab(id: String):
 	if cursors.has(id):
 		cursors[id].attempt_toggle_grab()
 
+func device_orientation(id: String, absolute: Variant, alpha: float, beta: float, gamma: float):
+	print([id, absolute, alpha, beta, gamma])
+
+
 func get_cursor(id: String) -> Cursor:
 	if cursors.has(id):
 		return cursors[id]

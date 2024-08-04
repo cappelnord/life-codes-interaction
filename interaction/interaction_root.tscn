@@ -23,6 +23,7 @@ scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
 id = "a"
+scheme = "orientation"
 target_size = 180
 
 [node name="QR-b" type="Sprite2D" parent="Interaction/WebSocketController"]
@@ -32,6 +33,7 @@ scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
 id = "b"
+scheme = "orientation"
 target_size = 180
 
 [node name="QR-c" type="Sprite2D" parent="Interaction/WebSocketController"]
@@ -41,6 +43,7 @@ scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
 id = "c"
+scheme = "orientation"
 target_size = 180
 
 [node name="QR-d" type="Sprite2D" parent="Interaction/WebSocketController"]
@@ -50,6 +53,7 @@ scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
 id = "d"
+scheme = "orientation"
 target_size = 180
 
 [node name="OSCManager" type="Node" parent="Interaction"]
