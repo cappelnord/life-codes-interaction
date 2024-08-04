@@ -246,6 +246,14 @@ func is_bound_or_active():
 
 func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 	if collider.block == self: return false
+	
+	# this crash happened every now and then .. I hope this will not give us any disadvantages.
+	# my assumption is that the collision is queued up and the _active_cursor gets taken away
+	# at some other point before. Added print here to see if other things are not working out.
+	if _active_cursor == null:
+		print("_active_cursor was null in _on_connection_area_entered - did other strange things happen?")
+		return false
+	
 	# print("Attempt to connect: " + display_string + "->" + collider.block.display_string)
 	if collider.block.can_connect(self):
 		_active_cursor.notify_snap()
