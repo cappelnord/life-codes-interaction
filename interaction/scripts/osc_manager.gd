@@ -14,6 +14,11 @@ func _ready():
 	_osc_impl.setServerPort(Config.osc_listen_port)
 	_osc_impl.startServer()
 	_osc_impl.osc_msg_received.connect(_on_osc_msg_received)
+
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_R:
+			_send("/lc/sceneManager/rush", [])
 	
 func set_code_block_manager(manager: CodeBlockManager):
 	_code_block_manager = manager
