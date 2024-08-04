@@ -23,6 +23,6 @@ func loadJSON(jsonPath: String, manager: CodeBlockManager):
 		var spec := CodeBlockSpec.from_json(dict["blockSpecs"][key], manager)
 		if spec:
 			manager.add_spec(spec)
-
-
 	
+	if dict.has("cornerVertices"):
+		CornerVertices.update_from_json(dict["cornerVertices"] as Array)
