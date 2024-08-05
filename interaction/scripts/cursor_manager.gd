@@ -10,6 +10,12 @@ var cursor_image_grab = preload("res://interaction/graphics/cursors/cursor_grab.
 
 var cursors = {}
 
+var _users_inactive = false
+var _time_of_last_movement := 0
+var _cursor_has_moved = true
+
+@onready var _osc: OSCManager = $"../OSCManager"
+
 func spawn(id: String, position: Vector2)->Cursor:
 	# TODO: make sure that we don't duplicate a cursor
 	var cursor = _cursor_node.instantiate()
@@ -27,11 +33,13 @@ func despawn(id: String):
 
 func move(id: String, new_position: Vector2):
 	if cursors.has(id):
-		cursors[id].move(new_position)	
+		cursors[id].move(new_position)
+		_cursor_has_moved = true
 
 func move_delta(id: String, delta: Vector2):
 	if cursors.has(id):
 		cursors[id].move_delta(delta)
+		_cursor_has_moved = true
 	
 	# TODO: notify anyone who might be interested that a cursor has moved
 
@@ -67,9 +75,30 @@ func get_cursor(id: String) -> Cursor:
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	_osc.send_users_active()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	var now := Time.get_ticks_msec()
+	var inactivity_time = Config.app_inactivity_time * 1000
+	
+	if _cursor_has_moved:
+		_time_of_last_movement = now
+		_cursor_has_moved = false
+		if _users_inactive:
+			_users_became_active()
+	
+	if not _users_inactive:
+		if (_time_of_last_movement + inactivity_time) < now:
+			_users_became_inactive()
+
+func _users_became_active():
+	_users_inactive = false
+	print("Users became active")
+	_osc.send_users_active()
+
+func _users_became_inactive():
+	_users_inactive = true
+	print("Users became inactive")
+	_osc.send_users_inactive()

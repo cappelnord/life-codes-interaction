@@ -33,6 +33,7 @@ static var app_render_width := 5380
 static var app_render_height := 1200
 static var app_window_width := app_render_width/2
 static var app_window_height := app_render_height/2
+static var app_inactivity_time := 15.0
 
 
 # I hate, that there is so much manual stuff here, but I'd rather have things as
@@ -73,6 +74,8 @@ static func _static_init():
 	_config.set_value("app", "window_width", app_window_width)
 	_config.set_value("app", "window_height", app_window_height)
 	
+	_config.set_value("app", "inactivity_time", app_inactivity_time)
+	
 	
 		
 	# load values on top
@@ -111,6 +114,8 @@ static func _static_init():
 	app_render_height = _config.get_value("app", "render_height") as int	
 	app_window_width = _config.get_value("app", "window_width") as int
 	app_window_height = _config.get_value("app", "window_height") as int		
+	app_inactivity_time = _config.get_value("app", "inactivity_time") as float		
+
 
 
 # real constants for things that should not be user-configurable

@@ -42,6 +42,12 @@ func send_context_data_update(context: String, payload: String):
 
 func send_request_specs():
 	_send("/lc/requestSpecs", [])
+	
+func send_users_active():
+	_send("/lc/usersActive")
+	
+func send_users_inactive():
+	_send("/lc/usersInactive")
 
 func _on_osc_msg_received(addr: String, args: Array):
 	
