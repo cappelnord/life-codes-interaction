@@ -44,10 +44,10 @@ func send_request_specs():
 	_send("/lc/requestSpecs", [])
 	
 func send_users_active():
-	_send("/lc/usersActive")
+	_send("/lc/usersActive", [1])
 	
 func send_users_inactive():
-	_send("/lc/usersInactive")
+	_send("/lc/usersActive", [0])
 
 func _on_osc_msg_received(addr: String, args: Array):
 	

@@ -11,8 +11,8 @@ var cursor_image_grab = preload("res://interaction/graphics/cursors/cursor_grab.
 var cursors = {}
 
 var _users_inactive = false
-var _time_of_last_movement := 0
-var _cursor_has_moved = true
+var _time_of_last_cursor_activity := 0
+
 
 @onready var _osc: OSCManager = $"../OSCManager"
 
@@ -34,13 +34,10 @@ func despawn(id: String):
 func move(id: String, new_position: Vector2):
 	if cursors.has(id):
 		cursors[id].move(new_position)
-		_cursor_has_moved = true
 
 func move_delta(id: String, delta: Vector2):
 	if cursors.has(id):
-		cursors[id].move_delta(delta)
-		_cursor_has_moved = true
-	
+		cursors[id].move_delta(delta)	
 	# TODO: notify anyone who might be interested that a cursor has moved
 
 func user_connected(id: String):
@@ -79,18 +76,17 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta):	
 	var now := Time.get_ticks_msec()
 	var inactivity_time = Config.app_inactivity_time * 1000
 	
-	if _cursor_has_moved:
-		_time_of_last_movement = now
-		_cursor_has_moved = false
+	if cursors.size() > 0:
+		_time_of_last_cursor_activity = now
 		if _users_inactive:
 			_users_became_active()
 	
 	if not _users_inactive:
-		if (_time_of_last_movement + inactivity_time) < now:
+		if (_time_of_last_cursor_activity + inactivity_time) < now:
 			_users_became_inactive()
 
 func _users_became_active():
