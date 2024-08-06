@@ -1,14 +1,25 @@
 extends Object
 class_name CodeBlockSpec
 
+class CodeBlockEffects:
+	var sets_values: Array[StringName]
+	var modifies_values: Array[StringName]
+	var mutes: bool
+		
+	func _init(sets_values: Array[StringName], modifies_values: Array[StringName], mutes: bool):
+		self.sets_values = sets_values
+		self.modifies_values = modifies_values
+		self.mutes = mutes
+
 var id: StringName
 var code_string: String
 var display_string: String
 var type: CodeBlock.Type
 var family: CodeBlockFamily
 var parameters: Array[CodeBlockParameter]
+var effects: CodeBlockEffects
 
-func _init(id: StringName, code_string: String, display_string: String, type: CodeBlock.Type, family: CodeBlockFamily, parameters: Array[CodeBlockParameter]):
+func _init(id: StringName, code_string: String, display_string: String, type: CodeBlock.Type, family: CodeBlockFamily, parameters: Array[CodeBlockParameter], effects: CodeBlockEffects):
 	self.id = id
 	self.code_string = code_string
 	self.display_string = display_string
@@ -40,6 +51,8 @@ static func from_json(dict, manager: CodeBlockManager) -> CodeBlockSpec:
 		"subject": type = CodeBlock.Type.SUBJECT
 		"modifier": type = CodeBlock.Type.MODIFIER
 		"action": type = CodeBlock.Type.ACTION
+	
+	# build parameters
 		
 	var parameters := [] as Array[CodeBlockParameter]
 	
@@ -59,4 +72,24 @@ static func from_json(dict, manager: CodeBlockManager) -> CodeBlockSpec:
 		
 		parameters.append(CodeBlockParameter.new(StringName(parameter_dict["id"]), parameter_type, default))
 	
-	return CodeBlockSpec.new(id, dict["code_string"], dict["display_string"], type, family, parameters)
+	
+	# build the effects info
+	
+	var mutes = false
+	var sets_values: Array[StringName] = []
+	var modifies_values: Array[StringName] = []
+	
+	if dict.has("mutes"):
+		mutes = dict["mutes"]
+	
+	if dict.has("setsValues"):
+		for name in (dict["setsValues"] as Array[String]):
+			sets_values.append(StringName(name))
+			
+	if dict.has("modifiesValues"):
+		for name in (dict["modifiesValues"] as Array[String]):
+			modifies_values.append(StringName(name))
+	
+	var effects := CodeBlockEffects.new(sets_values, modifies_values, mutes)
+	
+	return CodeBlockSpec.new(id, dict["code_string"], dict["display_string"], type, family, parameters, effects)
