@@ -12,6 +12,7 @@ var behaviour: CodeBlockBehaviour
 var context: String
 var can_respawn: bool
 var time_to_respawn: float
+var despawn_fade_time: float
 
 var _spawn_counter = 0
 var _respawn_timer = 0.0
@@ -40,6 +41,7 @@ func _init(spec: CodeBlockSpec, start_position: Vector2, id: StringName = &"", o
 	self.display_string = options.get("display_string", spec.display_string)
 	self.can_respawn = options.get("can_respawn", false)
 	self.time_to_respawn = options.get("time_to_respawn", 2)
+	self.despawn_fade_time = options.get("despawn_fade_time", 3)
 
 	var arguments = options.get("arguments", [])
 
@@ -100,7 +102,6 @@ func despawn_from_json(data: Variant):
 
 	if block == null: return
 	
-	var despawn_fade_time := 3.0
 	if data.has("fadeTime"):
 		despawn_fade_time = data["fadeTime"]
 	
@@ -131,6 +132,9 @@ static func from_json(data: Variant, manager: CodeBlockManager) -> CodeBlockSlot
 	
 	if do.has("timeToRespawn"):
 		options["time_to_respawn"] = do["timeToRespawn"]
+	
+	if do.has("fadeTime"):
+		options["despawn_fade_time"] = do["fadeTime"]
 	
 	if do.has("args"):	
 		var arguments = [] as Array[CodeBlockArgument]
