@@ -71,7 +71,7 @@ func update_material_and_zindex():
 	# apply group effects
 	if muted and not dont_apply_effects:
 		hsv_mod.y = hsv_mod.y * 0.8
-		hsv_mod.z = hsv_mod.z * 0.66666
+		hsv_mod.z = hsv_mod.z * 0.75
 	
 	if (not superseded) or dont_apply_effects:
 		_code_block_text.modulate = Color.WHITE
