@@ -6,10 +6,14 @@ static var oscillation_phase: float = 0
 
 var block: CodeBlock
 var background_material: Material
-var snapped = false
+var snapped := false
+var muted := false
+var superseded := false
 
 var _snap_position: Vector2
 var _flash_ramp: float = 0.0
+
+@onready var _code_block_text := ($CodeBlockText as Label)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -62,6 +66,18 @@ func update_material_and_zindex():
 		var flash_value := _flash_ramp * Config.code_blocks_flash_intensity
 		rgb_add = rgb_add + Vector3(flash_value, flash_value, flash_value)
 	
+	var dont_apply_effects = (block.grabbed or snapped)
+	
+	# apply group effects
+	if muted and not dont_apply_effects:
+		hsv_mod.y = hsv_mod.y * 0.8
+		hsv_mod.z = hsv_mod.z * 0.66666
+	
+	if (not superseded) or dont_apply_effects:
+		_code_block_text.modulate = Color.WHITE
+	else:
+		_code_block_text.modulate = Color(1.0, 0.8, 0.8, 0.8)
+	
 	background_material.set_shader_parameter("hsv", Vector3(rgb.h, rgb.s, rgb.v) * hsv_mod)
 	background_material.set_shader_parameter("rgb_add", rgb_add)
 		
@@ -76,7 +92,7 @@ func _process(delta):
 
 func set_size(size: Vector2):
 	($CodeBlockBackground as Sprite2D).scale = size
-	($CodeBlockText as Label).position = Vector2(Config.code_blocks_padding_x, Config.code_blocks_padding_y)
+	_code_block_text.position = Vector2(Config.code_blocks_padding_x, Config.code_blocks_padding_y)
 	
 	var oversize := Vector2(1.5, 1.25) * 1.05
 	var shadow_size := size * oversize

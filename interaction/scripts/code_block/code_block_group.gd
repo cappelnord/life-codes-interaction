@@ -64,7 +64,48 @@ func commit(new_block: CodeBlock)->bool:
 
 	return success
 
+func _apply_group_effects():
+	# if any of the blocks have the mutes flag all should be muted
+	var muted = false
+	for block in all_members:
+		muted = muted || block.slot.spec.effects.mutes
+	for block in all_members:
+		block.visual.muted = muted
+		
+	# start from the bottom, track which values are set and then 
+	# mark any block that tracks effects and does not have any
+	# effect anymore as superseded.
+	var values_set = Dictionary()
+	for i in range(all_members.size() - 1, -1, -1):
+		var block := all_members[i]
+		var effects := block.slot.spec.effects
+		
+		print("Block: " + block.slot.spec.code_string)
+		print("Tracks effects: " + str(effects.track_effects))
+		
+		if not effects.track_effects: continue
+		
+		# we first check and then set, so that a block does
+		# not supersede itself!
+		
+		var superseded = true
+		for value in effects.modifies_values:
+			if not values_set.has(value):
+				superseded = false
+		for value in effects.sets_values:
+			if not values_set.has(value):
+				superseded = false
+		
+		print("Superseded: " + str(superseded))
+		
+		block.visual.superseded = superseded
+		
+		# mark all values
+		for value in effects.sets_values:
+			values_set[value] = true
+
 func update_visual():
+	_apply_group_effects()
 	for block in all_members:
 		block.visual.update_material_and_zindex()
 

@@ -337,8 +337,13 @@ func _move_to_front_or_group_to_front():
 	else:
 		group.move_all_to_front()
 
+func _clear_group_effects():
+	visual.muted = false
+	visual.superseded = false
+
 func _update_visual_or_group_visual():
 	if group == null:
+		_clear_group_effects()
 		visual.update_material_and_zindex()
 	else:
 		group.update_visual()

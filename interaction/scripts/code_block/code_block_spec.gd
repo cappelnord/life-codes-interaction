@@ -5,11 +5,13 @@ class CodeBlockEffects:
 	var sets_values: Array[StringName]
 	var modifies_values: Array[StringName]
 	var mutes: bool
+	var track_effects: bool
 		
 	func _init(sets_values: Array[StringName], modifies_values: Array[StringName], mutes: bool):
 		self.sets_values = sets_values
 		self.modifies_values = modifies_values
 		self.mutes = mutes
+		self.track_effects = (self.sets_values.size() > 0) || (self.modifies_values.size() > 0)
 
 var id: StringName
 var code_string: String
@@ -26,6 +28,7 @@ func _init(id: StringName, code_string: String, display_string: String, type: Co
 	self.type = type
 	self.family = family
 	self.parameters = parameters
+	self.effects = effects
 
 func get_parameter(id: StringName)->CodeBlockParameter:
 	for parameter in parameters:
