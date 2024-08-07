@@ -80,9 +80,6 @@ func _apply_group_effects():
 		var block := all_members[i]
 		var effects := block.slot.spec.effects
 		
-		print("Block: " + block.slot.spec.code_string)
-		print("Tracks effects: " + str(effects.track_effects))
-		
 		if not effects.track_effects: continue
 		
 		# we first check and then set, so that a block does
@@ -96,7 +93,6 @@ func _apply_group_effects():
 			if not values_set.has(value):
 				superseded = false
 		
-		print("Superseded: " + str(superseded))
 		
 		block.visual.superseded = superseded
 		
