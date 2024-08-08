@@ -25,7 +25,7 @@ static var mouse_viewport_modifier := 2.0
 static var spout_enable := true
 static var spout_name := "LifeCodes"
 
-static var websocket_base_url := "http://localhost:8000"
+static var websocket_base_url := "https://lc.alexandracardenas.com"
 static var websocket_installation_path := "/ws/installation"
 static var websocket_ms_until_long_disconnect := 10000
 

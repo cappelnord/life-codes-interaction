@@ -141,7 +141,9 @@ func attempt_toggle_grab():
 
 func _do_attempt_toggle_grab():
 	texture = _manager.cursor_image_attempt_grab
-	if not _attempt_grab(): _time_when_reset = Time.get_ticks_msec() + 500
+	if not _attempt_grab():
+		_time_when_reset = Time.get_ticks_msec() + 500
+		notify_release()
 
 
 func _update_cursor_texture():
