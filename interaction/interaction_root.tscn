@@ -25,6 +25,16 @@ script = ExtResource("3_fiq1s")
 id = "a"
 target_size = 180
 
+[node name="QR-test" type="Sprite2D" parent="Interaction/WebSocketController"]
+texture_filter = 1
+position = Vector2(5269, 589)
+scale = Vector2(4.86, 4.86)
+texture = ExtResource("2_oyg0d")
+script = ExtResource("3_fiq1s")
+id = "test"
+scheme = "orientation"
+target_size = 180
+
 [node name="QR-b" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
 position = Vector2(4745.91, 426.91)
