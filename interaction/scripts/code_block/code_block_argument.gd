@@ -16,3 +16,6 @@ func _init(parameter: CodeBlockParameter, type: Type, value):
 
 func duplicate() -> CodeBlockArgument:
 	return CodeBlockArgument.new(parameter, type, value)
+
+func display() -> bool:
+	return value != parameter.hide

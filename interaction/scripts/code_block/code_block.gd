@@ -101,10 +101,15 @@ func _update_strings():
 	# for now we only havew constant parameters/arguments
 	for parameter in slot.spec.parameters:
 		var value = parameter.default
+		var display := false
 		if parameter.id in arguments:
-			value = arguments[parameter.id].value
-		display_string = display_string + " " + str(value)
-		code_string = code_string + "," + parameter.type_tag() + str(value)
+			var argument = arguments[parameter.id]
+			value = argument.value
+			display = argument.display()
+		
+		if display:
+			display_string = display_string + " " + str(value)
+			code_string = code_string + "," + parameter.type_tag() + str(value)
 	
 		
 	_label.add_theme_font_size_override("font_size", Config.code_blocks_font_size)

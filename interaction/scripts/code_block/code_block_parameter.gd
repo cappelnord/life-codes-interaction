@@ -10,11 +10,13 @@ enum Type {
 var id: StringName
 var type: Type
 var default
+var hide
 
-func _init(id: StringName, type: Type, default):
+func _init(id: StringName, type: Type, default, hide):
 	self.id = id
 	self.type = type
 	self.default = default
+	self.hide = hide
 
 func type_tag()->String:
 	match type:

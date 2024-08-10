@@ -60,20 +60,27 @@ static func from_json(dict, manager: CodeBlockManager) -> CodeBlockSpec:
 	var parameters := [] as Array[CodeBlockParameter]
 	
 	for parameter_dict in dict["parameters"]:
+		var hide = null
+		if parameter_dict.has("hide"):
+			hide = parameter_dict["hide"]
+		
 		var default = parameter_dict["default"]
 		var parameter_type = CodeBlockParameter.Type.STRING		
 		match parameter_dict["type"]:
 			"number": 
 				parameter_type = CodeBlockParameter.Type.NUMBER
 				default = float(default)
+				if hide != null: hide = float(hide)
 			"integer": 
 				parameter_type = CodeBlockParameter.Type.INTEGER
 				default = int(default)
+				if hide != null: hide = int(hide)
 			"string":
 				parameter_type = CodeBlockParameter.Type.STRING
 				default = str(default)
+				if hide != null: hide = str(hide)
 		
-		parameters.append(CodeBlockParameter.new(StringName(parameter_dict["id"]), parameter_type, default))
+		parameters.append(CodeBlockParameter.new(StringName(parameter_dict["id"]), parameter_type, default, hide))
 	
 	
 	# build the effects info
