@@ -88,8 +88,8 @@ func set_properties_from_json(data: Variant):
 	if data.has("canRespawn"):
 		can_respawn = data["canRespawn"]
 	
-	if data.has("timeToRespawn"):
-		time_to_respawn = data["timeToRespawn"]
+	if data.has("respawnTime"):
+		time_to_respawn = data["respawnTime"]
 	
 	# do others make sense here as well? who knows :)
 
@@ -97,8 +97,8 @@ func despawn_from_json(data: Variant):
 	if data.has("canRespawn"):
 		can_respawn = data["canRespawn"]
 	
-	if data.has("timeToRespawn"):
-		time_to_respawn = data["timeToRespawn"]
+	if data.has("respawnTime"):
+		time_to_respawn = data["respawnTime"]
 
 	if block == null: return
 	
@@ -130,8 +130,8 @@ static func from_json(data: Variant, manager: CodeBlockManager) -> CodeBlockSlot
 	if do.has("canRespawn"):
 		options["can_respawn"] = do["canRespawn"]
 	
-	if do.has("timeToRespawn"):
-		options["time_to_respawn"] = do["timeToRespawn"]
+	if do.has("respawnTime"):
+		options["time_to_respawn"] = do["respawnTime"]
 	
 	if do.has("fadeTime"):
 		options["despawn_fade_time"] = do["fadeTime"]
