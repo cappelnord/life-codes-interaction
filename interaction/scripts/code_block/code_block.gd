@@ -149,6 +149,11 @@ func _process(delta):
 			_last_sent_position = position
 
 func move(new_position: Vector2, propagate_to_group: bool=true):
+	
+	if group == null or head_of_group:
+		new_position.x = clamp(new_position.x , Config.app_interaction_boundary_topleft.x, Config.app_interaction_boundary_bottomright.x - text_box_size.x)
+		new_position.y = clamp(new_position.y, Config.app_interaction_boundary_topleft.y, Config.app_interaction_boundary_bottomright.y - text_box_size.y)
+	
 	subpixel_position = new_position
 	
 	if Config.code_blocks_quantize_position:
