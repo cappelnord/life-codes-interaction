@@ -105,7 +105,8 @@ func move_delta(delta: Vector2):
 func _do_move_delta(delta: Vector2):
 	var new_position : Vector2 = _subpixel_position + delta
 	
-	# TODO: Limit in extends
+	new_position.x = clamp(new_position.x, Config.app_interaction_boundary_topleft.x, Config.app_interaction_boundary_bottomright.x)
+	new_position.y = clamp(new_position.y, Config.app_interaction_boundary_topleft.y, Config.app_interaction_boundary_bottomright.y)	
 
 	_subpixel_position = new_position
 	position = Vector2(round(_subpixel_position.x), round(_subpixel_position.y))
