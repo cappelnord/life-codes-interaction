@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dhgams4dad5a2"]
+[gd_scene load_steps=10 format=3 uid="uid://dhgams4dad5a2"]
 
 [ext_resource type="Script" path="res://interaction/scripts/websocket_controller.gd" id="1_sem6k"]
 [ext_resource type="Texture2D" uid="uid://dnh80j7shpx7e" path="res://interaction/graphics/qr_placeholder.png" id="2_oyg0d"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_manager.gd" id="6_deg0t"]
 [ext_resource type="Script" path="res://interaction/scripts/osc_manager.gd" id="7_ssv5t"]
 [ext_resource type="Script" path="res://interaction/scripts/osc_cursor_controller.gd" id="8_fbsrd"]
+[ext_resource type="Texture2D" uid="uid://b2ek7wbn0qjsg" path="res://interaction/graphics/overlay.png" id="9_4hw61"]
 
 [node name="InteractionRoot" type="Node2D"]
 
@@ -18,7 +19,7 @@ script = ExtResource("1_sem6k")
 
 [node name="QR-a" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
-position = Vector2(5033.82, 426.91)
+position = Vector2(5270.82, 426.91)
 scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
@@ -27,7 +28,7 @@ target_size = 180
 
 [node name="QR-b" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
-position = Vector2(4745.91, 426.91)
+position = Vector2(4982.91, 426.91)
 scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
@@ -36,7 +37,7 @@ target_size = 180
 
 [node name="QR-c" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
-position = Vector2(5033.82, 733.82)
+position = Vector2(5270.82, 733.82)
 scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
@@ -45,7 +46,7 @@ target_size = 180
 
 [node name="QR-d" type="Sprite2D" parent="Interaction/WebSocketController"]
 texture_filter = 1
-position = Vector2(4745.91, 733.82)
+position = Vector2(4982.91, 733.82)
 scale = Vector2(4.86, 4.86)
 texture = ExtResource("2_oyg0d")
 script = ExtResource("3_fiq1s")
@@ -67,3 +68,8 @@ script = ExtResource("4_mivvh")
 
 [node name="CodeBlockManager" type="Node2D" parent="Interaction"]
 script = ExtResource("6_deg0t")
+
+[node name="Overlay" type="Sprite2D" parent="Interaction"]
+visible = false
+texture = ExtResource("9_4hw61")
+centered = false

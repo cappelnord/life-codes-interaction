@@ -14,13 +14,13 @@ script = ExtResource("1_oudhp")
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(5380, 1200)
+size = Vector2i(5760, 1200)
 render_target_update_mode = 4
 
 [node name="InteractionRoot" parent="RenderViewport" instance=ExtResource("1_hd1ur")]
 
 [node name="RenderDisplay" type="Sprite2D" parent="."]
-position = Vector2(1345, 300)
+position = Vector2(1440, 300)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("ViewportTexture_0mt2a")
 

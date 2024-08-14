@@ -29,7 +29,7 @@ static var websocket_base_url := "https://lc.alexandracardenas.com"
 static var websocket_installation_path := "/ws/installation"
 static var websocket_ms_until_long_disconnect := 10000
 
-static var app_render_width := 5380
+static var app_render_width := 5760
 static var app_render_height := 1200
 static var app_window_width := app_render_width/2
 static var app_window_height := app_render_height/2
