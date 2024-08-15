@@ -232,13 +232,18 @@ func release_grab(cursor: Cursor):
 		var success: bool = group_candidate.commit(self)
 	
 		if success:
-			_active_cursor.notify_connect_block_successful()
+			cursor.notify_connect_block_successful()
 			group = group_candidate
 			group.move_all_to_front()
 		
 	group_candidate = null
 	is_rem_candidate = false
 	grabbed = false
+	
+	# fix for the "can take play blocks away" thing?
+	if _active_cursor:
+		release_hover(cursor)
+		attempt_hover(cursor)
 	
 	_collider.set_collision_mask_value(Config.COLLISION_LAYER_BOTTOM_CONNECTION, false)
 	
