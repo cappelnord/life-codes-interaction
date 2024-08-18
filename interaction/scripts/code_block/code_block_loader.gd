@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 class_name CodeBlockLoader
 
 # I guess this should ideally also somehow happen at the startup

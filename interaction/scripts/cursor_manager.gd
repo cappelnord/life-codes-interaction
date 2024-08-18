@@ -18,11 +18,12 @@ var _time_of_last_cursor_activity := 0
 
 func spawn(id: String, position: Vector2)->Cursor:
 	# TODO: make sure that we don't duplicate a cursor
-	var cursor = _cursor_node.instantiate()
+	var cursor = _cursor_node.instantiate() as Cursor
 	cursor.move(position)
 	cursor.id = id
 	cursors[id] = cursor
 	add_child(cursor)
+	call_deferred("add_child", cursor)
 	return cursor
 
 func despawn(id: String):

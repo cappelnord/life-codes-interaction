@@ -1,7 +1,7 @@
-extends Object
+extends RefCounted
 class_name CursorEventBuffer
 
-var _buffer_size := 4096
+var _buffer_size := 2048
 var _buffer: Array[CursorEvent] = []
 var _read_pointer := 0
 var _write_pointer := 0

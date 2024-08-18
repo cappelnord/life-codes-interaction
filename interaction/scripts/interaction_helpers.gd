@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 class_name InteractionHelpers
 
 static func random_id()->String:

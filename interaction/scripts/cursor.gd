@@ -219,6 +219,7 @@ func cleanup():
 	_release_grab()
 	if _hover_block != null:
 		_hover_block.release_hover(self)
+	
 
 func _attempt_rehover()->bool:
 	var areas = _collider.get_overlapping_areas()

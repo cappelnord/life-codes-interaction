@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 class_name CodeBlockBehaviourHost
 
 # this needs some rethinking; the code block slot will know the initial behaviour and therefore

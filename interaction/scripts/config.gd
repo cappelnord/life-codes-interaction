@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 class_name Config
 
 static var _config: ConfigFile

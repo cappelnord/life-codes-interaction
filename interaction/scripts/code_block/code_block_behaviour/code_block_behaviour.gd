@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 class_name CodeBlockBehaviour
 
 static var _template_dict_initialized := false
