@@ -13,6 +13,7 @@ var superseded := false
 var _snap_position: Vector2
 var _flash_ramp: float = 0.0
 
+@onready var _shadow := ($CodeBlockShadow as Sprite2D)
 @onready var _code_block_text := ($CodeBlockText as Label)
 
 
@@ -97,8 +98,8 @@ func set_size(size: Vector2):
 	var oversize := Vector2(1.5, 1.25) * 1.05
 	var shadow_size := size * oversize
 	
-	($CodeBlockShadow as Sprite2D).position = (size - shadow_size) * 0.5
-	($CodeBlockShadow as Sprite2D).scale = shadow_size / Vector2(128, 64)
+	_shadow.position = (size - shadow_size) * 0.5
+	_shadow.scale = shadow_size / Vector2(128, 64)
 
 func snap(position: Vector2):
 	_snap_position = position
@@ -115,4 +116,7 @@ func flash(strength: float=1):
 	_flash_ramp = strength
 
 func update_fade(strength: float=1):
-	modulate = Color(1.0, 1.0, 1.0, max(0.0, strength))
+	strength = max(0.0, strength)
+	modulate = Color(1.0*strength, 1.0*strength, 1.0*strength, strength)
+	strength = pow(strength, 6)
+	_shadow.self_modulate = Color(strength, strength, strength, strength)
