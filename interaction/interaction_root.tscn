@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dhgams4dad5a2"]
+[gd_scene load_steps=11 format=3 uid="uid://dhgams4dad5a2"]
 
 [ext_resource type="Script" path="res://interaction/scripts/websocket_controller.gd" id="1_sem6k"]
 [ext_resource type="Texture2D" uid="uid://dnh80j7shpx7e" path="res://interaction/graphics/qr_placeholder.png" id="2_oyg0d"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://interaction/scripts/osc_manager.gd" id="7_ssv5t"]
 [ext_resource type="Script" path="res://interaction/scripts/osc_cursor_controller.gd" id="8_fbsrd"]
 [ext_resource type="Texture2D" uid="uid://b2ek7wbn0qjsg" path="res://interaction/graphics/overlay.png" id="9_4hw61"]
+[ext_resource type="Script" path="res://interaction/scripts/grid.gd" id="10_j1m08"]
 
 [node name="InteractionRoot" type="Node2D"]
 
@@ -73,3 +74,6 @@ script = ExtResource("6_deg0t")
 visible = false
 texture = ExtResource("9_4hw61")
 centered = false
+
+[node name="Grid" type="Node" parent="Interaction"]
+script = ExtResource("10_j1m08")

@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwwtpfxgidxl5"]
+
+[ext_resource type="Texture2D" uid="uid://c7mcvehoa7uak" path="res://interaction/graphics/grid_cell.png" id="1_upkrk"]
+
+[node name="Cell" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_upkrk")
+centered = false
+
+[node name="Label" type="Label" parent="."]
+offset_left = 17.0
+offset_top = 14.0
+offset_right = 113.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 26
+text = "0.0 @ 0.0"
