@@ -9,9 +9,9 @@ texture = ExtResource("1_upkrk")
 centered = false
 
 [node name="Label" type="Label" parent="."]
-offset_left = 17.0
-offset_top = 14.0
-offset_right = 113.0
-offset_bottom = 45.0
-theme_override_font_sizes/font_size = 26
+offset_left = 10.0
+offset_top = 5.0
+offset_right = 121.0
+offset_bottom = 41.0
+theme_override_font_sizes/font_size = 20
 text = "0.0 @ 0.0"

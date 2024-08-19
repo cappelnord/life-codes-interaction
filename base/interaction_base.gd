@@ -3,6 +3,7 @@ extends Node2D
 var mouse_cursor_controller: MouseCursorController
 var osc_manager: OSCManager
 var overlay: Sprite2D
+var grid: GridOverlay
 
 @onready var viewport: SubViewport = $RenderViewport
 
@@ -12,6 +13,7 @@ func _ready():
 	
 	osc_manager = find_child("OSCManager") as OSCManager
 	overlay = find_child("Overlay") as Sprite2D
+	grid = find_child("GridOverlay") as GridOverlay
  	
 	viewport.size = Vector2i(Config.app_render_width, Config.app_render_height)
 	get_window().size = Vector2i(Config.app_window_width, Config.app_window_height)
@@ -31,3 +33,5 @@ func _input(event):
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_O:
 			overlay.visible = not overlay.visible
+		if event.keycode == KEY_G:
+			grid.toggle()

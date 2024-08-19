@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://interaction/scripts/osc_manager.gd" id="7_ssv5t"]
 [ext_resource type="Script" path="res://interaction/scripts/osc_cursor_controller.gd" id="8_fbsrd"]
 [ext_resource type="Texture2D" uid="uid://b2ek7wbn0qjsg" path="res://interaction/graphics/overlay.png" id="9_4hw61"]
-[ext_resource type="Script" path="res://interaction/scripts/grid.gd" id="10_j1m08"]
+[ext_resource type="Script" path="res://interaction/scripts/grid_overlay.gd" id="10_j1m08"]
 
 [node name="InteractionRoot" type="Node2D"]
 
@@ -75,5 +75,5 @@ visible = false
 texture = ExtResource("9_4hw61")
 centered = false
 
-[node name="Grid" type="Node" parent="Interaction"]
+[node name="GridOverlay" type="Node" parent="Interaction"]
 script = ExtResource("10_j1m08")
