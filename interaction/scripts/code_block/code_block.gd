@@ -245,9 +245,8 @@ func release_grab(cursor: Cursor):
 	grabbed = false
 	
 	# fix for the "can take play blocks away" thing?
-	if _active_cursor != null:
-		release_hover(_active_cursor)
-		attempt_hover(_active_cursor)
+	release_hover(cursor)
+	attempt_hover(cursor)
 	
 	_collider.set_collision_mask_value(Config.COLLISION_LAYER_BOTTOM_CONNECTION, false)
 	
