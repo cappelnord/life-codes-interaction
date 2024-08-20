@@ -170,11 +170,13 @@ func move_delta(delta: Vector2):
 		group.head.move(group.head.subpixel_position + delta)
 	else:
 		move(subpixel_position + delta)
-	
+
+# TODO: Maybe should not hover on a group that is currently manipulated on	
 func attempt_hover(cursor: Cursor):	
 	if despawning or deleted: return false
 	if group != null and group.active_block != null: return false
 	
+	# should keep multi user scenario safe
 	if _active_cursor == null:
 		_active_cursor = cursor
 		
@@ -196,10 +198,11 @@ func release_hover(cursor: Cursor):
 		
 		_update_visual_or_group_visual()
 
-# TODO: do more thorough checks  if the block can actually be grabbed
+# TODO should not be able to grab from a group that is currently manipulated.
 func attempt_grab(cursor: Cursor):
 	if despawning or deleted: return false
 	if grabbed: return false
+	# should keep multi user scenario safe
 	if cursor != _active_cursor:
 		return false
 	else:
@@ -215,6 +218,7 @@ func attempt_grab(cursor: Cursor):
 		return true
 	
 func release_grab(cursor: Cursor):
+	if cursor != _active_cursor: return 
 	
 	if is_rem_candidate:
 		# if they are the same it will be dealt with in the group_candidate_comit
@@ -241,9 +245,9 @@ func release_grab(cursor: Cursor):
 	grabbed = false
 	
 	# fix for the "can take play blocks away" thing?
-	if _active_cursor:
-		release_hover(cursor)
-		attempt_hover(cursor)
+	if _active_cursor != null:
+		release_hover(_active_cursor)
+		attempt_hover(_active_cursor)
 	
 	_collider.set_collision_mask_value(Config.COLLISION_LAYER_BOTTOM_CONNECTION, false)
 	
