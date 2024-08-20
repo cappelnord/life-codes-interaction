@@ -37,6 +37,8 @@ static var app_inactivity_time := 15.0
 static var app_interaction_boundary_topleft := Vector2i(0, 0)
 static var app_interaction_boundary_bottomright := Vector2i(app_render_width, app_render_height)
 
+static var debug_test_interaction_integrity := true
+
 static var grid_divisions_x = 40
 static var grid_divisions_y = 10
 
@@ -84,6 +86,8 @@ static func _static_init():
 	_config.set_value("app", "interaction_boundary_left", app_interaction_boundary_topleft.x)
 	_config.set_value("app", "interaction_boundary_bottom", app_interaction_boundary_bottomright.y)
 	_config.set_value("app", "interaction_boundary_right", app_interaction_boundary_bottomright.x)
+	
+	_config.set_value("debug", "test_interaction_integrity", debug_test_interaction_integrity)
 	
 	_config.set_value("grid", "divisions_x", grid_divisions_x)
 	_config.set_value("grid", "divisions_y", grid_divisions_y)
@@ -136,6 +140,8 @@ static func _static_init():
 		_config.get_value("app", "interaction_boundary_right") as int,
 		_config.get_value("app", "interaction_boundary_bottom") as int,
 	)
+	
+	debug_test_interaction_integrity = _config.get_value("debug", "test_interaction_integrity") as bool
 	
 	grid_divisions_x = _config.get_value("grid", "divisions_x")	as int
 	grid_divisions_y = _config.get_value("grid", "divisions_y") as int

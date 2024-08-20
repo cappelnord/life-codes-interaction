@@ -15,6 +15,7 @@ var _time_of_last_cursor_activity := 0
 
 
 @onready var _osc: OSCManager = $"../OSCManager"
+@onready var _block_manager: CodeBlockManager = $"../CodeBlockManager"
 
 func spawn(id: String, position: Vector2)->Cursor:
 	# TODO: make sure that we don't duplicate a cursor
@@ -95,6 +96,9 @@ func _process(delta):
 	if not _users_inactive:
 		if (_time_of_last_cursor_activity + inactivity_time) < now:
 			_users_became_inactive()
+	
+	if Config.debug_test_interaction_integrity and OS.is_debug_build():
+		_test_interaction_integrity()
 
 func _users_became_active():
 	_users_inactive = false
@@ -105,3 +109,31 @@ func _users_became_inactive():
 	_users_inactive = true
 	print("Users became inactive")
 	_osc.send_users_inactive()
+
+func _test_interaction_integrity():
+	for key in cursors:
+		var cursor := cursors[key] as Cursor
+		
+		# _grab_block and _hover_block can be different
+		# assert(cursor._grab_block == null or cursor._grab_block == cursor._hover_block)
+		
+		if cursor._hover_block:
+			assert(cursor._hover_block._active_cursor == cursor)
+		
+		if cursor._grab_block:
+			assert(cursor._grab_block._active_cursor == cursor)
+	
+	for key in _block_manager._slots:
+		var slot := _block_manager._slots[key] as CodeBlockSlot
+		if slot.block != null:
+			var block := slot.block
+			if block._active_cursor:
+				pass
+				# print(block._active_cursor._hover_block)
+				# print(block._active_cursor._grab_block)
+				
+				# this seems broken
+				
+				# assert(block._active_cursor._hover_block == block or block._active_cursor._grab_block == block)
+			
+	
