@@ -207,8 +207,9 @@ func _on_area_entered(collider: CodeBlockCollider):
 	return success
 	
 func _on_area_exited(collider: CodeBlockCollider):
-	collider.block.release_hover(self)
-	_hover_block = null
+	if _hover_block == collider.block:
+		collider.block.release_hover(self)
+		_hover_block = null
 	
 	if not _attempt_rehover():
 		notify_unhover()
