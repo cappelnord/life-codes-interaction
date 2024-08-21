@@ -24,7 +24,6 @@ func spawn(id: String, position: Vector2)->Cursor:
 	cursor.id = id
 	cursors[id] = cursor
 	add_child(cursor)
-	call_deferred("add_child", cursor)
 	return cursor
 
 func despawn(id: String):
