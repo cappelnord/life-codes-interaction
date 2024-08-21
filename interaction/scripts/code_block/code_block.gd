@@ -202,7 +202,6 @@ func release_hover(cursor: Cursor):
 func attempt_grab(cursor: Cursor):
 	if despawning or deleted: return false
 	if grabbed: return false
-	
 	# should keep multi user scenario safe
 	if cursor != _active_cursor:
 		return false
@@ -245,7 +244,7 @@ func release_grab(cursor: Cursor):
 	is_rem_candidate = false
 	grabbed = false
 	
-	# fix for the "can take play blocks away" thing?
+	# fix for the "can take play blocks away" thingy
 	release_hover(cursor)
 	attempt_hover(cursor)
 	

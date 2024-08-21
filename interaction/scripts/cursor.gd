@@ -58,6 +58,9 @@ func _process(delta):
 		_apply_event(event)
 		event = _event_buffer.read_next_move_event()
 	
+	if _hover_block == null:
+		_attempt_rehover()
+	
 	if _time_when_reset > 0 and Time.get_ticks_msec() > _time_when_reset:
 		_update_cursor_texture()
 		_time_when_reset = -1
