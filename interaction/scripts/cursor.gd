@@ -210,12 +210,15 @@ func _on_area_entered(collider: CodeBlockCollider):
 	return success
 	
 func _on_area_exited(collider: CodeBlockCollider):
-	if _hover_block == collider.block:
+	var was_hovered := _hover_block == collider.block
+	
+	if was_hovered:
 		collider.block.release_hover(self)
 		_hover_block = null
 	
 	if not _attempt_rehover():
-		notify_unhover()
+		if was_hovered:
+			notify_unhover()
 		
 	_update_cursor_texture()
 

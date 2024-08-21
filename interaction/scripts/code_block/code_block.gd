@@ -174,7 +174,7 @@ func move_delta(delta: Vector2):
 # TODO: Maybe should not hover on a group that is currently manipulated on	
 func attempt_hover(cursor: Cursor):	
 	if despawning or deleted: return false
-	if group != null and group.active_block != null: return false
+	if group != null and not group.user_can_hover(): return false
 	
 	# should keep multi user scenario safe
 	if _active_cursor == null:

@@ -232,44 +232,12 @@ func move_all_to_front():
 func has_action()->bool:
 	return action != null
 
-func unlink_on_delete(block: CodeBlock, hard: bool):
-	if OS.is_debug_build() and Config.debug_verbose:
-		print("Block " +  block.slot.id + " had to be unlinked from group on delete ...")
-	
-	
-	if head == block:
-		head = null
-	if action == block:
-		action = null
-	
-	var mods: Array[CodeBlock] = []
-	
-	for mod in modifiers:
-		if mod != block:
-			mods.append(block)
-	
-	modifiers = mods
-	
-	_update_all_members()
-	
-	# this should only happen if all members of the group are despawning (or dead)
-	if OS.is_debug_build():
-		var clean := true
-		if head != null:
-			clean = clean and head.despawning
-		if action != null:
-			clean = clean and action.despawning
-		for mod in modifiers:
-			if mod != null:
-				clean = clean and mod.despawning
-		
-		if(not (clean or hard)):
-			print("Group with mixed despawning states ...")
-		# if this trips over there were blocks in the group that were not despawning
-		# .. reactivate later!
-		# assert(clean or hard)
-	
-	
+func user_can_hover()->bool:
+	if despawning: return false
+	if active_block: return false
+	if _add_candidate: return false
+	if _rem_candidate: return false
+	return true
 
 func on_command_feedback(command_id: String):
 	print("on_command_feedback")
