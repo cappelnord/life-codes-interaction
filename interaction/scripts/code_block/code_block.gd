@@ -166,7 +166,7 @@ func move(new_position: Vector2, propagate_to_group: bool=true):
 		group.update_positions()
 	
 func move_delta(delta: Vector2):
-	if group != null and group.active_block_is_glued() and group.head != self:
+	if group != null and group.active_block_is_glued() and group.head != self and not group.despawning:
 		group.head.move(group.head.subpixel_position + delta)
 	else:
 		move(subpixel_position + delta)

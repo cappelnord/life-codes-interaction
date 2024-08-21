@@ -21,6 +21,8 @@ func _init(head: CodeBlock):
 	_update_all_members()
 
 func commit(new_block: CodeBlock)->bool:
+	if despawning: return false
+	
 	var success := false
 	
 	# shortcut in case we did not change anything
@@ -139,6 +141,8 @@ func can_connect(new_block: CodeBlock, target_block: CodeBlock):
 	return true
 	
 func set_add_candidate(block: CodeBlock, target_block: CodeBlock):
+	if despawning: return
+	
 	_add_candidate = block
 	_candidate_target = target_block
 	
@@ -153,6 +157,8 @@ func set_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	# print(all_members_candidate())
 
 func set_rem_candidate(block: CodeBlock):
+	if despawning: return
+	
 	_rem_candidate = block
 	# print("Remove Candidate: " + str(block))
 
@@ -166,8 +172,10 @@ func release_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	block.group_candidate = null
 	
 	block.visual.unsnap()
+	
 	for member in all_members:
-		member.visual.unsnap()
+		if member != null:
+			member.visual.unsnap()
 	
 	# print(all_members_candidate())
 
@@ -216,6 +224,8 @@ func active_block_is_glued():
 	return block_is_glued(active_block)
 
 func move_all_to_front():
+	if despawning: return 
+	
 	for member in all_members:
 		member.move_to_front()
 
