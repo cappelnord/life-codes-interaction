@@ -229,6 +229,7 @@ func cleanup():
 	_release_grab()
 	if _hover_block != null:
 		_hover_block.release_hover(self)
+		_hover_block = null
 	
 
 func _attempt_rehover()->bool:
