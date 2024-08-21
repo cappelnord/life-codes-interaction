@@ -115,7 +115,7 @@ func _test_interaction_integrity():
 		var cursor := cursors[key] as Cursor
 		
 		# _grab_block and _hover_block can be different
-		# assert(cursor._grab_block == null or cursor._grab_block == cursor._hover_block)
+		assert(cursor._grab_block == null or cursor._grab_block == cursor._hover_block)
 		
 		if cursor._hover_block:
 			assert(cursor._hover_block._active_cursor == cursor)
@@ -128,12 +128,7 @@ func _test_interaction_integrity():
 		if slot.block != null:
 			var block := slot.block
 			if block._active_cursor:
-				pass
-				# print(block._active_cursor._hover_block)
-				# print(block._active_cursor._grab_block)
-				
-				# this seems broken
-				
-				# assert(block._active_cursor._hover_block == block or block._active_cursor._grab_block == block)
+				assert(block._active_cursor._hover_block == block or block._active_cursor._grab_block == block)
+
 			
 	

@@ -202,6 +202,7 @@ func release_hover(cursor: Cursor):
 func attempt_grab(cursor: Cursor):
 	if despawning or deleted: return false
 	if grabbed: return false
+	
 	# should keep multi user scenario safe
 	if cursor != _active_cursor:
 		return false
