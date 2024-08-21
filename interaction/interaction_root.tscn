@@ -62,7 +62,6 @@ script = ExtResource("8_fbsrd")
 
 [node name="MouseCursorController" type="Node" parent="Interaction"]
 script = ExtResource("5_c3jn7")
-id = null
 
 [node name="CursorManager" type="Node" parent="Interaction"]
 script = ExtResource("4_mivvh")
