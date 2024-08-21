@@ -77,7 +77,8 @@ func get_group(id: StringName)->CodeBlockGroup:
 		return null
 
 func on_group_comitted(group: CodeBlockGroup):
-	_osc.send_code_command(group.head.slot.get_command_context(), _compile_code_string(group), group.last_command_id)
+	if group != null and not group.despawning:
+		_osc.send_code_command(group.head.slot.get_command_context(), _compile_code_string(group), group.last_command_id)
 
 func on_context_data_update(context: String, data: Variant):
 	_osc.send_context_data_update(context, InteractionHelpers.osc_encode_dictionary(data))
@@ -93,7 +94,7 @@ func _compile_code_string(group: CodeBlockGroup)->String:
 
 func on_received_command_feedback(id: String, command_id: String):
 	var group := get_group(id)
-	if group != null:
+	if group != null and not group.despawning:
 		group.on_command_feedback(command_id)
 
 func on_received_load_specs(path: String):

@@ -267,6 +267,8 @@ func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 	if collider.block == null: return false
 	if collider.block.despawning: return false
 	if collider.block.deleted: return false
+	if self.despawning: return false
+	if self.deleted: return false
 	
 	# this crash happened every now and then .. I hope this will not give us any disadvantages.
 	# my assumption is that the collision is queued up and the _active_cursor gets taken away
@@ -289,6 +291,8 @@ func _on_connection_area_exited(collider: CodeBlockConnectionCollider):
 	if collider.block == null: return false
 	if collider.block.despawning: return false
 	if collider.block.deleted: return false
+	if self.despawning: return false
+	if self.deleted: return false
 
 	if _active_cursor == null:
 		if OS.is_debug_build() and Config.debug_verbose:
@@ -343,6 +347,7 @@ func _attempt_despawn():
 			for block in group.all_members:
 				block.despawn_fade_time = despawn_fade_time
 				block.do_despawn()
+			group.despawning = true
 				
 
 func do_despawn():
@@ -366,7 +371,7 @@ func delete(hard: bool=false):
 		_active_cursor.cleanup()
 	
 	if group:
-		group.unlink_on_delete(self, hard)
+		# group.unlink_on_delete(self, hard)
 		group = null
 		head_of_group = false
 		

@@ -9,6 +9,7 @@ var active_block: CodeBlock
 var last_command_id: String
 var all_members: Array[CodeBlock] = []
 var pending_action: bool = false
+var despawning = false
 
 var _add_candidate: CodeBlock
 var _rem_candidate: CodeBlock
@@ -65,6 +66,8 @@ func commit(new_block: CodeBlock)->bool:
 	return success
 
 func _apply_group_effects():
+	if despawning: return
+	
 	# if any of the blocks have the mutes flag all should be muted
 	var muted = false
 	for block in all_members:
@@ -101,9 +104,12 @@ func _apply_group_effects():
 			values_set[value] = true
 
 func update_visual():
+	if despawning: return
+	
 	_apply_group_effects()
 	for block in all_members:
-		block.visual.update_material_and_zindex()
+		if block != null:
+			block.visual.update_material_and_zindex()
 
 func flash(strength: float=1):
 	for block in all_members:
@@ -144,11 +150,11 @@ func set_add_candidate(block: CodeBlock, target_block: CodeBlock):
 		member.visual.snap(snap_position)
 		snap_position = snap_position + Vector2(0, member.text_box_size.y)
 	
-	print(all_members_candidate())
+	# print(all_members_candidate())
 
 func set_rem_candidate(block: CodeBlock):
 	_rem_candidate = block
-	print("Remove Candidate: " + str(block))
+	# print("Remove Candidate: " + str(block))
 
 func release_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	if _add_candidate == null: return
@@ -163,7 +169,7 @@ func release_add_candidate(block: CodeBlock, target_block: CodeBlock):
 	for member in all_members:
 		member.visual.unsnap()
 	
-	print(all_members_candidate())
+	# print(all_members_candidate())
 
 func all_members_candidate()->Array[CodeBlock]:
 	if _add_candidate == null: return all_members
