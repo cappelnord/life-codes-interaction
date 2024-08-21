@@ -66,14 +66,15 @@ func block_was_deleted():
 func should_spawn() -> bool:
 	return block == null and (can_respawn or _spawn_counter == 0) and _respawn_timer <= 0
 
-func delete():
+func delete(hard: bool=false):
 	can_respawn = false
 	deleted = true
 	if block:
-		block.delete()
+		block.delete(hard)
 	block = null
 	manager.remove_slot(id)
-	print("Delete Slot: " + id)
+	if OS.is_debug_build() and Config.debug_verbose:
+		print("Delete Slot: " + id)
 
 func get_command_context()->String:
 	if context != null and context != "":

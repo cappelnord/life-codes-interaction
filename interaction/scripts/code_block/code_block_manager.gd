@@ -133,5 +133,5 @@ func _wipe():
 
 func clear_all_slots():
 	for key in _slots.keys():
-		_slots[key].delete()
+		_slots[key].delete(true)
 	_slots = {}
