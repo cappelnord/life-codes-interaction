@@ -264,12 +264,16 @@ func is_bound_or_active():
 
 func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 	if collider.block == self: return false
+	if collider.block == null: return false
+	if collider.block.despawning: return false
+	if collider.block.deleted: return false
 	
 	# this crash happened every now and then .. I hope this will not give us any disadvantages.
 	# my assumption is that the collision is queued up and the _active_cursor gets taken away
 	# at some other point before. Added print here to see if other things are not working out.
 	if _active_cursor == null:
-		print("_active_cursor was null in _on_connection_area_entered - did other strange things happen?")
+		if OS.is_debug_build() and Config.debug_verbose:
+			print("_active_cursor was null in _on_connection_area_entered - did other strange things happen?")
 		return false
 	
 	# print("Attempt to connect: " + display_string + "->" + collider.block.display_string)
@@ -281,7 +285,16 @@ func _on_connection_area_entered(collider: CodeBlockConnectionCollider):
 		return false
 	
 func _on_connection_area_exited(collider: CodeBlockConnectionCollider):
-	if collider.block == self: return
+	if collider.block == self: return false
+	if collider.block == null: return false
+	if collider.block.despawning: return false
+	if collider.block.deleted: return false
+
+	if _active_cursor == null:
+		if OS.is_debug_build() and Config.debug_verbose:
+			print("_active_cursor was null in _on_connection_area_exited - did other strange things happen?")
+		return false	
+
 	if collider.block.group != null:
 		collider.block.group.release_add_candidate(self, collider.block)
 		_attempt_reconnect()
@@ -319,18 +332,23 @@ func queue_despawn(despawn_fade_time: float):
 
 func _attempt_despawn():
 	if _marked_for_despawn and not despawning:
+		
 		# if the block is free then we can proceed with despawning
+		if group_candidate:
+			group_candidate.release_add_candidate(self, null)
+		
 		if group == null:
 			do_despawn()
-		
-		# if we are the head of the group then despawn the whole group
-		if head_of_group:
+		elif head_of_group:
 			for block in group.all_members:
 				block.despawn_fade_time = despawn_fade_time
 				block.do_despawn()
+				
 
 func do_despawn():
 	despawning = true
+	if _active_cursor:
+		_active_cursor.cleanup()
 	_despawn_timer = despawn_fade_time
 
 func _process_despwaning(delta: float):
@@ -341,12 +359,22 @@ func _process_despwaning(delta: float):
 
 # this is radical and does not check/care if the block is part of a group ...
 # ... it is also the last step of a more soft resign/dismiss process
-func delete():
+func delete(hard: bool=false):
 	deleted = true
+	
 	if _active_cursor:
 		_active_cursor.cleanup()
+	
+	if group:
+		group.unlink_on_delete(self, hard)
+		group = null
+		head_of_group = false
+		
 	queue_free()
-	print("Delete Block: " + slot.id)
+	
+	if OS.is_debug_build() and Config.debug_verbose:
+		print("Delete Block: " + slot.id)
+	
 	slot.block_was_deleted()
 	
 func _move_to_front_or_group_to_front():
