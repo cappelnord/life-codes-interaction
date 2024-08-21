@@ -58,8 +58,9 @@ func _process(delta):
 		_apply_event(event)
 		event = _event_buffer.read_next_move_event()
 	
-	if _hover_block == null:
-		_attempt_rehover()
+	if not _grab_block:
+		if _hover_block == null:
+			_attempt_rehover()
 	
 	if _time_when_reset > 0 and Time.get_ticks_msec() > _time_when_reset:
 		_update_cursor_texture()
@@ -213,6 +214,8 @@ func _on_area_exited(collider: CodeBlockCollider):
 	var was_hovered := _hover_block == collider.block
 	
 	if was_hovered:
+		if _grab_block:
+			_release_grab()
 		collider.block.release_hover(self)
 		_hover_block = null
 	
@@ -233,3 +236,4 @@ func _attempt_rehover()->bool:
 	for area in areas:
 		if _on_area_entered(area): return true
 	return false
+
