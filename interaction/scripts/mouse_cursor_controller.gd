@@ -8,6 +8,7 @@ class_name MouseCursorController
 
 
 var _active = false
+var _secondary_active = false
 var _secondary = false
 var _last_position : Vector2 =  Vector2(100, 100)
 
@@ -53,14 +54,16 @@ func _activate():
 	_active = true
 
 func _secondary_on():
-	var cursor := _manager.spawn(secondary_id, _last_position)
-	cursor.user_progress.progress.connect(_on_user_progress)
-	cursor.feedback.connect(_on_cursor_feedback)
+	if not _secondary_active:
+		var cursor := _manager.spawn(secondary_id, _last_position)
+		cursor.user_progress.progress.connect(_on_user_progress)
+		cursor.feedback.connect(_on_cursor_feedback)
+		_secondary_active = true
+		
 	_secondary = true
 
 func _secondary_off():
 	_secondary = false
-	_manager.despawn(secondary_id)
 	
 func _toggle_secondary():
 	if _secondary:
@@ -75,8 +78,10 @@ func _deactivate():
 		_last_position = cursor.position
 	_manager.despawn(id)
 	
-	if _secondary:
-		_secondary_off()
+	if _secondary_active:
+		_manager.despawn(secondary_id)
+		_secondary_active = false
+		_secondary = false
 	
 	_active = false
 
