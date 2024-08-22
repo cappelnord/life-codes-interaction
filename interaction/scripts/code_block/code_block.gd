@@ -136,6 +136,10 @@ func _physics_process(delta):
 	# that this only happens when the block is not active, snapped or part of a group
 	subpixel_position = subpixel_position + (movement * behaviour_activity_ramp)
 	
+	if group == null or head_of_group:
+		subpixel_position.x = clamp(subpixel_position.x , Config.app_interaction_boundary_topleft.x, Config.app_interaction_boundary_bottomright.x - text_box_size.x)
+		subpixel_position.y = clamp(subpixel_position.y, Config.app_interaction_boundary_topleft.y, Config.app_interaction_boundary_bottomright.y - text_box_size.y)
+	
 	if Config.code_blocks_quantize_position:
 		position = Vector2(round(subpixel_position.x), round(subpixel_position.y))
 	else:
