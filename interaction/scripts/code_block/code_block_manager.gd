@@ -9,10 +9,10 @@ var _slots: Dictionary = {}
 var _families: Dictionary = {}
 
 @onready var _osc: OSCManager = $"../OSCManager"
+@onready var _hints_manager: CodeBlockHintsManager = $"CodeBlockHintsManager"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_osc.set_code_block_manager(self)
 	_osc.send_request_specs()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -127,6 +127,7 @@ func on_received_despawn_slot(slot_id: String, json_string: String):
 # this will not call the gracious "dismiss" on the blocks but will terminate things quickly
 func _wipe():
 	self.clear_all_slots()
+	_hints_manager.wipe()
 
 	# I assume here the GC should be sufficient in dealing with things
 	_specs = {}

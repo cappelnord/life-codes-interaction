@@ -3,7 +3,8 @@ class_name OSCManager
 
 var _osc_impl: OscReceiver
 var _target_string: String
-var _code_block_manager: CodeBlockManager
+@onready var _code_block_manager: CodeBlockManager = $"../CodeBlockManager"
+@onready var _hints_manager: CodeBlockHintsManager = $"../CodeBlockManager/CodeBlockHintsManager"
 var _osc_cursor_controller: OSCCursorController
 
 func _ready():
@@ -19,9 +20,6 @@ func _input(event):
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_R:
 			_send("/lc/sceneManager/rush", [])
-	
-func set_code_block_manager(manager: CodeBlockManager):
-	_code_block_manager = manager
 	
 func set_osc_cursor_controller(controller: OSCCursorController):
 	_osc_cursor_controller = controller
@@ -65,6 +63,15 @@ func _on_osc_msg_received(addr: String, args: Array):
 				_code_block_manager.on_received_add_slot(args[0] as String)
 			"/lc/blocks/despawnSlot":
 				_code_block_manager.on_received_despawn_slot(args[0] as String, args[1] as String)
+	
+	if _hints_manager != null:
+		match addr:
+			"/lc/blocks/hints":
+				_hints_manager.on_received_hints(args[0] as String)
+			"/lc/blocks/clearHints":
+				_hints_manager.on_received_clear_hints()
+			"/lc/blocks/triggerHints":
+				_hints_manager.on_received_trigger_hints()
 	
 	if _osc_cursor_controller != null and addr.begins_with(OSCCursorController.ADDR_PATTERN_ROOT):
 		_osc_cursor_controller.on_osc_msg_received(addr, args)
