@@ -29,3 +29,9 @@ func get_delta_movement(block: CodeBlock, delta: float) -> Vector2:
 func replace_behaviour(behaviour: CodeBlockBehaviour):
 	_behaviours.clear()
 	_behaviours.append(CodeBlockBehaviourReference.new(behaviour))
+
+func ignore_interaction_boundary()->bool:
+	var ret := false
+	for ref in _behaviours:
+		ret = ret or ref.behaviour.ignore_interaction_boundary()
+	return ret

@@ -52,3 +52,6 @@ func is_stateless()->bool:
 
 func clone()->CodeBlockBehaviour:
 	return self
+
+func ignore_interaction_boundary()->bool:
+	return false

@@ -51,3 +51,6 @@ func get_delta_movement(block: CodeBlock, host: CodeBlockBehaviourHost, delta: f
 func clone()->CodeBlockBehaviour:
 	return CodeBlockFallBehaviour.new(_start_y, _min_fall_time, _max_fall_time, _fall_pow, _filter_weight, _base_behaviour)
 
+# TODO might need to be smarter
+func ignore_interaction_boundary()->bool:
+	return _fall_value > 0.1
