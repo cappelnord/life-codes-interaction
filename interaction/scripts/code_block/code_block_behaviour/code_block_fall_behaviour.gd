@@ -11,6 +11,7 @@ var _start_y: float
 var _min_fall_time: float
 var _max_fall_time: float
 var _filter_weight: float
+var _block
 
 
 # fall with pow, dampen it, add base behaviour
@@ -27,6 +28,8 @@ func _init(start_y: float, min_fall_time: float, max_fall_time: float, fall_pow:
 
 func initialize(block: CodeBlock, host: CodeBlockBehaviourHost):
 	_fall_height = block.position.y - _start_y
+	
+	_block = block
 	
 	block.position.y = _start_y
 	block.subpixel_position.y = _start_y
@@ -53,4 +56,4 @@ func clone()->CodeBlockBehaviour:
 
 # TODO might need to be smarter
 func ignore_interaction_boundary()->bool:
-	return _fall_value > 0.1
+	return _block.position.y < Config.app_interaction_boundary_topleft.y
