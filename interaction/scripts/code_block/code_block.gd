@@ -59,7 +59,6 @@ func _ready():
 	_top_connection_collider.block = self
 	_bottom_connection_collider.block = self
 	
-	visual.init_with_block(self)
 	
 	# copy arguments over from the slot - duplication is likely more manual than it needs to be
 	for key in slot.arguments:
@@ -68,6 +67,8 @@ func _ready():
 	if slot.spec.head_role():
 		head_of_group = true
 		group = CodeBlockGroup.new(self)
+
+	visual.init_with_block(self)
 	
 	_update_strings()
 	# always call _update_sizes() after _update_strings()

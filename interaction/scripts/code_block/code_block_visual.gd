@@ -79,11 +79,19 @@ func update_material_and_zindex():
 	if muted and not dont_apply_effects:
 		hsv_mod.y = hsv_mod.y * 0.8
 		hsv_mod.z = hsv_mod.z * 0.75
+		
+	var block_connected = block.group != null
 	
-	if (not superseded) or dont_apply_effects:
-		_code_block_text.modulate = Color.WHITE
-	else:
-		_code_block_text.modulate = Color(1.0, 0.8, 0.8, 0.8)
+	var text_color := Color.WHITE
+	
+	if not block_connected:
+	#	text_color = Color(0, 0, 0, 1)
+		pass
+	#	text_color = Color(0.9, 0.9, 0.9, 0.9)
+	elif (superseded and not dont_apply_effects):
+		text_color = Color(0.8, 0.8, 0.8, 0.8)
+	
+	_code_block_text.modulate = text_color
 	
 	background_material.set_shader_parameter("hsv", Vector3(rgb.h, rgb.s, rgb.v) * hsv_mod)
 	background_material.set_shader_parameter("rgb_add", rgb_add)
