@@ -30,26 +30,34 @@ func _hint():
 	
 	_schedule_hints()
 	
-	var emit_hints = true
-	
+	var has_subject = false
+	var hints_to_emit := []
 
 	for blockId in hints:
 		var block = _code_block_manager.get_block(blockId)
 		if block == null:
-			emit_hints = false
 			continue
 		if block.grabbed or block.despawning:
-			emit_hints = false
+			continue
+		if not block.slot.spec.head_role() and block.group != null:
+			continue
+		
+		if block.slot.spec.head_role():
+			has_subject = true
+		
+		hints_to_emit.append(blockId)
+	
+	if not has_subject:
+		return
 	
 	var delay := 0.0
-	if emit_hints:
-		for blockId in hints:
-			var block = _code_block_manager.get_block(blockId)
-			var hint = _hint_node.instantiate() as CodeBlockHint
-			hint.block = block
-			hint.delay = delay
-			add_child(hint)
-			delay = delay + 0.125
+	for blockId in hints_to_emit:
+		var block = _code_block_manager.get_block(blockId)
+		var hint = _hint_node.instantiate() as CodeBlockHint
+		hint.block = block
+		hint.delay = delay
+		add_child(hint)
+		delay = delay + 0.125
 
 func clear():
 	hints.clear()

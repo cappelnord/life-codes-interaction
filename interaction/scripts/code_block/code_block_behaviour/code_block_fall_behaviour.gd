@@ -12,6 +12,7 @@ var _min_fall_time: float
 var _max_fall_time: float
 var _filter_weight: float
 var _block
+var _went_under := false
 
 
 # fall with pow, dampen it, add base behaviour
@@ -54,6 +55,8 @@ func get_delta_movement(block: CodeBlock, host: CodeBlockBehaviourHost, delta: f
 func clone()->CodeBlockBehaviour:
 	return CodeBlockFallBehaviour.new(_start_y, _min_fall_time, _max_fall_time, _fall_pow, _filter_weight, _base_behaviour)
 
-# TODO might need to be smarter
+
 func ignore_interaction_boundary()->bool:
-	return _block.position.y < Config.app_interaction_boundary_topleft.y
+	_went_under = _went_under or (_block.position.y > Config.app_interaction_boundary_topleft.y)
+	return not _went_under
+
