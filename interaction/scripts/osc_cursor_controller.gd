@@ -43,15 +43,20 @@ func on_osc_msg_received(addr: String, args: Array):
 	
 	match addr:
 		ADDR_MOVE:
-			_cursor_manager.move(cursor_id, Vector2(args[1], args[2]))
+			if _osc.check_osc_args(addr, args, "sff"):
+				_cursor_manager.move(cursor_id, Vector2(args[1], args[2]))
 		ADDR_MOVE_DELTA:
-			_cursor_manager.move_delta(cursor_id, Vector2(args[1], args[2]))
+			if _osc.check_osc_args(addr, args, "sff"):
+				_cursor_manager.move_delta(cursor_id, Vector2(args[1], args[2]))
 		ADDR_PRESS:
-			_cursor_manager.press(cursor_id)
+			if _osc.check_osc_args(addr, args, "s"):
+				_cursor_manager.press(cursor_id)
 		ADDR_RELEASE:
-			_cursor_manager.release(cursor_id)
+			if _osc.check_osc_args(addr, args, "s"):
+				_cursor_manager.release(cursor_id)
 		ADDR_ATTEMPT_TOGGLE_GRAB:
-			_cursor_manager.attempt_toggle_grab(cursor_id)
+			if _osc.check_osc_args(addr, args, "s"):
+				_cursor_manager.attempt_toggle_grab(cursor_id)
 			
 func _assure_alive(cursor_id: String):
 	if not cursor_id in _last_cursor_updates:

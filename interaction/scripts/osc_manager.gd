@@ -47,6 +47,29 @@ func send_users_active():
 func send_users_inactive():
 	_send("/lc/usersActive", [0])
 
+func check_osc_args(addr: String, args: Array, typetag: String):
+	var valid := true
+	if args.size() < typetag.length():
+		valid = false
+		
+	if valid:
+		var i := 0
+		for char in typetag:
+			match char:
+				"s":
+					valid = valid and (args[i] is String)
+				"f":
+					valid = valid and (args[i] is float)
+				"i":
+					valid = valid and (args[i] is int)
+			i = i + 1
+	
+	if not valid:
+		print("Received invalid OSC message: " + addr + " that does not adhere to typetag: " + typetag)
+		
+	return valid
+	
+
 func _on_osc_msg_received(addr: String, args: Array):
 	
 	if _code_block_manager != null:
@@ -54,20 +77,26 @@ func _on_osc_msg_received(addr: String, args: Array):
 			"/lc/blocks/clearAllSlots":
 				_code_block_manager.clear_all_slots()
 			"/lc/blocks/commandFeedback":
-				_code_block_manager.on_received_command_feedback(args[0] as String, args[1] as String)
+				if check_osc_args(addr, args, "ss"):
+					_code_block_manager.on_received_command_feedback(args[0] as String, args[1] as String)
 			"/lc/blocks/loadSpecs":
-				_code_block_manager.on_received_load_specs(args[0] as String)
+				if check_osc_args(addr, args, "s"):
+					_code_block_manager.on_received_load_specs(args[0] as String)
 			"/lc/blocks/setSlotProperties":
-				_code_block_manager.on_received_set_slot_properties(args[0] as String, args[1] as String)
+				if check_osc_args(addr, args, "ss"):
+					_code_block_manager.on_received_set_slot_properties(args[0] as String, args[1] as String)
 			"/lc/blocks/addSlot":
-				_code_block_manager.on_received_add_slot(args[0] as String)
+				if check_osc_args(addr, args, "s"):
+					_code_block_manager.on_received_add_slot(args[0] as String)
 			"/lc/blocks/despawnSlot":
-				_code_block_manager.on_received_despawn_slot(args[0] as String, args[1] as String)
+				if check_osc_args(addr, args, "ss"):
+					_code_block_manager.on_received_despawn_slot(args[0] as String, args[1] as String)
 	
 	if _hints_manager != null:
 		match addr:
 			"/lc/blocks/hints":
-				_hints_manager.on_received_hints(args[0] as String)
+				if check_osc_args(addr, args, "s"):
+					_hints_manager.on_received_hints(args[0] as String)
 			"/lc/blocks/clearHints":
 				_hints_manager.on_received_clear_hints()
 			"/lc/blocks/triggerHints":
