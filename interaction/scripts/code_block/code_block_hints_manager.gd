@@ -57,7 +57,7 @@ func _hint():
 		hint.block = block
 		hint.delay = delay
 		add_child(hint)
-		delay = delay + 0.125
+		delay = delay + 0.25
 
 func clear():
 	hints.clear()

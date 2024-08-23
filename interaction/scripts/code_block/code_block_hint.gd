@@ -7,7 +7,7 @@ var delay: float = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	scale = block.text_box_size
-	var tween_time := 0.25
+	var tween_time := 0.3333333
 	var tween := create_tween()
 	
 	tween.tween_interval(delay)
@@ -24,4 +24,5 @@ func _process(delta):
 
 func _flash_block():
 	if block == null: return
+	block.move_to_front()
 	block.visual.flash()
