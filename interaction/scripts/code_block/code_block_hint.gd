@@ -12,7 +12,7 @@ func _ready():
 	
 	tween.tween_interval(delay)
 	tween.tween_callback(self._flash_block)
-	tween.tween_property(self, "scale", block.text_box_size * 3, tween_time)
+	tween.tween_property(self, "scale", block.text_box_size * 2, tween_time)
 	tween.parallel().tween_property(self, "modulate", Color(1, 1, 1, 0), tween_time)
 	tween.tween_callback(self.queue_free)
 
