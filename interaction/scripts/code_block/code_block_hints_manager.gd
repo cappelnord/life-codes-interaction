@@ -39,7 +39,7 @@ func _hint():
 			continue
 		if block.grabbed or block.despawning:
 			continue
-		if not block.slot.spec.head_role() and block.group != null:
+		if (not block.slot.spec.head_role()) and (block.group != null):
 			continue
 		
 		if block.slot.spec.head_role():
@@ -47,7 +47,7 @@ func _hint():
 		
 		hints_to_emit.append(blockId)
 	
-	if not has_subject:
+	if not has_subject or hints_to_emit.size() < 2:
 		return
 	
 	var delay := 0.0
