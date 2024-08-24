@@ -94,12 +94,20 @@ func _update_sizes():
 	_bottom_connection_collider.position = connection_collider_size * 0.5 + Vector2(0, text_box_size.y * 0.6666666)	
 
 func _update_strings():
+	var alt_decoration := true
+	
 	# build the display_string and code_string and set it
 	display_string = slot.display_string
 	code_string = slot.spec.code_string + "?" + slot.id
 	
+	if alt_decoration and not slot.spec.head_role():
+		display_string = "." + display_string + "("
+	
 	# we should iterate over parameters and then see if we have one set; otherwise use default parameters
 	# for now we only havew constant parameters/arguments
+	
+	var first_display_parameter := true
+	
 	for parameter in slot.spec.parameters:
 		var value = parameter.default
 		var display := false
@@ -109,9 +117,21 @@ func _update_strings():
 			display = argument.display()
 		
 		if display:
-			display_string = display_string + " " + str(value)
+			if not alt_decoration:
+				display_string = display_string + " " + str(value)
+			else:
+				var v = str(value)
+				if value is String:
+					v = "\"" + v + "\""
+				if not first_display_parameter:
+					display_string = display_string + ", "
+				display_string = display_string + v
+			
 			code_string = code_string + "," + parameter.type_tag() + str(value)
+			first_display_parameter = false
 	
+	if alt_decoration and not slot.spec.head_role():
+		display_string = display_string + ")"
 		
 	_label.add_theme_font_size_override("font_size", Config.code_blocks_font_size)
 	_label.text = display_string

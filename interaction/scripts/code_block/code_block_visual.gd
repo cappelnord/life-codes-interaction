@@ -4,7 +4,8 @@ class_name CodeBlockVisual
 static var oscillation_phase: float = 0
 
 # static var defaultFont = preload("res://interaction/fonts/SourceCodePro-Medium.ttf")
-static var subjectFont = preload("res://interaction/fonts/SourceCodePro-Bold.ttf")
+static var actionFont = preload("res://interaction/fonts/SourceCodePro-Bold.ttf")
+static var subjectFont = preload("res://interaction/fonts/SourceCodePro-Black.ttf")
 
 var block: CodeBlock
 var background_material: Material
@@ -31,6 +32,9 @@ func init_with_block(block: CodeBlock):
 	
 	if block.slot.spec.head_role():
 		_code_block_text.set("theme_override_fonts/font", subjectFont)
+	
+	if block.slot.spec.action_role():
+		_code_block_text.set("theme_override_fonts/font", actionFont)
 	
 	update_material_and_zindex()
 
