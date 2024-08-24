@@ -3,7 +3,7 @@ class_name CodeBlockVisual
 
 static var oscillation_phase: float = 0
 
-# static var defaultFont = preload("res://interaction/fonts/SourceCodePro-Medium.ttf")
+static var defaultFont = preload("res://interaction/fonts/SourceCodePro-Medium.ttf")
 static var actionFont = preload("res://interaction/fonts/SourceCodePro-Bold.ttf")
 static var subjectFont = preload("res://interaction/fonts/SourceCodePro-Black.ttf")
 
@@ -15,6 +15,7 @@ var superseded := false
 
 var _snap_position: Vector2
 var _flash_ramp: float = 0.0
+var _current_font = null
 
 @onready var _shadow := ($CodeBlockShadow as Sprite2D)
 @onready var _code_block_text := ($CodeBlockText as Label)
@@ -24,6 +25,11 @@ var _flash_ramp: float = 0.0
 func _ready():
 	z_index = Config.Z_INDEX_CODE_BLOCK
 
+func _switch_font(font):
+	if _current_font != font:
+		_code_block_text.set("theme_override_fonts/font", font)
+		_current_font = font
+
 func init_with_block(block: CodeBlock):
 	self.block = block
 	var background = ($CodeBlockBackground as Sprite2D)
@@ -31,10 +37,11 @@ func init_with_block(block: CodeBlock):
 	background.material = background_material
 	
 	if block.slot.spec.head_role():
-		_code_block_text.set("theme_override_fonts/font", subjectFont)
-	
-	if block.slot.spec.action_role():
-		_code_block_text.set("theme_override_fonts/font", actionFont)
+		_switch_font(subjectFont)
+	elif block.slot.spec.action_role() and block.group == null:
+		_switch_font(actionFont)
+	else:
+		_switch_font(defaultFont)
 	
 	update_material_and_zindex()
 
