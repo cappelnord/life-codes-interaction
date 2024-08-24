@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://dx01rghfqnaxo"]
+
+[ext_resource type="Texture2D" uid="uid://dlpxoacywkeb0" path="res://interaction/graphics/white.png" id="1_858ch"]
+[ext_resource type="Script" path="res://interaction/scripts/displacer.gd" id="2_de00t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a3ucf"]
+size = Vector2(1, 1)
+
+[node name="Displacer" type="Sprite2D"]
+modulate = Color(1, 0, 1, 0.196078)
+texture = ExtResource("1_858ch")
+script = ExtResource("2_de00t")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 536870912
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_a3ucf")

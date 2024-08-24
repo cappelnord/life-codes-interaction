@@ -17,6 +17,8 @@ var code_string
 var text_box_size: Vector2
 var grabbed = false
 var subpixel_position: Vector2
+var displacement_vector := Vector2.ZERO
+var displacement_speed := Vector2.ZERO
 
 var head_of_group: bool = false
 var group: CodeBlockGroup
@@ -157,6 +159,18 @@ func _physics_process(delta):
 	# that this only happens when the block is not active, snapped or part of a group
 	subpixel_position = subpixel_position + (movement * behaviour_activity_ramp)
 	
+	# DISPLACEMENT IS SUCH A MESS ...
+	
+	var do_displace = true
+	if group != null:
+		do_displace = group.user_can_hover()
+	
+	var did_displace = false
+	if not (displacement_speed == Vector2.ZERO and displacement_vector == Vector2.ZERO) and do_displace:
+		subpixel_position = subpixel_position + _process_displacement(delta)
+		did_displace = true
+	
+	
 	if not behaviour_host.ignore_interaction_boundary():
 		if group == null or head_of_group:
 			subpixel_position.x = clamp(subpixel_position.x , Config.app_interaction_boundary_topleft.x, Config.app_interaction_boundary_bottomright.x - text_box_size.x)
@@ -166,8 +180,23 @@ func _physics_process(delta):
 		position = Vector2(round(subpixel_position.x), round(subpixel_position.y))
 	else:
 		position = subpixel_position
+	
+	if head_of_group and did_displace:
+		group.update_subpixel_positions()
+
+func _process_displacement(delta):
+	displacement_speed = (displacement_speed * 0.98) + (displacement_vector * 0.02)
+	displacement_vector = Vector2.ZERO
+	if displacement_speed.length() > 0.00000000001:
+		var movement = displacement_speed * delta
+		return movement
+	else:
+		displacement_speed = Vector2.ZERO
+		return Vector2.ZERO
+		
 
 func _process(delta):
+	
 	# send position of the head (if context is known)
 	if head_of_group and Config.osc_send_head_position and slot.context != "":
 		if _last_sent_position != position:

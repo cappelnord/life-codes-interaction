@@ -36,6 +36,8 @@ static var app_window_height := app_render_height/2
 static var app_inactivity_time := 15.0
 static var app_interaction_boundary_topleft := Vector2i(0, 0)
 static var app_interaction_boundary_bottomright := Vector2i(app_render_width, app_render_height)
+static var app_enable_displacers = true
+static var app_displacement_speed := 20.0
 
 static var debug_test_interaction_integrity := false
 static var debug_verbose := false
@@ -88,6 +90,9 @@ static func _static_init():
 	_config.set_value("app", "interaction_boundary_bottom", app_interaction_boundary_bottomright.y)
 	_config.set_value("app", "interaction_boundary_right", app_interaction_boundary_bottomright.x)
 	
+	_config.set_value("app", "enable_displacers", app_enable_displacers)
+	_config.set_value("app", "displacement_speed", app_displacement_speed)
+	
 	_config.set_value("debug", "test_interaction_integrity", debug_test_interaction_integrity)
 	_config.set_value("debug", "verbose", debug_verbose)
 	
@@ -132,6 +137,8 @@ static func _static_init():
 	app_window_width = _config.get_value("app", "window_width") as int
 	app_window_height = _config.get_value("app", "window_height") as int		
 	app_inactivity_time = _config.get_value("app", "inactivity_time") as float
+	app_enable_displacers = _config.get_value("app", "enable_displacers") as bool
+	app_displacement_speed = _config.get_value("app", "displacement_speed") as float
 	
 	app_interaction_boundary_topleft = Vector2(
 		_config.get_value("app", "interaction_boundary_left") as int,
@@ -160,3 +167,4 @@ const Z_INDEX_MOUSE_CURSOR: int = 2500
 const COLLISION_LAYER_BLOCK: int = 25
 const COLLISION_LAYER_TOP_CONNECTION: int = 26
 const COLLISION_LAYER_BOTTOM_CONNECTION: int = 27
+const COLLISION_LAYER_DISPLACEMENT: int = 30

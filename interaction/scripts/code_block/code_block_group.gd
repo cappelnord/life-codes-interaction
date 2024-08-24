@@ -117,12 +117,21 @@ func flash(strength: float=1):
 	for block in all_members:
 		block.visual.flash(strength)
 
+func update_subpixel_positions():
+	var pos := head.subpixel_position
+	for member in all_members:
+		member.visual.unsnap()
+		member.subpixel_position = pos
+		pos = pos + Vector2(0, member.text_box_size.y)
+
 func update_positions():
 	var pos := head.position
 	for member in all_members:
 		member.visual.unsnap()
 		member.move(pos, false)
 		pos = pos + Vector2(0, member.text_box_size.y)
+	
+
 
 func can_connect(new_block: CodeBlock, target_block: CodeBlock):
 	# special rule to allow moving blocks within the hierarchy
