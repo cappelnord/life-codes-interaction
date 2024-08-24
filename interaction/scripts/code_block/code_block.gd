@@ -121,8 +121,8 @@ func _update_strings():
 				display_string = display_string + " " + str(value)
 			else:
 				var v = str(value)
-				if value is String:
-					v = "\"" + v + "\""
+				# if value is String:
+				#	v = "\"" + v + "\""
 				if not first_display_parameter:
 					display_string = display_string + ", "
 				display_string = display_string + v

@@ -89,7 +89,6 @@ func update_material_and_zindex():
 	var text_color := Color.WHITE
 	
 	if not block_connected:
-	#	text_color = Color(0, 0, 0, 1)
 		pass
 	#	text_color = Color(0.9, 0.9, 0.9, 0.9)
 	elif (superseded and not dont_apply_effects):
