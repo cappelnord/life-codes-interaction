@@ -102,7 +102,9 @@ func _update_strings():
 	display_string = slot.display_string
 	code_string = slot.spec.code_string + "?" + slot.id
 	
-	if alt_decoration and not slot.spec.head_role():
+	var do_decorate = alt_decoration and not slot.spec.head_role() and not slot.spec.effects.dont_decorate
+	
+	if do_decorate:
 		display_string = "." + display_string + "("
 	
 	# we should iterate over parameters and then see if we have one set; otherwise use default parameters
@@ -132,7 +134,7 @@ func _update_strings():
 			code_string = code_string + "," + parameter.type_tag() + str(value)
 			first_display_parameter = false
 	
-	if alt_decoration and not slot.spec.head_role():
+	if do_decorate:
 		display_string = display_string + ")"
 		
 	_label.add_theme_font_size_override("font_size", Config.code_blocks_font_size)

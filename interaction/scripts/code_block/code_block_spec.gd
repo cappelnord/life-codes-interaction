@@ -6,11 +6,16 @@ class CodeBlockEffects:
 	var modifies_values: Array[StringName]
 	var mutes: bool
 	var track_effects: bool
+	# these should probably not be here ...
+	var dont_decorate: bool
+	var invert_text_color: bool
 		
-	func _init(sets_values: Array[StringName], modifies_values: Array[StringName], mutes: bool):
+	func _init(sets_values: Array[StringName], modifies_values: Array[StringName], mutes: bool, dont_decorate: bool, invert_text_color: bool):
 		self.sets_values = sets_values
 		self.modifies_values = modifies_values
 		self.mutes = mutes
+		self.dont_decorate = dont_decorate
+		self.invert_text_color = invert_text_color
 		self.track_effects = (self.sets_values.size() > 0) || (self.modifies_values.size() > 0)
 
 var id: StringName
@@ -85,12 +90,20 @@ static func from_json(dict, manager: CodeBlockManager) -> CodeBlockSpec:
 	
 	# build the effects info
 	
-	var mutes = false
+	var mutes := false
 	var sets_values: Array[StringName] = []
 	var modifies_values: Array[StringName] = []
+	var dont_decorate := false
+	var invert_text_color := false
 	
 	if dict.has("mutes"):
 		mutes = dict["mutes"]
+		
+	if dict.has("dontDecorate"):
+		dont_decorate = dict["dontDecorate"]
+	
+	if dict.has("invertTextColor"):
+		invert_text_color = dict["invertTextColor"]
 	
 	if dict.has("setsValues"):
 		for name in (dict["setsValues"] as Array[String]):
@@ -100,6 +113,6 @@ static func from_json(dict, manager: CodeBlockManager) -> CodeBlockSpec:
 		for name in (dict["modifiesValues"] as Array[String]):
 			modifies_values.append(StringName(name))
 	
-	var effects := CodeBlockEffects.new(sets_values, modifies_values, mutes)
+	var effects := CodeBlockEffects.new(sets_values, modifies_values, mutes, dont_decorate, invert_text_color)
 	
 	return CodeBlockSpec.new(id, dict["code_string"], dict["display_string"], type, family, parameters, effects)
