@@ -30,6 +30,7 @@ func spawn(id: String, position: Vector2, style: StringName=Cursor.default_curso
 	var cursor = _cursor_node.instantiate() as Cursor
 	cursor.move(position)
 	cursor.id = id
+	cursor.style = style
 	cursors[id] = cursor
 	add_child(cursor)
 	return cursor
@@ -89,11 +90,33 @@ func get_cursor(id: String) -> Cursor:
 func _ready():
 	_osc.send_users_active()
 	
+	# &a
 	_cursor_styles[Cursor.default_cursor_style] = CursorStyleSet.new(
-		preload("res://interaction/graphics/cursors/cursor_base.png"),
-		preload("res://interaction/graphics/cursors/cursor_attempt_grab.png"),
-		preload("res://interaction/graphics/cursors/cursor_hover.png"),
-		preload("res://interaction/graphics/cursors/cursor_grab.png")
+		preload("res://interaction/graphics/cursors/cursor_base_a.png"),
+		preload("res://interaction/graphics/cursors/cursor_attempt_grab_a.png"),
+		preload("res://interaction/graphics/cursors/cursor_hover_a.png"),
+		preload("res://interaction/graphics/cursors/cursor_grab_a.png")
+	)
+	
+	_cursor_styles[&"b"] = CursorStyleSet.new(
+		preload("res://interaction/graphics/cursors/cursor_base_b.png"),
+		preload("res://interaction/graphics/cursors/cursor_attempt_grab_b.png"),
+		preload("res://interaction/graphics/cursors/cursor_hover_b.png"),
+		preload("res://interaction/graphics/cursors/cursor_grab_b.png")
+	)
+	
+	_cursor_styles[&"c"] = CursorStyleSet.new(
+		preload("res://interaction/graphics/cursors/cursor_base_c.png"),
+		preload("res://interaction/graphics/cursors/cursor_attempt_grab_c.png"),
+		preload("res://interaction/graphics/cursors/cursor_hover_c.png"),
+		preload("res://interaction/graphics/cursors/cursor_grab_c.png")
+	)
+	
+	_cursor_styles[&"d"] = CursorStyleSet.new(
+		preload("res://interaction/graphics/cursors/cursor_base_d.png"),
+		preload("res://interaction/graphics/cursors/cursor_attempt_grab_d.png"),
+		preload("res://interaction/graphics/cursors/cursor_hover_d.png"),
+		preload("res://interaction/graphics/cursors/cursor_grab_d.png")
 	)
 
 func cursor_style(id: StringName)->Variant:

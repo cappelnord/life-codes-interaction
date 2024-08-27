@@ -41,6 +41,9 @@ func _ready():
 	_collider.area_entered.connect(_on_area_entered)
 	_collider.area_exited.connect(_on_area_exited)
 	_cursor_style = _manager.cursor_style(style)
+	print(style)
+	
+	texture = _cursor_style.base
 
 
 func _physics_process(delta):
@@ -150,7 +153,7 @@ func attempt_toggle_grab():
 	_event_buffer.write_event(CursorEvent.Type.ATTEMPT_TOGGLE_GRAB)
 
 func _do_attempt_toggle_grab():
-	texture = _manager.cursor_image_attempt_grab
+	texture = _cursor_style.attempt_grab
 	if not _attempt_grab():
 		_time_when_reset = Time.get_ticks_msec() + 500
 		notify_release()
