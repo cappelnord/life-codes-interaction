@@ -9,8 +9,8 @@ static var osc_listen_port := 57140
 static var osc_enable_cursor_controller := true
 static var osc_send_head_position := true
 
-static var code_blocks_font_size := 28
-static var code_blocks_padding_x := 18
+static var code_blocks_font_size := 26
+static var code_blocks_padding_x := 16
 static var code_blocks_padding_y := 8
 static var code_blocks_oscillation_hz := 1.5
 static var code_blocks_flash_intensity := 0.4
