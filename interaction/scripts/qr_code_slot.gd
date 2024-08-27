@@ -3,6 +3,7 @@ class_name QRCodeSlot
 
 @export var id: String
 @export var scheme: String = "default"
+@export var style: String = "a"
 @export var target_size: int = 120
 @export var time_until_refresh: float = 60
 

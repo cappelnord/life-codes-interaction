@@ -12,7 +12,10 @@ enum Feedback {
 
 signal feedback(cursor_id: String, feedback: Feedback)
 
+const default_cursor_style := &"a"
+
 var id: String
+var style: StringName = Cursor.default_cursor_style
 var user_progress: CursorUserProgress
 var _manager: CursorManager
 var _time_when_reset := -1
@@ -23,6 +26,7 @@ var _pressed := false
 var _user_connected := true
 var _subpixel_position := Vector2.ZERO
 var _event_buffer := CursorEventBuffer.new()
+var _cursor_style
 
 @onready var _collider: Area2D = $"CursorCollider"
 
@@ -36,6 +40,7 @@ func _ready():
 	_manager = (get_parent() as CursorManager)
 	_collider.area_entered.connect(_on_area_entered)
 	_collider.area_exited.connect(_on_area_exited)
+	_cursor_style = _manager.cursor_style(style)
 
 
 func _physics_process(delta):
@@ -153,15 +158,15 @@ func _do_attempt_toggle_grab():
 
 func _update_cursor_texture():
 	if _grab_block != null:
-		texture = _manager.cursor_image_grab
+		texture = _cursor_style.grab
 		return
 	if _pressed:
-		texture = _manager.cursor_image_attempt_grab
+		texture = _cursor_style.attempt_grab
 		return
 	if _hover_block != null:
-		texture = _manager.cursor_image_hover
+		texture = _cursor_style.hover
 	else:
-		texture = _manager.cursor_image_base
+		texture = _cursor_style.base
 		
 
 

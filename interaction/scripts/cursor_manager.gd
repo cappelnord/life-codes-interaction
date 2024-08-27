@@ -1,14 +1,22 @@
 extends Node
 class_name CursorManager
 
+class CursorStyleSet:
+	var base
+	var attempt_grab
+	var hover
+	var grab
+	
+	func _init(base, attempt_grab, hover, grab):
+		self.base = base
+		self.attempt_grab = grab
+		self.hover = hover
+		self.grab = grab
+
 var _cursor_node = preload("res://interaction/nodes/cursor_node.tscn")
 
-var cursor_image_base = preload("res://interaction/graphics/cursors/cursor_base.png")
-var cursor_image_attempt_grab = preload("res://interaction/graphics/cursors/cursor_attempt_grab.png")
-var cursor_image_hover = preload("res://interaction/graphics/cursors/cursor_hover.png")
-var cursor_image_grab = preload("res://interaction/graphics/cursors/cursor_grab.png")
-
 var cursors = {}
+var _cursor_styles = {}
 
 var _users_inactive = false
 var _time_of_last_cursor_activity := 0
@@ -17,7 +25,7 @@ var _time_of_last_cursor_activity := 0
 @onready var _osc: OSCManager = $"../OSCManager"
 @onready var _block_manager: CodeBlockManager = $"../CodeBlockManager"
 
-func spawn(id: String, position: Vector2)->Cursor:
+func spawn(id: String, position: Vector2, style: StringName=Cursor.default_cursor_style)->Cursor:
 	# TODO: make sure that we don't duplicate a cursor
 	var cursor = _cursor_node.instantiate() as Cursor
 	cursor.move(position)
@@ -80,7 +88,19 @@ func get_cursor(id: String) -> Cursor:
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_osc.send_users_active()
+	
+	_cursor_styles[Cursor.default_cursor_style] = CursorStyleSet.new(
+		preload("res://interaction/graphics/cursors/cursor_base.png"),
+		preload("res://interaction/graphics/cursors/cursor_attempt_grab.png"),
+		preload("res://interaction/graphics/cursors/cursor_hover.png"),
+		preload("res://interaction/graphics/cursors/cursor_grab.png")
+	)
 
+func cursor_style(id: StringName)->Variant:
+	if _cursor_styles.has(id):
+		return _cursor_styles[id]
+	else:
+		return _cursor_styles[Cursor.default_cursor_style]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):	

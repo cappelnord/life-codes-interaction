@@ -236,7 +236,7 @@ func _process_cursor_spawn(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
 	if slot and not slot.spawned:
 		slot.spawn()
-		var cursor := _cursor_manager.spawn(slot.id, slot.position)
+		var cursor := _cursor_manager.spawn(slot.id, slot.position, slot.style)
 		cursor.feedback.connect(_on_cursor_feedback)
 		cursor.user_progress.progress.connect(_on_user_progress)
 
