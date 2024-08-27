@@ -99,7 +99,7 @@ func update_material_and_zindex():
 		pass
 	#	text_color = Color(0.9, 0.9, 0.9, 0.9)
 	elif (superseded and not dont_apply_effects):
-		text_color = Color(0.65, 0.65, 0.65, 0.7)
+		text_color = Color(0.7, 0.7, 0.7, 0.5)
 	
 	_code_block_text.modulate = text_color
 	
