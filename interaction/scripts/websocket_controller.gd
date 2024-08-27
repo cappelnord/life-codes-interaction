@@ -243,7 +243,7 @@ func _process_cursor_spawn(msg: Variant):
 func _process_cursor_move_delta(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
 	if slot and slot.spawned:
-		_cursor_manager.move_delta(slot.id, Vector2(msg.x, msg.y))
+		_cursor_manager.move_delta(slot.id, Vector2(msg.x, msg.y) * Config.websocket_cursor_speed_modifier)
 
 func _process_cursor_press(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
