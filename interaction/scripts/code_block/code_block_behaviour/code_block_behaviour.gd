@@ -15,7 +15,7 @@ static func _populate_templates():
 	_template_dict = {
 		"default": CodeBlockFallBehaviour.new(
 			-600,
-			1.0, 3.0,
+			3.0, 7.0,
 			2,
 			0.05,
 			brownian
