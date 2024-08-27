@@ -11,8 +11,8 @@ func _ready():
 	if not Config.app_enable_displacers: return
 	
 	_spawn(
-		InteractionHelpers.position_to_pixel(Vector2(0.914, 0.485)),
-		Vector2(550, 550),
+		Vector2(5450, 600),
+		Vector2(400, 400),
 		Vector2(-1, 0),
 		false
 	)

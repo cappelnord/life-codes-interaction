@@ -3,6 +3,8 @@ class_name WebSocketController
 
 static var run_id: String
 
+static var _qr_node = preload("res://interaction/nodes/qr_node.tscn")
+
 var _socket: WebSocketPeer
 var _attempt_connection := true
 var _connected := false
@@ -18,8 +20,23 @@ var _http_request
 
 @onready var _cursor_manager: CursorManager = $"../CursorManager"
 
+
+func _spawn_qr_code(position: Vector2, target_size: int, id: String, style: StringName, scheme: String="default"):
+	var node = _qr_node.instantiate() as QRCodeSlot
+	node.id = id
+	node.position = position
+	node.target_size = target_size
+	node.style = style
+	node.scheme = scheme
+	add_child(node)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_spawn_qr_code(Vector2(5350, 500), 150, "a", &"a");
+	_spawn_qr_code(Vector2(5350, 700), 150, "b", &"b");
+	_spawn_qr_code(Vector2(5550, 500), 150, "c", &"c");
+	_spawn_qr_code(Vector2(5550, 700), 150, "d", &"d");
+	
 	if run_id == "":
 		run_id = str(str(randf_range(0.0, 1.0)).hash())
 		print("Initialized WebSocket Client with runID: " + run_id)

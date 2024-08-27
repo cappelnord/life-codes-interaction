@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8hsr7ogmghqv"]
+
+[ext_resource type="Texture2D" uid="uid://dnh80j7shpx7e" path="res://interaction/graphics/qr_placeholder.png" id="1_vhxxm"]
+[ext_resource type="Script" path="res://interaction/scripts/qr_code_slot.gd" id="2_c26xi"]
+
+[node name="QR-node" type="Sprite2D"]
+texture_filter = 1
+position = Vector2(5473.91, 420)
+scale = Vector2(4.86, 4.86)
+texture = ExtResource("1_vhxxm")
+script = ExtResource("2_c26xi")
+id = "a"
+target_size = 140
