@@ -138,16 +138,18 @@ func _update_strings():
 		display_string = display_string + ")"
 	
 	var type_modifier = 1.0
+	var type_padding_modifier = 1.0
 		
 	var font_size = Config.code_blocks_font_size
 	
-	if slot.spec.modifier_role():
-		type_modifier = 0.75
+	if slot.spec.modifier_role() or slot.spec.action_role():
+		type_modifier = 0.8
+		type_padding_modifier = 0.9
 		
 	_label.add_theme_font_size_override("font_size", floor(font_size * type_modifier))
 	_label.text = display_string
 	text_box_size = _label.get_theme_font("font").get_string_size(display_string, HORIZONTAL_ALIGNMENT_LEFT, -1,  font_size * type_modifier)
-	text_box_size = text_box_size + Vector2(2 * floor(Config.code_blocks_padding_x * type_modifier), 2 * floor(Config.code_blocks_padding_y * type_modifier))
+	text_box_size = text_box_size + Vector2(2 * floor(Config.code_blocks_padding_x * type_padding_modifier), 2 * floor(Config.code_blocks_padding_y * type_padding_modifier))
 
 func _physics_process(delta):
 	_attempt_despawn()

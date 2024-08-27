@@ -4,7 +4,7 @@ class_name CodeBlockVisual
 static var oscillation_phase: float = 0
 
 static var defaultFont = preload("res://interaction/fonts/SourceCodePro-Medium.ttf")
-static var actionFont = preload("res://interaction/fonts/SourceCodePro-Medium.ttf")
+static var actionFont = preload("res://interaction/fonts/SourceCodePro-Bold.ttf")
 static var subjectFont = preload("res://interaction/fonts/SourceCodePro-Black.ttf")
 
 var block: CodeBlock
@@ -38,7 +38,7 @@ func init_with_block(block: CodeBlock):
 	
 	if block.slot.spec.head_role():
 		_switch_font(subjectFont)
-	elif block.slot.spec.action_role() and block.group == null:
+	elif block.slot.spec.action_role():
 		_switch_font(actionFont)
 	else:
 		_switch_font(defaultFont)
