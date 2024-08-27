@@ -4,7 +4,7 @@ class_name CodeBlockVisual
 static var oscillation_phase: float = 0
 
 static var defaultFont = preload("res://interaction/fonts/SourceCodePro-Medium.ttf")
-static var actionFont = preload("res://interaction/fonts/SourceCodePro-Bold.ttf")
+static var actionFont = preload("res://interaction/fonts/SourceCodePro-Medium.ttf")
 static var subjectFont = preload("res://interaction/fonts/SourceCodePro-Black.ttf")
 
 var block: CodeBlock

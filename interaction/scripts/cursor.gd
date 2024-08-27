@@ -41,7 +41,6 @@ func _ready():
 	_collider.area_entered.connect(_on_area_entered)
 	_collider.area_exited.connect(_on_area_exited)
 	_cursor_style = _manager.cursor_style(style)
-	print(style)
 	
 	texture = _cursor_style.base
 

@@ -9,7 +9,7 @@ static var osc_listen_port := 57140
 static var osc_enable_cursor_controller := true
 static var osc_send_head_position := true
 
-static var code_blocks_font_size := 26
+static var code_blocks_font_size := 32
 static var code_blocks_padding_x := 16
 static var code_blocks_padding_y := 8
 static var code_blocks_oscillation_hz := 1.5
@@ -77,6 +77,7 @@ static func _static_init():
 	
 	_config.set_value("websocket", "base_url", websocket_base_url)
 	_config.set_value("websocket", "installation_path", websocket_installation_path)
+	_config.set_value("websocket", "ms_until_long_disconnect", websocket_cursor_speed_modifier)
 	_config.set_value("websocket", "cursor_speed_modifier", websocket_cursor_speed_modifier)
 	
 	_config.set_value("app", "render_width", app_render_width)

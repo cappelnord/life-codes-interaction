@@ -142,7 +142,7 @@ func _update_strings():
 	var font_size = Config.code_blocks_font_size
 	
 	if slot.spec.modifier_role():
-		type_modifier = 0.9
+		type_modifier = 0.75
 		
 	_label.add_theme_font_size_override("font_size", floor(font_size * type_modifier))
 	_label.text = display_string
