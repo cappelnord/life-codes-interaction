@@ -78,7 +78,7 @@ static func _static_init():
 	
 	_config.set_value("websocket", "base_url", websocket_base_url)
 	_config.set_value("websocket", "installation_path", websocket_installation_path)
-	_config.set_value("websocket", "ms_until_long_disconnect", websocket_cursor_speed_modifier)
+	_config.set_value("websocket", "ms_until_long_disconnect", websocket_ms_until_long_disconnect)
 	_config.set_value("websocket", "cursor_speed_modifier", websocket_cursor_speed_modifier)
 	
 	_config.set_value("app", "render_width", app_render_width)
