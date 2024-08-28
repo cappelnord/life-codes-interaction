@@ -2,6 +2,7 @@ extends Node
 class_name CodeBlockHintsManager
 
 @onready var _hint_node = preload("res://interaction/nodes/code_block_hint.tscn")
+@onready var _cursor_hint_node = preload("res://interaction/nodes/cursor_hint.tscn")
 
 var hints: Array[StringName] = []
 var interval := 10
@@ -20,6 +21,11 @@ func _process(delta):
 	
 	if Time.get_ticks_msec() >= _next_hint_time:
 		_hint()
+
+func cursor_hint(cursor: Cursor):
+	var hint = _cursor_hint_node.instantiate() as CursorHint
+	hint.cursor = cursor
+	add_child(hint)
 
 func _schedule_hints():
 	if interval > 0:

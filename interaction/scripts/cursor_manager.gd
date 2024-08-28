@@ -25,6 +25,7 @@ var _time_of_last_cursor_activity := 0
 
 @onready var _osc: OSCManager = $"../OSCManager"
 @onready var _block_manager: CodeBlockManager = $"../CodeBlockManager"
+@onready var _hints_manager: CodeBlockHintsManager = $"../CodeBlockManager/CodeBlockHintsManager"
 
 func spawn(id: String, position: Vector2, style: StringName=Cursor.default_cursor_style)->Cursor:
 	# TODO: make sure that we don't duplicate a cursor
@@ -34,6 +35,7 @@ func spawn(id: String, position: Vector2, style: StringName=Cursor.default_curso
 	cursor.style = style
 	cursors[id] = cursor
 	add_child(cursor)
+	_hints_manager.cursor_hint(cursor)
 	return cursor
 
 func despawn(id: String):
