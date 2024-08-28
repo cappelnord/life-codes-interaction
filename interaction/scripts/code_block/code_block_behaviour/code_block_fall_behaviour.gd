@@ -13,6 +13,7 @@ var _max_fall_time: float
 var _filter_weight: float
 var _block
 var _went_under := false
+var _cancelled := false
 
 
 # fall with pow, dampen it, add base behaviour
@@ -39,6 +40,12 @@ func initialize(block: CodeBlock, host: CodeBlockBehaviourHost):
 
 
 func get_delta_movement(block: CodeBlock, host: CodeBlockBehaviourHost, delta: float)->Vector2:
+	
+	if block.behaviour_activity_ramp == 0 and block.position.y > 200:
+		_cancelled = true
+	
+	if _cancelled:
+		return _base_behaviour.get_delta_movement(block, host, delta)
 		
 	_fall_value = max(_fall_value - (delta * _normalized_fall_speed), 0.0)
 
