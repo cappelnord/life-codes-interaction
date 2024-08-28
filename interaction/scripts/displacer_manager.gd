@@ -18,14 +18,14 @@ func _ready():
 	)
 	
 	_spawn(
-		InteractionHelpers.position_to_pixel(Vector2(0.333333, 0.5)),
+		InteractionHelpers.position_to_pixel(Vector2(0.285, 0.5)),
 		Vector2(20, 1200),
 		Vector2(-1, 0),
 		true
 	)
 	
 	_spawn(
-		InteractionHelpers.position_to_pixel(Vector2(0.6666666, 0.5)),
+		InteractionHelpers.position_to_pixel(Vector2(0.69, 0.5)),
 		Vector2(20, 1200),
 		Vector2(-1, 0),
 		true
