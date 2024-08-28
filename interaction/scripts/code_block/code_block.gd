@@ -196,6 +196,12 @@ func _physics_process(delta):
 		group.update_subpixel_positions()
 
 func _process_displacement(delta):
+	# see that we kill momentum if we come while the block is grabbed
+	if grabbed:
+		displacement_speed = Vector2.ZERO
+		displacement_vector = Vector2.ZERO
+		return Vector2.ZERO
+	
 	displacement_speed = (displacement_speed * 0.98) + (displacement_vector * 0.02)
 	displacement_vector = Vector2.ZERO
 	if displacement_speed.length() > 0.00000000001:
