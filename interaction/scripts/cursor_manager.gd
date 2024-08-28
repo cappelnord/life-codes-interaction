@@ -130,7 +130,7 @@ func cursor_style(id: StringName)->Variant:
 func _process(delta):	
 	var now := Time.get_ticks_msec()
 	var inactivity_time = Config.app_inactivity_time * 1000
-	var long_inactivity_time = Config.app_long_inactivity_time
+	var long_inactivity_time = Config.app_long_inactivity_time * 1000
 	
 	if cursors.size() > 0:
 		_time_of_last_cursor_activity = now
