@@ -47,6 +47,9 @@ func send_users_active():
 func send_users_inactive():
 	_send("/lc/usersActive", [0])
 
+func send_users_inactive_long():
+	_send("/lc/usersInactiveLong", [0])
+
 func check_osc_args(addr: String, args: Array, typetag: String):
 	var valid := true
 	if args.size() < typetag.length():

@@ -19,6 +19,7 @@ var cursors = {}
 var _cursor_styles = {}
 
 var _users_inactive = false
+var _users_inactive_long = false
 var _time_of_last_cursor_activity := 0
 
 
@@ -129,6 +130,7 @@ func cursor_style(id: StringName)->Variant:
 func _process(delta):	
 	var now := Time.get_ticks_msec()
 	var inactivity_time = Config.app_inactivity_time * 1000
+	var long_inactivity_time = Config.app_long_inactivity_time
 	
 	if cursors.size() > 0:
 		_time_of_last_cursor_activity = now
@@ -139,11 +141,16 @@ func _process(delta):
 		if (_time_of_last_cursor_activity + inactivity_time) < now:
 			_users_became_inactive()
 	
+	if not _users_inactive_long:
+		if (_time_of_last_cursor_activity + long_inactivity_time) < now:
+			_users_became_inactive_long()
+	
 	if Config.debug_test_interaction_integrity and OS.is_debug_build():
 		_test_interaction_integrity()
 
 func _users_became_active():
 	_users_inactive = false
+	_users_inactive_long = false
 	print("Users became active")
 	_osc.send_users_active()
 
@@ -151,6 +158,11 @@ func _users_became_inactive():
 	_users_inactive = true
 	print("Users became inactive")
 	_osc.send_users_inactive()
+
+func _users_became_inactive_long():
+	_users_inactive_long = true;
+	print("Users became long inactive")
+	_osc.send_users_inactive_long()
 
 func _test_interaction_integrity():
 	for key in cursors:
