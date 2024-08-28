@@ -50,6 +50,9 @@ func send_users_inactive():
 func send_users_inactive_long():
 	_send("/lc/usersInactiveLong", [0])
 
+func send_cursor_spawned(id: StringName):
+	_send("/lc/cursorSpawned", [id])
+
 func check_osc_args(addr: String, args: Array, typetag: String):
 	var valid := true
 	if args.size() < typetag.length():

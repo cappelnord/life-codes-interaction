@@ -36,6 +36,7 @@ func spawn(id: String, position: Vector2, style: StringName=Cursor.default_curso
 	cursors[id] = cursor
 	add_child(cursor)
 	_hints_manager.cursor_hint(cursor)
+	_osc.send_cursor_spawned(cursor.id)
 	return cursor
 
 func despawn(id: String):
