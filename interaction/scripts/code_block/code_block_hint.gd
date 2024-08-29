@@ -7,12 +7,12 @@ var delay: float = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	scale = block.text_box_size
-	var tween_time := 0.3333333
+	var tween_time := 0.55
 	var tween := create_tween()
 	
 	tween.tween_interval(delay)
 	tween.tween_callback(self._flash_block)
-	tween.tween_property(self, "scale", block.text_box_size * 2, tween_time)
+	tween.tween_property(self, "scale", block.text_box_size * 3, tween_time)
 	tween.parallel().tween_property(self, "modulate", Color(1, 1, 1, 0), tween_time)
 	tween.tween_callback(self.queue_free)
 

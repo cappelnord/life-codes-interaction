@@ -1,8 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://c2rhclu7le8sk"]
+[gd_scene load_steps=4 format=3 uid="uid://c2rhclu7le8sk"]
 
+[ext_resource type="Material" uid="uid://cbdilgxrptp7v" path="res://interaction/materials/additive.tres" id="1_akdbh"]
 [ext_resource type="Texture2D" uid="uid://dlpxoacywkeb0" path="res://interaction/graphics/white.png" id="1_msyuo"]
 [ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_hint.gd" id="2_x80g1"]
 
 [node name="CodeBlockHint" type="Sprite2D"]
+material = ExtResource("1_akdbh")
 texture = ExtResource("1_msyuo")
 script = ExtResource("2_x80g1")
