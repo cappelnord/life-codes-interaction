@@ -94,6 +94,8 @@ func update_material_and_zindex():
 	var block_connected = block.group != null
 	
 	var text_color := Color.WHITE
+	if block.slot.spec.effects.invert_text_color:
+		text_color = Color(0.25, 0.25, 0.25, 1.0)
 	
 	if not block_connected:
 		pass
