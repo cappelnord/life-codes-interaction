@@ -30,7 +30,12 @@ var _time_of_last_cursor_activity := 0
 func spawn(id: String, position: Vector2, style: StringName=Cursor.default_cursor_style)->Cursor:
 	# TODO: make sure that we don't duplicate a cursor
 	var cursor = _cursor_node.instantiate() as Cursor
-	cursor.move(position)
+	
+	# do not call move as it would be delayed until the next frame
+	# as it is processed via the event queue
+	
+	cursor._do_move(position)
+	
 	cursor.id = id
 	cursor.style = style
 	cursors[id] = cursor
