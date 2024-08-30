@@ -18,7 +18,7 @@ var _cursor_node = preload("res://interaction/nodes/cursor_node.tscn")
 var cursors = {}
 var _cursor_styles = {}
 
-var _users_inactive = false
+var _users_inactive = true
 var _users_inactive_long = false
 var _time_of_last_cursor_activity := 0
 
