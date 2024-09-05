@@ -2,7 +2,6 @@ extends Node
 class_name WebSocketController
 
 static var run_id: String
-
 static var _qr_node = preload("res://interaction/nodes/qr_node.tscn")
 
 var _socket: WebSocketPeer
@@ -12,6 +11,8 @@ var _time_of_disconnect := -1
 var _authenticated := false
 var _json = JSON.new()
 var _server_run_id: String
+
+var _secret: String
 
 var _qr_slots: Array[QRCodeSlot] = []
 var _qr_slots_lookup = {}
@@ -30,9 +31,22 @@ func _spawn_qr_code(position: Vector2, target_size: int, id: String, style: Stri
 	node.scheme = scheme
 	add_child(node)
 
+func _load_secret()->bool:
+	var file = FileAccess.open("./websocket_shared_secret.txt", FileAccess.READ)
+	if not file:
+		printerr("Could not load WebSocket server shared secret from ./websocket_shared_secret.txt ... will not attempt connectio to server.")
+		return false
+	else:
+		_secret = file.get_as_text()
+		return true
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if not Config.websocket_enable:
+		queue_free()
+		return
+	
+	if not _load_secret():
 		queue_free()
 		return
 	
