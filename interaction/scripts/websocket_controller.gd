@@ -11,6 +11,7 @@ var _time_of_disconnect := -1
 var _authenticated := false
 var _json = JSON.new()
 var _server_run_id: String
+var _last_challenge := ""
 
 var _secret: String
 
@@ -37,7 +38,7 @@ func _load_secret()->bool:
 		printerr("Could not load WebSocket server shared secret from ./websocket_shared_secret.txt ... will not attempt connectio to server.")
 		return false
 	else:
-		_secret = file.get_as_text()
+		_secret = file.get_as_text().strip_edges(true, true)
 		return true
 
 # Called when the node enters the scene tree for the first time.
@@ -64,6 +65,8 @@ func _ready():
 	add_child(_http_request)
 	_http_request.request_completed.connect(self._qr_code_download_completed)
 
+func _salted_hash(data)->String:
+	return (data + _secret).md5_text() as String
 
 func register_slot(qr_slot: QRCodeSlot):
 	# print(slot.slot_id)
@@ -169,9 +172,8 @@ func _process_packet(packet: PackedByteArray):
 		print("Could not decode JSON message from WebSocket: " + packet.get_string_from_ascii())
 
 func _process_msg(msg: Variant):
-	# print(msg)
 	
-	# messages that must be processed before auth
+	# all messages here have a cmd - in particular challenge and hello are susceptible 
 	
 	if msg.cmd == "challenge":
 		_process_challenge_msg(msg)
@@ -209,14 +211,19 @@ func _process_msg(msg: Variant):
 			_process_cursor_device_orientation(msg)
 
 func _process_challenge_msg(msg: Variant):
-	# TODO: do the challenge
-	_socket.send_text(JSON.stringify({"cmd": "challengeAccepted", "payload": "...", "challenge": "...", "run_id": run_id}))
+	var challenge_response := _salted_hash(msg.get("challenge", ""))
+	_last_challenge = str(str(randf_range(0.0, 1.0)).hash())
+	
+	_socket.send_text(JSON.stringify({"cmd": "challengeAccepted", "payload": challenge_response, "challenge": _last_challenge, "run_id": run_id}))
 
 func _process_hello_msg(msg: Variant):
-	# TODO: check authentification
-	_authenticated = true
 	
-	if _server_run_id != "" and msg.run_id != _server_run_id:
+	_authenticated = _salted_hash(_last_challenge) == msg.get("payload", "")
+	
+	if(not _authenticated):
+		printerr("Failed authentification with server .. most likely the shared secret does not match.")
+	
+	if _server_run_id != "" and msg.get("run_id", "") != _server_run_id:
 		_server_has_restarted()
 	
 	_server_run_id = msg.run_id
