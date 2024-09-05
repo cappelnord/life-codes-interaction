@@ -25,6 +25,7 @@ static var mouse_viewport_modifier := 2.0
 static var spout_enable := true
 static var spout_name := "LifeCodes"
 
+static var websocket_enable := true
 static var websocket_base_url := "https://lc.alexandracardenas.com"
 static var websocket_installation_path := "/ws/installation"
 static var websocket_ms_until_long_disconnect := 10000
@@ -76,6 +77,7 @@ static func _static_init():
 	_config.set_value("spout", "enable", spout_enable)
 	_config.set_value("spout", "name", spout_name)
 	
+	_config.set_value("websocket", "enable", websocket_enable)
 	_config.set_value("websocket", "base_url", websocket_base_url)
 	_config.set_value("websocket", "installation_path", websocket_installation_path)
 	_config.set_value("websocket", "ms_until_long_disconnect", websocket_ms_until_long_disconnect)
@@ -132,6 +134,7 @@ static func _static_init():
 	spout_enable = _config.get_value("spout", "enable") as bool
 	spout_name = _config.get_value("spout", "name") as String
 	
+	websocket_enable = _config.get_value("websocket", "enable") as bool
 	websocket_base_url = _config.get_value("websocket", "base_url") as String
 	websocket_installation_path = _config.get_value("websocket", "installation_path") as String
 	websocket_ms_until_long_disconnect = _config.get_value("websocket", "ms_until_long_disconnect") as int

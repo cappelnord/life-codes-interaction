@@ -32,6 +32,10 @@ func _spawn_qr_code(position: Vector2, target_size: int, id: String, style: Stri
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if not Config.websocket_enable:
+		queue_free()
+		return
+	
 	_spawn_qr_code(Vector2(5350, 500), 150, "a", &"a");
 	_spawn_qr_code(Vector2(5350, 700), 150, "b", &"b");
 	_spawn_qr_code(Vector2(5550, 500), 150, "c", &"c");
