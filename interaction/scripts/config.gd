@@ -28,7 +28,9 @@ static var spout_name := "LifeCodes"
 static var websocket_enable := true
 static var websocket_base_url := "https://lc.alexandracardenas.com"
 static var websocket_installation_path := "/ws/installation"
-static var websocket_ms_until_long_disconnect := 10000
+static var websocket_time_until_long_disconnect := 120
+static var websocket_time_until_code_refresh := 60
+static var websocket_time_until_loading_timeout := 15
 static var websocket_cursor_speed_modifier = 1.2
 
 static var app_render_width := 5760
@@ -80,7 +82,9 @@ static func _static_init():
 	_config.set_value("websocket", "enable", websocket_enable)
 	_config.set_value("websocket", "base_url", websocket_base_url)
 	_config.set_value("websocket", "installation_path", websocket_installation_path)
-	_config.set_value("websocket", "ms_until_long_disconnect", websocket_ms_until_long_disconnect)
+	_config.set_value("websocket", "time_until_long_disconnect", websocket_time_until_long_disconnect)
+	_config.set_value("websocket", "time_until_code_refresh", websocket_time_until_code_refresh)
+	_config.set_value("websocket", "time_until_loading_timeout", websocket_time_until_loading_timeout)
 	_config.set_value("websocket", "cursor_speed_modifier", websocket_cursor_speed_modifier)
 	
 	_config.set_value("app", "render_width", app_render_width)
@@ -137,7 +141,9 @@ static func _static_init():
 	websocket_enable = _config.get_value("websocket", "enable") as bool
 	websocket_base_url = _config.get_value("websocket", "base_url") as String
 	websocket_installation_path = _config.get_value("websocket", "installation_path") as String
-	websocket_ms_until_long_disconnect = _config.get_value("websocket", "ms_until_long_disconnect") as int
+	websocket_time_until_long_disconnect = _config.get_value("websocket", "time_until_long_disconnect") as int
+	websocket_time_until_code_refresh = _config.get_value("websocket", "time_until_code_refresh") as int
+	websocket_time_until_loading_timeout = _config.get_value("websocket", "time_until_loading_timeout") as int
 	websocket_cursor_speed_modifier = _config.get_value("websocket", "cursor_speed_modifier") as float
 	
 	app_render_width = _config.get_value("app", "render_width") as int

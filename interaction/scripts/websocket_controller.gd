@@ -102,7 +102,7 @@ func _process(delta):
 	if _connected and _authenticated:
 		_process_slots()
 
-	if _time_of_disconnect > 0 and (_time_of_disconnect + Config.websocket_ms_until_long_disconnect) < Time.get_ticks_msec():
+	if _time_of_disconnect > 0 and (_time_of_disconnect + (Config.websocket_time_until_long_disconnect * 1000)) < Time.get_ticks_msec():
 		print("Disconnected to WebSocket server already for some time. Hard reset QR code slots.")
 		for qr_slot in _qr_slots:
 			_hard_reset_qr_slot(qr_slot)

@@ -5,7 +5,6 @@ class_name QRCodeSlot
 @export var scheme: String = "default"
 @export var style: String = "a"
 @export var target_size: int = 120
-@export var time_until_refresh: float = 60
 
 var pending := false # if it is inbetween, waiting for an QR code to be assigned
 var requires_action := true # waiting to be in line to receive a new QR code
@@ -18,6 +17,7 @@ var _loading_node = preload("res://interaction/nodes/loading_rotate_node.tscn")
 
 
 var _last_refresh : int = -1
+var _loading_timeout : int = -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -28,8 +28,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if loading and Time.get_ticks_msec() > _loading_timeout:
+		reset()
+	
 	if not pending and not requires_action and not under_control:
-		if Time.get_ticks_msec() > _last_refresh + (time_until_refresh * 1000):
+		if Time.get_ticks_msec() > _last_refresh + (Config.websocket_time_until_code_refresh * 1000):
 			requires_action = true
 
 func _update_scale():
@@ -61,6 +64,7 @@ func spawn():
 func start_loading():
 	stop_loading() # to be sure that any old node is removed
 	loading = true
+	_loading_timeout = Time.get_ticks_msec() + (Config.websocket_time_until_loading_timeout * 1000)
 	_loading_node_instance = _loading_node.instantiate()
 	get_parent().add_child.call_deferred(_loading_node_instance)
 	(_loading_node_instance as Sprite2D).position = position
@@ -71,6 +75,7 @@ func stop_loading():
 	if not _loading_node_instance == null:
 		_loading_node_instance.queue_free()
 		_loading_node_instance = null
+	_loading_timeout = -1
 	loading = false
 
 func reset():
