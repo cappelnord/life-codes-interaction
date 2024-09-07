@@ -90,8 +90,10 @@ func _process(delta):
 			while _socket.get_available_packet_count():
 				_process_packet(_socket.get_packet())
 		elif state == WebSocketPeer.STATE_CLOSING:
-			# Keep polling to achieve proper close.
-			pass
+			print("WebSocketPeer State: Closing")
+			# controversial if it is needed or not - maybe not.
+			while _socket.get_available_packet_count():
+				_socket.get_packet()
 		elif state == WebSocketPeer.STATE_CLOSED:
 			if _connected:
 				var code = _socket.get_close_code()
@@ -150,6 +152,7 @@ func _clear_websocket():
 func _connection_established():
 	_connected = true
 	_time_of_disconnect = -1
+	_socket.set_no_delay(true)
 
 	for qr_slot in _qr_slots:
 		qr_slot.pending = false # if a new QR code is needed then they should now try to get it
