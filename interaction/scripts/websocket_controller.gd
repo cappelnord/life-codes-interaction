@@ -288,7 +288,19 @@ func _process_cursor_spawn(msg: Variant):
 func _process_cursor_move_delta(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
 	if slot and slot.spawned:
-		_cursor_manager.move_delta(slot.id, Vector2(msg.x, msg.y) * Config.websocket_cursor_speed_modifier)
+		
+		# we had a case of invalid numbers here. While this ideally is already caught
+		# in the browser and/or server we should also validate it here.
+		
+		var x := 0.0
+		var y := 0.0
+		
+		if typeof(msg.x) == TYPE_FLOAT || typeof(msg.x) == TYPE_INT:
+			x = msg.x
+		if typeof(msg.y) == TYPE_FLOAT || typeof(msg.y) == TYPE_INT:
+			y = msg.y		
+		
+		_cursor_manager.move_delta(slot.id, Vector2(x, y) * Config.websocket_cursor_speed_modifier)
 
 func _process_cursor_press(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
