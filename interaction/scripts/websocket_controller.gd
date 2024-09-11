@@ -134,6 +134,10 @@ func _attempt_connect_websocket():
 	websocket_url = websocket_url.replacen("http://", "ws://").replacen("https://", "wss://")
 	
 	_socket = WebSocketPeer.new()
+	
+	_socket.set_inbound_buffer_size(1048576)
+	_socket.set_max_queued_packets(4096)
+	
 	_socket.connect_to_url(websocket_url)
 	
 
