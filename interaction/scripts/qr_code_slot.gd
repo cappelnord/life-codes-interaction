@@ -84,3 +84,5 @@ func reset():
 	spawned = false
 	under_control = false
 	stop_loading()
+	hide()
+

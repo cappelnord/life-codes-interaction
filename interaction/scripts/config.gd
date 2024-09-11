@@ -10,7 +10,7 @@ static var osc_send_head_position := true
 static var code_blocks_font_size := 32
 static var code_blocks_padding_x := 18
 static var code_blocks_padding_y := 10
-static var code_blocks_oscillation_hz := 1.5
+static var code_blocks_oscillation_frequency := 1.5
 static var code_blocks_flash_intensity := 0.4
 static var code_blocks_flash_ramp_speed := 4
 static var code_blocks_quantize_position := true
@@ -26,9 +26,11 @@ static var spout_name := "LifeCodes"
 static var websocket_enable := true
 static var websocket_base_url := "https://lc.alexandracardenas.com"
 static var websocket_installation_path := "/ws/installation"
-static var websocket_time_until_long_disconnect := 120
+static var websocket_time_until_long_disconnect := 12
 static var websocket_time_until_code_refresh := 60
 static var websocket_time_until_loading_timeout := 15
+static var websocket_time_until_lifebeat_timeout := 12
+static var websocket_lifebeat_frequency := 2
 static var websocket_cursor_speed_modifier = 1.2
 
 static var app_render_width := 5760
@@ -65,7 +67,7 @@ static func _static_init():
 	_config.set_value("code_blocks", "font_size", code_blocks_font_size)
 	_config.set_value("code_blocks", "padding_x", code_blocks_padding_x)
 	_config.set_value("code_blocks", "padding_y", code_blocks_padding_y)
-	_config.set_value("code_blocks", "oscillation_hz", code_blocks_oscillation_hz)
+	_config.set_value("code_blocks", "oscillation_frequency", code_blocks_oscillation_frequency)
 	_config.set_value("code_blocks", "flash_intensity", code_blocks_flash_intensity)
 	_config.set_value("code_blocks", "flash_ramp_speed", code_blocks_flash_ramp_speed)
 	_config.set_value("code_blocks", "quantize_position", code_blocks_quantize_position)
@@ -83,6 +85,9 @@ static func _static_init():
 	_config.set_value("websocket", "time_until_long_disconnect", websocket_time_until_long_disconnect)
 	_config.set_value("websocket", "time_until_code_refresh", websocket_time_until_code_refresh)
 	_config.set_value("websocket", "time_until_loading_timeout", websocket_time_until_loading_timeout)
+	_config.set_value("websocket", "time_until_lifebeat_timeout", websocket_time_until_lifebeat_timeout)
+	_config.set_value("websocket", "lifebeat_frequency", websocket_lifebeat_frequency)
+	
 	_config.set_value("websocket", "cursor_speed_modifier", websocket_cursor_speed_modifier)
 	
 	_config.set_value("app", "render_width", app_render_width)
@@ -124,7 +129,7 @@ static func _static_init():
 	code_blocks_font_size = _config.get_value("code_blocks", "font_size") as int
 	code_blocks_padding_x = _config.get_value("code_blocks", "padding_x") as int
 	code_blocks_padding_y = _config.get_value("code_blocks", "padding_y") as int
-	code_blocks_oscillation_hz = _config.get_value("code_blocks", "oscillation_hz") as float
+	code_blocks_oscillation_frequency = _config.get_value("code_blocks", "oscillation_frequency") as float
 	code_blocks_flash_intensity = _config.get_value("code_blocks", "flash_intensity") as float
 	code_blocks_flash_ramp_speed = _config.get_value("code_blocks", "flash_ramp_speed") as float
 	code_blocks_quantize_position = _config.get_value("code_blocks", "quantize_position") as bool
@@ -142,6 +147,8 @@ static func _static_init():
 	websocket_time_until_long_disconnect = _config.get_value("websocket", "time_until_long_disconnect") as int
 	websocket_time_until_code_refresh = _config.get_value("websocket", "time_until_code_refresh") as int
 	websocket_time_until_loading_timeout = _config.get_value("websocket", "time_until_loading_timeout") as int
+	websocket_time_until_lifebeat_timeout = _config.get_value("websocket", "time_until_lifebeat_timeout") as int
+	websocket_lifebeat_frequency = _config.get_value("websocket", "lifebeat_frequency") as int
 	websocket_cursor_speed_modifier = _config.get_value("websocket", "cursor_speed_modifier") as float
 	
 	app_render_width = _config.get_value("app", "render_width") as int

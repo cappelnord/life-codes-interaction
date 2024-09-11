@@ -27,7 +27,7 @@ func _process(delta):
 			slot.block.slot = slot # the codeblock will take care of reading everything from the slot
 			add_child(slot.block)
 	
-	CodeBlockVisual.oscillation_phase = fmod(CodeBlockVisual.oscillation_phase + Config.code_blocks_oscillation_hz * TAU * delta, TAU)
+	CodeBlockVisual.oscillation_phase = fmod(CodeBlockVisual.oscillation_phase + Config.code_blocks_oscillation_frequency * TAU * delta, TAU)
 
 func add_spec(spec: CodeBlockSpec)->CodeBlockSpec:
 	_specs[spec.id] = spec

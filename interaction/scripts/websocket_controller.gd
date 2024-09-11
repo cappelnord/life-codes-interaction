@@ -20,6 +20,9 @@ var _qr_slots_lookup = {}
 var _current_slot_index := 0
 var _http_request
 
+var _last_lifebeat_sent := -1
+var _last_lifebeat_received := -1
+
 @onready var _cursor_manager: CursorManager = $"../CursorManager"
 
 
@@ -89,6 +92,10 @@ func _process(delta):
 			
 			while _socket.get_available_packet_count():
 				_process_packet(_socket.get_packet())
+			
+			_send_lifebeat()
+			_check_for_lifebeat()
+			
 		elif state == WebSocketPeer.STATE_CLOSING:
 			print("WebSocketPeer State: Closing")
 			# controversial if it is needed or not - maybe not.
@@ -108,8 +115,26 @@ func _process(delta):
 		print("Disconnected to WebSocket server already for some time. Hard reset QR code slots.")
 		for qr_slot in _qr_slots:
 			_hard_reset_qr_slot(qr_slot)
-			qr_slot.start_loading()
 		_time_of_disconnect = -1
+
+func _check_for_lifebeat():
+	if not _connected: return
+	
+	if _last_lifebeat_received + (Config.websocket_time_until_lifebeat_timeout * 1000) < Time.get_ticks_msec():
+		_lifebeat_timeout()
+	
+func _lifebeat_timeout():
+	print("lifeBeat timeout ...")
+	_socket.close()
+	_clear_websocket()
+	_server_has_restarted()
+
+func _send_lifebeat():
+	if not _connected: return
+	
+	if _last_lifebeat_sent + (Config.websocket_lifebeat_frequency * 1000) < Time.get_ticks_msec():
+		_last_lifebeat_sent = Time.get_ticks_msec()
+		_socket.send_text(JSON.stringify({"cmd": "lifeBeat"}))
 
 func _process_slots():
 	if _qr_slots.size() == 0: return
@@ -134,10 +159,6 @@ func _attempt_connect_websocket():
 	websocket_url = websocket_url.replacen("http://", "ws://").replacen("https://", "wss://")
 	
 	_socket = WebSocketPeer.new()
-	
-	_socket.set_inbound_buffer_size(1048576)
-	_socket.set_max_queued_packets(4096)
-	
 	_socket.connect_to_url(websocket_url)
 	
 
@@ -149,6 +170,8 @@ func _clear_websocket():
 
 	_connected = false
 	
+	_http_request.cancel_request()
+	
 	for qr_slot in _qr_slots:
 		if qr_slot.spawned:
 			_cursor_manager.user_disconnected(qr_slot.id)
@@ -157,6 +180,9 @@ func _connection_established():
 	_connected = true
 	_time_of_disconnect = -1
 	_socket.set_no_delay(true)
+	
+	_last_lifebeat_sent = -1
+	_last_lifebeat_received = Time.get_ticks_msec()
 
 	for qr_slot in _qr_slots:
 		qr_slot.pending = false # if a new QR code is needed then they should now try to get it
@@ -194,6 +220,8 @@ func _process_msg(msg: Variant):
 		return
 	
 	match msg.cmd:
+		"lifeBeat":
+			_process_lifebeat_msg(msg)
 		"qr":
 			_process_qr_msg(msg)
 		"slotControlIssued":
@@ -216,6 +244,9 @@ func _process_msg(msg: Variant):
 			_process_cursor_attempt_toggle_grab(msg)
 		"cursorDeviceOrientation":
 			_process_cursor_device_orientation(msg)
+
+func _process_lifebeat_msg(msg: Variant):
+	_last_lifebeat_received = Time.get_ticks_msec()
 
 func _process_challenge_msg(msg: Variant):
 	var challenge_response := _salted_hash(msg.get("challenge", ""))
