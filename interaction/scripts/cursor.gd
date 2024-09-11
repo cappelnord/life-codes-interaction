@@ -103,6 +103,11 @@ func _apply_event(event: CursorEvent):
 			_do_attempt_toggle_grab()
 
 func move(new_position: Vector2):
+	
+	# if we receive a move the user is conencted for sure - this assures that an active
+	# cursor is not held on a blinking state ...
+	_user_connected = true
+
 	_event_buffer.write_event(CursorEvent.Type.MOVE, new_position)
 
 # effectively every move is a move_delta
@@ -111,9 +116,15 @@ func _do_move(new_position: Vector2):
 	_do_move_delta(new_position - _subpixel_position);
 
 func move_delta(delta: Vector2):
+	
+	# if we receive a move the user is conencted for sure - this assures that an active
+	# cursor is not held on a blinking state ...
+	_user_connected = true
+	
 	_event_buffer.write_event(CursorEvent.Type.MOVE_DELTA, delta)
 
 func _do_move_delta(delta: Vector2):
+	
 	var new_position : Vector2 = _subpixel_position + delta
 	
 	new_position.x = clamp(new_position.x, Config.app_interaction_boundary_topleft.x, Config.app_interaction_boundary_bottomright.x)

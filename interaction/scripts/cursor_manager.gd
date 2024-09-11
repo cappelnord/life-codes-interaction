@@ -57,7 +57,6 @@ func move(id: String, new_position: Vector2):
 func move_delta(id: String, delta: Vector2):
 	if cursors.has(id):
 		cursors[id].move_delta(delta)	
-	# TODO: notify anyone who might be interested that a cursor has moved
 
 func user_connected(id: String):
 	if cursors.has(id):
