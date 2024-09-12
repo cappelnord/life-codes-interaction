@@ -132,7 +132,7 @@ func _lifebeat_timeout():
 func _send_lifebeat():
 	if not _connected: return
 	
-	if _last_lifebeat_sent + (Config.websocket_lifebeat_frequency * 1000) < Time.get_ticks_msec():
+	if _last_lifebeat_sent + (Config.websocket_lifebeat_interval * 1000) < Time.get_ticks_msec():
 		_last_lifebeat_sent = Time.get_ticks_msec()
 		_socket.send_text(JSON.stringify({"cmd": "lifeBeat"}))
 

@@ -30,7 +30,7 @@ static var websocket_time_until_long_disconnect := 12
 static var websocket_time_until_code_refresh := 60
 static var websocket_time_until_loading_timeout := 15
 static var websocket_time_until_lifebeat_timeout := 12
-static var websocket_lifebeat_frequency := 2
+static var websocket_lifebeat_interval := 2
 static var websocket_cursor_speed_modifier = 1.2
 
 static var app_render_width := 5760
@@ -86,7 +86,7 @@ static func _static_init():
 	_config.set_value("websocket", "time_until_code_refresh", websocket_time_until_code_refresh)
 	_config.set_value("websocket", "time_until_loading_timeout", websocket_time_until_loading_timeout)
 	_config.set_value("websocket", "time_until_lifebeat_timeout", websocket_time_until_lifebeat_timeout)
-	_config.set_value("websocket", "lifebeat_frequency", websocket_lifebeat_frequency)
+	_config.set_value("websocket", "lifebeat_interval", websocket_lifebeat_interval)
 	
 	_config.set_value("websocket", "cursor_speed_modifier", websocket_cursor_speed_modifier)
 	
@@ -148,7 +148,7 @@ static func _static_init():
 	websocket_time_until_code_refresh = _config.get_value("websocket", "time_until_code_refresh") as int
 	websocket_time_until_loading_timeout = _config.get_value("websocket", "time_until_loading_timeout") as int
 	websocket_time_until_lifebeat_timeout = _config.get_value("websocket", "time_until_lifebeat_timeout") as int
-	websocket_lifebeat_frequency = _config.get_value("websocket", "lifebeat_frequency") as int
+	websocket_lifebeat_interval = _config.get_value("websocket", "lifebeat_interval") as int
 	websocket_cursor_speed_modifier = _config.get_value("websocket", "cursor_speed_modifier") as float
 	
 	app_render_width = _config.get_value("app", "render_width") as int
