@@ -58,6 +58,7 @@ func slot_control_released():
 	requires_action = true	
 
 func spawn():
+	hide()
 	stop_loading()
 	spawned = true
 
