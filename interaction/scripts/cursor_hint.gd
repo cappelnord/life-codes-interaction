@@ -10,7 +10,7 @@ func _ready():
 	var tween := create_tween()
 	
 	tween.tween_property(self, "scale", Vector2(0, 0), tween_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(self, "modulate", Color(1, 1, 1, 0.9), tween_time)
+	tween.parallel().tween_property(self, "modulate", Color(1, 1, 1, 0.85), tween_time)
 	tween.tween_callback(self.queue_free)
 
 
