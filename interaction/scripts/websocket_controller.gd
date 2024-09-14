@@ -65,6 +65,7 @@ func _ready():
 	
 	_http_request = HTTPRequest.new()
 	_http_request.use_threads = true
+	_http_request.set_timeout(10.0)
 	add_child(_http_request)
 	_http_request.request_completed.connect(self._qr_code_download_completed)
 
