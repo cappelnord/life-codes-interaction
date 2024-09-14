@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://interaction/scripts/cursor_hint.gd" id="2_a5id5"]
 
 [node name="CursorHint" type="Sprite2D"]
-modulate = Color(0.376471, 0.376471, 0.376471, 1)
+modulate = Color(1, 1, 1, 0.752941)
 material = ExtResource("1_fq6y6")
 scale = Vector2(20, 20)
 texture = ExtResource("1_18lt3")
