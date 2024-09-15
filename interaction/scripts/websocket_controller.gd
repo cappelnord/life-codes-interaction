@@ -310,8 +310,7 @@ func _qr_code_download_completed(result, response_code, headers, body):
 		_qr_slots[_current_slot_index].pending = false
 		return
 
-	var texture = ImageTexture.create_from_image(image)
-	_qr_slots[_current_slot_index].update_qr_code(texture)
+	_qr_slots[_current_slot_index].update_qr_code(image)
 	
 func _process_slot_control_issued_msg(msg: Variant):
 	var slot = _qr_slots_lookup[msg.slot]
