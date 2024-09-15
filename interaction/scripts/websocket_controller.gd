@@ -63,11 +63,21 @@ func _ready():
 		run_id = str(str(randf_range(0.0, 1.0)).hash())
 		print("Initialized WebSocket Client with runID: " + run_id)
 	
+	_reset_http_request()
+
+
+func _reset_http_request():
+	if _http_request:
+		_http_request.request_completed.disconnect(self._qr_code_download_completed)
+		_http_request.cancel_request()
+		remove_child(_http_request)
+	
 	_http_request = HTTPRequest.new()
 	_http_request.use_threads = true
 	_http_request.set_timeout(10.0)
 	add_child(_http_request)
 	_http_request.request_completed.connect(self._qr_code_download_completed)
+	
 
 func _salted_hash(data)->String:
 	return (data + _secret).md5_text() as String
@@ -171,7 +181,7 @@ func _clear_websocket():
 
 	_connected = false
 	
-	_http_request.cancel_request()
+	_reset_http_request()
 	
 	for qr_slot in _qr_slots:
 		if qr_slot.spawned:
@@ -272,7 +282,7 @@ func _process_qr_msg(msg: Variant):
 		print("Received qr message that does not correspond to current slot.")
 		return
 	
-	_http_request.cancel_request()
+	_reset_http_request()
 	
 	var error = _http_request.request(msg.url)
 	if error != OK:
