@@ -19,7 +19,7 @@ var _loading_node = preload("res://interaction/nodes/loading_rotate_node.tscn")
 var _last_refresh : int = -1
 var _loading_timeout : int = -1
 
-var _image_texture : ImageTexture
+var _image_textures : Variant = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -41,13 +41,15 @@ func _update_scale():
 	scale = Vector2(target_size, target_size) / texture.get_width()
 
 func update_qr_code(image: Image):
+	var dim_key = str(image.get_width()) + "x" + str(image.get_height())
 	
-	if _image_texture == null:
-		_image_texture = ImageTexture.create_from_image(image)
+	if not _image_textures.has(dim_key):
+		_image_textures[dim_key] = ImageTexture.create_from_image(image)
 	else:
-		_image_texture.update(image)
+		_image_textures[dim_key].update(image)
 	
-	set_texture(_image_texture)
+	set_texture(_image_textures[dim_key])
+	
 	_update_scale()
 	
 	_last_refresh = Time.get_ticks_msec()
