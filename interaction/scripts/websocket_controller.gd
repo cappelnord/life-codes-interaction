@@ -165,8 +165,8 @@ func _refresh_current_slot():
 	_qr_slots[_current_slot_index].stop_loading()
 	_qr_slots[_current_slot_index].pending = true
 	
-	if Config.debug_verbose:
-		print("Requesting requestToken for slot: " + _qr_slots[_current_slot_index].id)
+	#if Config.debug_verbose:
+		#print("Requesting requestToken for slot: " + _qr_slots[_current_slot_index].id)
 	
 	_socket.send_text(JSON.stringify({"cmd": "request", "slot": _qr_slots[_current_slot_index].id, "scheme": _qr_slots[_current_slot_index].scheme}))
 
@@ -290,8 +290,8 @@ func _process_qr_msg(msg: Variant):
 	
 	_reset_http_request()
 	
-	if Config.debug_verbose:
-		print("Requesting QR code for slot: " + msg.slot)
+	#if Config.debug_verbose:
+		#print("Requesting QR code for slot: " + msg.slot)
 	
 	var error = _http_request.request(msg.url)
 	if error != OK:
@@ -317,9 +317,9 @@ func _qr_code_download_completed(result, response_code, headers, body):
 		_qr_slots[_current_slot_index].pending = false
 		return
 		
-	if Config.debug_verbose:
-		print("Rotate QR code for slot: " + _qr_slots[_current_slot_index].id)
-		print("---")
+	#if Config.debug_verbose:
+		#print("Rotate QR code for slot: " + _qr_slots[_current_slot_index].id)
+		#print("---")
 
 	_qr_slots[_current_slot_index].update_qr_code(image)
 	
