@@ -70,11 +70,13 @@ func _reset_http_request():
 	if _http_request:
 		_http_request.request_completed.disconnect(self._qr_code_download_completed)
 		_http_request.cancel_request()
+		_http_request.queue_free() 
 		remove_child(_http_request)
 	
 	_http_request = HTTPRequest.new()
-	_http_request.use_threads = true
-	_http_request.set_timeout(10.0)
+	 # while using threads is/was nice it created hangs when downloads timed out
+	_http_request.use_threads = false
+	_http_request.set_timeout(10)
 	add_child(_http_request)
 	_http_request.request_completed.connect(self._qr_code_download_completed)
 	
@@ -287,17 +289,17 @@ func _process_qr_msg(msg: Variant):
 	var error = _http_request.request(msg.url)
 	if error != OK:
 		print("An error occurred in the HTTP request.")
-		_qr_slots[_current_slot_index].pending = true
+		_qr_slots[_current_slot_index].pending = false
 
 func _qr_code_download_completed(result, response_code, headers, body):
 	if result != HTTPRequest.RESULT_SUCCESS:
-		print("Failed downloading QR code.")
-		_qr_slots[_current_slot_index].pending = true
+		print("Failed downloading QR code - Result Code: " + str(result))
+		_qr_slots[_current_slot_index].pending = false
 		return		
 	
 	if response_code != 200:
 		print("Server did not respond with status code 200 - could not download QR code. Code: " + str(response_code))
-		_qr_slots[_current_slot_index].pending = true
+		_qr_slots[_current_slot_index].pending = false
 		return
 	
 	var image = Image.new()
@@ -305,7 +307,7 @@ func _qr_code_download_completed(result, response_code, headers, body):
 	
 	if image_error != OK:
 		print("Couldn't load the image.")
-		_qr_slots[_current_slot_index].pending = true
+		_qr_slots[_current_slot_index].pending = false
 		return
 
 	var texture = ImageTexture.create_from_image(image)
