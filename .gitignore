@@ -1,3 +1,4 @@
 # Godot 4+ specific ignores
 .godot/
 websocket_shared_secret.txt
+lifecodes.ini
