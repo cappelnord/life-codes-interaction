@@ -1,4 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
+
+# Life Codes specific ignores
 websocket_shared_secret.txt
 lifecodes.ini
+ping_log.txt

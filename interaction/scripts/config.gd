@@ -32,6 +32,7 @@ static var websocket_time_until_loading_timeout := 15
 static var websocket_time_until_lifebeat_timeout := 12
 static var websocket_lifebeat_interval := 2
 static var websocket_cursor_speed_modifier = 1.2
+static var websocket_record_ping_log := false
 
 static var app_render_width := 5760
 static var app_render_height := 1200
@@ -87,6 +88,7 @@ static func _static_init():
 	_config.set_value("websocket", "time_until_loading_timeout", websocket_time_until_loading_timeout)
 	_config.set_value("websocket", "time_until_lifebeat_timeout", websocket_time_until_lifebeat_timeout)
 	_config.set_value("websocket", "lifebeat_interval", websocket_lifebeat_interval)
+	_config.set_value("websocket", "record_ping_log", websocket_record_ping_log)
 	
 	_config.set_value("websocket", "cursor_speed_modifier", websocket_cursor_speed_modifier)
 	
@@ -150,6 +152,7 @@ static func _static_init():
 	websocket_time_until_lifebeat_timeout = _config.get_value("websocket", "time_until_lifebeat_timeout") as int
 	websocket_lifebeat_interval = _config.get_value("websocket", "lifebeat_interval") as int
 	websocket_cursor_speed_modifier = _config.get_value("websocket", "cursor_speed_modifier") as float
+	websocket_record_ping_log = _config.get_value("websocket", "record_ping_log") as bool
 	
 	app_render_width = _config.get_value("app", "render_width") as int
 	app_render_height = _config.get_value("app", "render_height") as int	

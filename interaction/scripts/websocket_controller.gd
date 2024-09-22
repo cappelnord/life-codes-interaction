@@ -23,6 +23,9 @@ var _http_request
 var _last_lifebeat_sent := -1
 var _last_lifebeat_received := -1
 
+var _ping_log_file
+var _last_ping_sent := -1
+
 @onready var _cursor_manager: CursorManager = $"../CursorManager"
 
 
@@ -53,6 +56,17 @@ func _ready():
 	if not _load_secret():
 		queue_free()
 		return
+	
+	if Config.websocket_record_ping_log:
+		var path := "./ping_log.txt"
+		
+		if not FileAccess.file_exists(path):
+			_ping_log_file = FileAccess.open(path, FileAccess.WRITE_READ)
+		else:
+			_ping_log_file = FileAccess.open(path, FileAccess.READ_WRITE)
+
+		_ping_log_file.seek_end()
+
 	
 	_spawn_qr_code(Vector2(5350, 500), 150, "a", &"a");
 	_spawn_qr_code(Vector2(5350, 700), 150, "b", &"b");
@@ -108,6 +122,8 @@ func _process(delta):
 			
 			_send_lifebeat()
 			_check_for_lifebeat()
+			if Config.websocket_record_ping_log:
+				_send_ping()
 			
 		elif state == WebSocketPeer.STATE_CLOSING:
 			print("WebSocketPeer State: Closing")
@@ -141,6 +157,13 @@ func _lifebeat_timeout():
 	_socket.close()
 	_clear_websocket()
 	_server_has_restarted()
+
+func _send_ping():
+	if not _connected or not Config.websocket_record_ping_log: return
+	
+	if _last_ping_sent + 1000 < Time.get_ticks_msec():
+		_last_ping_sent = Time.get_ticks_msec()
+		_socket.send_text(JSON.stringify({"cmd": "ping", "payload": Time.get_ticks_msec()}))
 
 func _send_lifebeat():
 	if not _connected: return
@@ -239,6 +262,8 @@ func _process_msg(msg: Variant):
 	match msg.cmd:
 		"lifeBeat":
 			_process_lifebeat_msg(msg)
+		"pong":
+			_process_pong(msg)
 		"qr":
 			_process_qr_msg(msg)
 		"slotControlIssued":
@@ -261,6 +286,13 @@ func _process_msg(msg: Variant):
 			_process_cursor_attempt_toggle_grab(msg)
 		"cursorDeviceOrientation":
 			_process_cursor_device_orientation(msg)
+
+func _process_pong(msg: Variant):
+	if not Config.websocket_record_ping_log: return
+
+	var rtt := Time.get_ticks_msec() - msg["payload"] as int
+	_ping_log_file.store_line(JSON.stringify({"type": "ping", "utc": Time.get_datetime_string_from_system(true), "rtt": rtt }))
+	_ping_log_file.flush()
 
 func _process_lifebeat_msg(msg: Variant):
 	_last_lifebeat_received = Time.get_ticks_msec()
