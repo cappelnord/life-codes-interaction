@@ -107,6 +107,14 @@ func _ready():
 		preload("res://interaction/graphics/cursors/cursor_hover_a.png"),
 		preload("res://interaction/graphics/cursors/cursor_grab_a.png")
 	)
+
+	# &mirrored
+	_cursor_styles[Cursor.default_mirrored_cursor_style] = CursorStyleSet.new(
+		preload("res://interaction/graphics/cursors/cursor_base_mirrored.png"),
+		preload("res://interaction/graphics/cursors/cursor_attempt_grab_mirrored.png"),
+		preload("res://interaction/graphics/cursors/cursor_hover_mirrored.png"),
+		preload("res://interaction/graphics/cursors/cursor_grab_mirrored.png")
+	)
 	
 	_cursor_styles[&"b"] = CursorStyleSet.new(
 		preload("res://interaction/graphics/cursors/cursor_base_b.png"),

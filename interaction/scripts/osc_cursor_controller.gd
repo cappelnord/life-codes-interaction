@@ -65,7 +65,11 @@ func _assure_alive(cursor_id: String):
 			start_position = Vector2(100, 100)
 		else:
 			start_position = _last_cursor_positions[cursor_id]
-
-		_cursor_manager.spawn(cursor_id, start_position, Config.osc_display_cursor_hint)
+		
+		var cursor_style = Cursor.default_cursor_style
+		if "mirrored" in cursor_id:
+			cursor_style = Cursor.default_mirrored_cursor_style
+		
+		_cursor_manager.spawn(cursor_id, start_position, Config.osc_display_cursor_hint, cursor_style)
 	
 	_last_cursor_updates[cursor_id] = Time.get_ticks_msec()

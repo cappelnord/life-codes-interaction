@@ -13,6 +13,7 @@ enum Feedback {
 signal feedback(cursor_id: String, feedback: Feedback)
 
 const default_cursor_style := &"a"
+const default_mirrored_cursor_style := &"mirrored"
 
 var id: String
 var style: StringName = Cursor.default_cursor_style
