@@ -27,7 +27,7 @@ var _time_of_last_cursor_activity := 0
 @onready var _block_manager: CodeBlockManager = $"../CodeBlockManager"
 @onready var _hints_manager: CodeBlockHintsManager = $"../CodeBlockManager/CodeBlockHintsManager"
 
-func spawn(id: String, position: Vector2, style: StringName=Cursor.default_cursor_style)->Cursor:
+func spawn(id: String, position: Vector2, cursor_hint: bool, style: StringName=Cursor.default_cursor_style)->Cursor:
 	# TODO: make sure that we don't duplicate a cursor
 	var cursor = _cursor_node.instantiate() as Cursor
 	
@@ -40,8 +40,10 @@ func spawn(id: String, position: Vector2, style: StringName=Cursor.default_curso
 	cursor.style = style
 	cursors[id] = cursor
 	add_child(cursor)
-	_hints_manager.cursor_hint(cursor)
-	_osc.send_cursor_spawned(cursor.id)
+	
+	if cursor_hint:
+		_hints_manager.cursor_hint(cursor)
+		_osc.send_cursor_spawned(cursor.id)
 	return cursor
 
 func despawn(id: String):

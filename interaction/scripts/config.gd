@@ -6,6 +6,7 @@ static var osc_receiver_port := 57150
 static var osc_listen_port := 57140
 static var osc_enable_cursor_controller := true
 static var osc_send_head_position := true
+static var osc_display_cursor_hint := false
 
 static var code_blocks_font_size := 26
 static var code_blocks_padding_x := 16
@@ -19,6 +20,7 @@ static var code_blocks_quantize_position := true
 static var mouse_enable := true
 static var mouse_speed := 2.0
 static var mouse_viewport_modifier := 2.0
+static var mouse_display_cursor_hint := false
 
 static var spout_enable := true
 static var spout_name := "LifeCodes"
@@ -33,6 +35,7 @@ static var websocket_time_until_lifebeat_timeout := 12
 static var websocket_lifebeat_interval := 2
 static var websocket_cursor_speed_modifier = 1.2
 static var websocket_record_ping_log := false
+static var websocket_display_cursor_hint := true
 
 static var app_render_width := 5760
 static var app_render_height := 1200
@@ -64,6 +67,7 @@ static func _static_init():
 	_config.set_value("osc", "listen_port", osc_listen_port)
 	_config.set_value("osc", "enable_cursor_controller", osc_enable_cursor_controller)
 	_config.set_value("osc", "send_head_position", osc_send_head_position)
+	_config.set_value("osc", "display_cursor_hint", osc_display_cursor_hint)
 	
 	_config.set_value("code_blocks", "font_size", code_blocks_font_size)
 	_config.set_value("code_blocks", "padding_x", code_blocks_padding_x)
@@ -76,6 +80,7 @@ static func _static_init():
 	_config.set_value("mouse", "enable", mouse_enable)
 	_config.set_value("mouse", "speed", mouse_speed)
 	_config.set_value("mouse", "viewport_modifier", mouse_viewport_modifier)
+	_config.set_value("mouse", "display_cursor_hint", mouse_display_cursor_hint)
 	
 	_config.set_value("spout", "enable", spout_enable)
 	_config.set_value("spout", "name", spout_name)
@@ -89,6 +94,7 @@ static func _static_init():
 	_config.set_value("websocket", "time_until_lifebeat_timeout", websocket_time_until_lifebeat_timeout)
 	_config.set_value("websocket", "lifebeat_interval", websocket_lifebeat_interval)
 	_config.set_value("websocket", "record_ping_log", websocket_record_ping_log)
+	_config.set_value("websocket", "display_cursor_hint", websocket_display_cursor_hint)
 	
 	_config.set_value("websocket", "cursor_speed_modifier", websocket_cursor_speed_modifier)
 	
@@ -127,6 +133,7 @@ static func _static_init():
 	osc_listen_port = _config.get_value("osc", "listen_port") as int
 	osc_enable_cursor_controller = _config.get_value("osc", "enable_cursor_controller") as bool
 	osc_send_head_position = _config.get_value("osc", "send_head_position") as bool
+	osc_display_cursor_hint = _config.get_value("osc", "display_cursor_hint") as bool
 	
 	code_blocks_font_size = _config.get_value("code_blocks", "font_size") as int
 	code_blocks_padding_x = _config.get_value("code_blocks", "padding_x") as int
@@ -139,6 +146,7 @@ static func _static_init():
 	mouse_enable = _config.get_value("mouse", "enable") as bool
 	mouse_speed = _config.get_value("mouse", "speed") as float
 	mouse_viewport_modifier = _config.get_value("mouse", "viewport_modifier") as float
+	mouse_display_cursor_hint = _config.get_value("mouse", "display_cursor_hint") as bool
 	
 	spout_enable = _config.get_value("spout", "enable") as bool
 	spout_name = _config.get_value("spout", "name") as String
@@ -153,6 +161,7 @@ static func _static_init():
 	websocket_lifebeat_interval = _config.get_value("websocket", "lifebeat_interval") as int
 	websocket_cursor_speed_modifier = _config.get_value("websocket", "cursor_speed_modifier") as float
 	websocket_record_ping_log = _config.get_value("websocket", "record_ping_log") as bool
+	websocket_display_cursor_hint = _config.get_value("websocket", "display_cursor_hint") as bool
 	
 	app_render_width = _config.get_value("app", "render_width") as int
 	app_render_height = _config.get_value("app", "render_height") as int	

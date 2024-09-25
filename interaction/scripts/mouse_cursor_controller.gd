@@ -47,7 +47,7 @@ func _input(event):
 			else: _deactivate()
 
 func _activate():
-	var cursor := _manager.spawn(id, _last_position)
+	var cursor := _manager.spawn(id, _last_position, Config.mouse_display_cursor_hint)
 	cursor.user_progress.progress.connect(_on_user_progress)
 	cursor.feedback.connect(_on_cursor_feedback)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -55,7 +55,7 @@ func _activate():
 
 func _secondary_on():
 	if not _secondary_active:
-		var cursor := _manager.spawn(secondary_id, _last_position)
+		var cursor := _manager.spawn(secondary_id, _last_position, Config.mouse_display_cursor_hint)
 		cursor.user_progress.progress.connect(_on_user_progress)
 		cursor.feedback.connect(_on_cursor_feedback)
 		_secondary_active = true

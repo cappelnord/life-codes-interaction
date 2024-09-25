@@ -66,6 +66,6 @@ func _assure_alive(cursor_id: String):
 		else:
 			start_position = _last_cursor_positions[cursor_id]
 
-		_cursor_manager.spawn(cursor_id, start_position)
+		_cursor_manager.spawn(cursor_id, start_position, Config.osc_display_cursor_hint)
 	
 	_last_cursor_updates[cursor_id] = Time.get_ticks_msec()
