@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://va4wuo30obpa"]
 
-[ext_resource type="Script" path="res://interaction/interaction_base.gd" id="1_jui8t"]
+[ext_resource type="Script" path="res://interaction/scripts/interaction_base.gd" id="1_jui8t"]
 [ext_resource type="PackedScene" uid="uid://dhgams4dad5a2" path="res://interaction/interaction_root.tscn" id="2_6myps"]
 [ext_resource type="PackedScene" uid="uid://be711cgcxokry" path="res://spout/spout_sender.tscn" id="3_2kd7i"]
 
