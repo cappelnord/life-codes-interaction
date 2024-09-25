@@ -1,5 +1,5 @@
 """
-osc_receiver.gd is based off OscReceiver.gd from Animatron by Roger Pibernat and Glenn Fraser.
+osc_receiver.gd is based off OscReceiver.gd from Animatron by Roger Pibernat and Glen Fraser.
 
 https://github.com/loopier/animatron
 
