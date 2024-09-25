@@ -1,3 +1,11 @@
+"""
+osc_receiver.gd is based off OscReceiver.gd from Animatron by Roger Pibernat and Glenn Fraser.
+
+https://github.com/loopier/animatron
+https://github.com/loopier/animatron/blob/main/osc/OscReceiver.gd
+
+"""
+
 extends Node
 class_name OscReceiver
 
@@ -33,9 +41,9 @@ func _ready():
 func startServer():
 	var err := socketUdp.bind(serverPort)
 	if err != 0:
-		Log.error("OSC ERROR while trying to listen on port: %s" % [serverPort])
+		printerr("OSC ERROR while trying to listen on port: %s" % [serverPort])
 	else:
-		Log.info("OSC server listening on port: %s" % [socketUdp.get_local_port()])
+		print("OSC server listening on port: %s" % [socketUdp.get_local_port()])
 
 func startServerOn(listenPort: int):
 	serverPort = listenPort
@@ -148,7 +156,7 @@ func sendMessage(target: String, oscAddr: String, oscArgs: Array):
 			TYPE_NIL:
 				argTags += "N"
 			_:
-				Log.error("Unsupported OSC type: %s" % typeof(arg))				
+				printerr("Unsupported OSC type: %s" % typeof(arg))				
 
 	addString(oscBuf, argTags)
 	oscBuf.put_data(oscArgBuf.data_array)
@@ -156,7 +164,7 @@ func sendMessage(target: String, oscAddr: String, oscArgs: Array):
 	if target != lastSentTarget:
 		var addrPort := target.split("/")
 		if addrPort.size() == 2:
-			Log.verbose("Replying %s to %s/%s" % [oscAddr, addrPort[0], addrPort[1] as int])
+			# Log.verbose("Replying %s to %s/%s" % [oscAddr, addrPort[0], addrPort[1] as int])
 			socketUdp.set_dest_address(addrPort[0], addrPort[1] as int)
 			lastSentTarget = target
 	

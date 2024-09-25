@@ -1,14 +1,14 @@
 [gd_scene load_steps=5 format=3 uid="uid://va4wuo30obpa"]
 
-[ext_resource type="PackedScene" uid="uid://dhgams4dad5a2" path="res://interaction/interaction_root.tscn" id="1_hd1ur"]
-[ext_resource type="Script" path="res://base/interaction_base.gd" id="1_oudhp"]
-[ext_resource type="PackedScene" uid="uid://be711cgcxokry" path="res://spout/spout_sender.tscn" id="3_ooqla"]
+[ext_resource type="Script" path="res://interaction/interaction_base.gd" id="1_jui8t"]
+[ext_resource type="PackedScene" uid="uid://dhgams4dad5a2" path="res://interaction/interaction_root.tscn" id="2_6myps"]
+[ext_resource type="PackedScene" uid="uid://be711cgcxokry" path="res://spout/spout_sender.tscn" id="3_2kd7i"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_0mt2a"]
 viewport_path = NodePath("RenderViewport")
 
 [node name="InteractionBase" type="Node2D"]
-script = ExtResource("1_oudhp")
+script = ExtResource("1_jui8t")
 
 [node name="RenderViewport" type="SubViewport" parent="."]
 disable_3d = true
@@ -17,12 +17,12 @@ handle_input_locally = false
 size = Vector2i(5760, 1200)
 render_target_update_mode = 4
 
-[node name="InteractionRoot" parent="RenderViewport" instance=ExtResource("1_hd1ur")]
+[node name="InteractionRoot" parent="RenderViewport" instance=ExtResource("2_6myps")]
 
 [node name="RenderDisplay" type="Sprite2D" parent="."]
 position = Vector2(1440, 300)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("ViewportTexture_0mt2a")
 
-[node name="SpoutSender" parent="." node_paths=PackedStringArray("viewport") instance=ExtResource("3_ooqla")]
+[node name="SpoutSender" parent="." node_paths=PackedStringArray("viewport") instance=ExtResource("3_2kd7i")]
 viewport = NodePath("../RenderViewport")
