@@ -25,8 +25,8 @@ static var mouse_display_cursor_hint := false
 static var spout_enable := true
 static var spout_name := "LifeCodes"
 
-static var websocket_enable := true
-static var websocket_base_url := "https://lc.alexandracardenas.com"
+static var websocket_enable := false
+static var websocket_base_url := "http://127.0.0.1:15666/"
 static var websocket_installation_path := "/ws/installation"
 static var websocket_time_until_long_disconnect := 12
 static var websocket_time_until_code_refresh := 60
