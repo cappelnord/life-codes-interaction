@@ -9,27 +9,20 @@ var _visible := false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if not Config.app_enable_displacers: return
+	var json_as_text = FileAccess.get_file_as_string("displacers.json")
+	if not json_as_text:
+		print("displacers.json not found - will continue without displacer areas")
+		return
 	
-	_spawn(
-		Vector2(5450, 600),
-		Vector2(400, 400),
-		Vector2(-1, 0),
-		false
-	)
+	var json_as_dict = JSON.parse_string(json_as_text)
 	
-	_spawn(
-		InteractionHelpers.position_to_pixel(Vector2(0.2786, 0.5)),
-		Vector2(30, 1200),
-		Vector2(-1, 0),
-		true
-	)
-	
-	_spawn(
-		InteractionHelpers.position_to_pixel(Vector2(0.6615, 0.5)),
-		Vector2(30, 1200),
-		Vector2(-1, 0),
-		true
-	)
+	for item in json_as_dict["displacers"]:
+		_spawn(
+			_vector_from_dict(item.position),
+			_vector_from_dict(item.size),
+			_vector_from_dict(item.vector),
+			item.allowXFlip
+		)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -50,6 +43,12 @@ func _spawn(position: Vector2, size: Vector2, vector: Vector2, allow_x_flip:bool
 	node.visible = _visible
 	displacers.append(node)
 	add_child(node)
+
+func _vector_from_dict(dict: Dictionary):
+	if dict.get("normalized", false):
+		return InteractionHelpers.position_to_pixel(Vector2(dict.x, dict.y))
+	else:
+		return Vector2(dict.x, dict.y)
 
 func toggle_visibility():
 	_visible = not _visible
