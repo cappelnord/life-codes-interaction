@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://c4m03nvq48yxx" path="res://interaction/materials/premul_alpha.tres" id="1_1i2yg"]
 [ext_resource type="Texture2D" uid="uid://bydsnxjh6eyhx" path="res://interaction/graphics/cursor_hint.png" id="1_18lt3"]
-[ext_resource type="Script" path="res://interaction/scripts/cursor_hint.gd" id="2_a5id5"]
+[ext_resource type="Script" uid="uid://cs2rbrxjj0sap" path="res://interaction/scripts/cursor_hint.gd" id="2_a5id5"]
 
 [node name="CursorHint" type="Sprite2D"]
 modulate = Color(0.376471, 0.376471, 0.376471, 0.376471)

@@ -66,4 +66,3 @@ func clone()->CodeBlockBehaviour:
 func ignore_interaction_boundary()->bool:
 	_went_under = _went_under or (_block.position.y > Config.app_interaction_boundary_topleft.y)
 	return not _went_under
-

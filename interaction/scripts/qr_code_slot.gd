@@ -97,4 +97,3 @@ func reset():
 	under_control = false
 	stop_loading()
 	hide()
-

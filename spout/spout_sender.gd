@@ -17,4 +17,3 @@ func _on_frame_post_draw():
 		
 		# 3553 = GL_TEXTURE_2D in the Open GL API (Texture Target)
 		spout.send_texture(handle, 3553, viewport.size.x, viewport.size.y, false, 0)
-

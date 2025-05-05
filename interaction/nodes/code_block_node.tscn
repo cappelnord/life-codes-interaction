@@ -1,18 +1,18 @@
 [gd_scene load_steps=13 format=3 uid="uid://b6km55bfwr8m1"]
 
-[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block.gd" id="1_4tiqi"]
-[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_visual.gd" id="2_jbgps"]
+[ext_resource type="Script" uid="uid://dfvl7rqslrooy" path="res://interaction/scripts/code_block/code_block.gd" id="1_4tiqi"]
+[ext_resource type="Script" uid="uid://bk424iqk7rqen" path="res://interaction/scripts/code_block/code_block_visual.gd" id="2_jbgps"]
 [ext_resource type="Texture2D" uid="uid://cugvsinxuyvb8" path="res://interaction/graphics/shadow_block.png" id="3_cvutx"]
-[ext_resource type="Shader" path="res://interaction/materials/code_block_material.gdshader" id="4_qrhsk"]
+[ext_resource type="Shader" uid="uid://2wc7rsyvihqh" path="res://interaction/materials/code_block_material.gdshader" id="4_qrhsk"]
 [ext_resource type="Texture2D" uid="uid://dv31sb6e87klr" path="res://interaction/graphics/red.png" id="5_khabq"]
 [ext_resource type="FontFile" uid="uid://blc6yv0xumbp4" path="res://interaction/fonts/SourceCodePro-Medium.ttf" id="6_g02q6"]
-[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_collider.gd" id="7_0j81k"]
-[ext_resource type="Script" path="res://interaction/scripts/code_block/code_block_connection_collider.gd" id="8_dch7u"]
+[ext_resource type="Script" uid="uid://chpwyuhet5i8a" path="res://interaction/scripts/code_block/code_block_collider.gd" id="7_0j81k"]
+[ext_resource type="Script" uid="uid://ynch6hde3q1q" path="res://interaction/scripts/code_block/code_block_connection_collider.gd" id="8_dch7u"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kkdvp"]
 shader = ExtResource("4_qrhsk")
 shader_parameter/hsv = Vector3(0.8, 1, 1)
-shader_parameter/rgb_add = null
+shader_parameter/rgb_add = Vector3(0, 0, 0)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eu6dc"]
 

@@ -16,7 +16,7 @@ vec3 rgb2hsv(vec3 inc) {
 
 	float maxv = max(r, max(g, b));
 	float minv = min(r, min(g, b));
-	
+
 	float h = 0.0;
 	float s = 0.0;
 	float v = maxv;
@@ -52,7 +52,7 @@ vec3 hsv2rgb(vec3 inc) {
 	float h = inc.r;
 	float s = inc.g;
 	float v = inc.b;
-	
+
 	int hi = int((h * 6.0));
 	float f = (h*6.0) - float(hi);
 

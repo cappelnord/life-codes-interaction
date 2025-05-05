@@ -256,4 +256,3 @@ func _attempt_rehover()->bool:
 	for area in areas:
 		if _on_area_entered(area): return true
 	return false
-

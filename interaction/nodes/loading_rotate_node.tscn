@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c50ogyu8ewk60"]
 
 [ext_resource type="Texture2D" uid="uid://bumdl1w843hnf" path="res://interaction/graphics/loading.png" id="1_jm36m"]
-[ext_resource type="Script" path="res://interaction/scripts/loading_rotate.gd" id="2_81fp0"]
+[ext_resource type="Script" uid="uid://wpm7bl4vgepa" path="res://interaction/scripts/loading_rotate.gd" id="2_81fp0"]
 
 [node name="LoadingRotate" type="Sprite2D"]
 self_modulate = Color(1, 1, 1, 0.823529)

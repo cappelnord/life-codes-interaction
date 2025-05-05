@@ -66,4 +66,3 @@ func get_delta_movement(block: CodeBlock, host: CodeBlockBehaviourHost, delta: f
 
 func clone()->CodeBlockBehaviour:
 	return CodeBlockSmoothBrownianBehaviour.new(_range, _min_travel_time, _max_travel_time, _min_wait_time, _max_wait_time, _filter_weight)
-
