@@ -1,6 +1,6 @@
 # Life Codes Interaction Layer
 
-This [Godot 4.2](https://godotengine.org/) project is the graphical user interface for Alexandra Cárdenas' installation Life Codes, produced by EPFL Pavilions for the installation *Musica ex Machina*.
+This [Godot 4.2](https://godotengine.org/) project is the graphical user interface for Alexandra Cárdenas' installation *Life Codes*, produced by EPFL Pavilions for the installation *Musica ex Machina*.
 
 ## Further documentation pending ...
 
