@@ -34,3 +34,9 @@ static func osc_encode_dictionary(data: Variant):
 			ret = ret + ","
 		ret = ret + InteractionHelpers.osc_encode_value(key) + "," + InteractionHelpers.osc_encode_value(data[key])
 	return ret
+
+static func vector_from_setup_dict(dict: Dictionary):
+	if dict.get("normalized", false):
+		return InteractionHelpers.position_to_pixel(Vector2(dict.x, dict.y))
+	else:
+		return Vector2(dict.x, dict.y)

@@ -47,12 +47,15 @@ static var app_interaction_boundary_topleft := Vector2i(0, 0)
 static var app_interaction_boundary_bottomright := Vector2i(app_render_width, app_render_height)
 static var app_enable_displacers = true
 static var app_displacement_speed := 20.0
+static var app_setup_file := "setup.json"
 
 static var debug_test_interaction_integrity := false
 static var debug_verbose := false
 
 static var grid_divisions_x = 40
 static var grid_divisions_y = 10
+
+static var setup = null
 
 # I hate, that there is so much manual stuff here, but I'd rather have things as
 # members here and not have a look-up structure ... this is very finicky unfortunately!
@@ -114,6 +117,8 @@ static func _static_init():
 	_config.set_value("app", "enable_displacers", app_enable_displacers)
 	_config.set_value("app", "displacement_speed", app_displacement_speed)
 	
+	_config.set_value("app", "setup_file", app_setup_file)
+	
 	_config.set_value("debug", "test_interaction_integrity", debug_test_interaction_integrity)
 	_config.set_value("debug", "verbose", debug_verbose)
 	
@@ -171,6 +176,7 @@ static func _static_init():
 	app_long_inactivity_time = _config.get_value("app", "long_inactivity_time") as float
 	app_enable_displacers = _config.get_value("app", "enable_displacers") as bool
 	app_displacement_speed = _config.get_value("app", "displacement_speed") as float
+	app_setup_file = _config.get_value("app", "setup_file") as String
 	
 	app_interaction_boundary_topleft = Vector2(
 		_config.get_value("app", "interaction_boundary_left") as int,
@@ -187,6 +193,16 @@ static func _static_init():
 	
 	grid_divisions_x = _config.get_value("grid", "divisions_x")	as int
 	grid_divisions_y = _config.get_value("grid", "divisions_y") as int
+	
+	_read_setup()
+
+static func _read_setup():
+	var json_as_text = FileAccess.get_file_as_string(app_setup_file)
+	if not json_as_text:
+		print(app_setup_file + " not found ...")
+		return
+	
+	setup = JSON.parse_string(json_as_text)
 
 # real constants for things that should not be user-configurable
 

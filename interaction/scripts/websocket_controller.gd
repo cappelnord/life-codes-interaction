@@ -66,12 +66,17 @@ func _ready():
 			_ping_log_file = FileAccess.open(path, FileAccess.READ_WRITE)
 
 		_ping_log_file.seek_end()
-
 	
-	_spawn_qr_code(Vector2(5350, 500), 150, "a", &"a");
-	_spawn_qr_code(Vector2(5350, 700), 150, "b", &"b");
-	_spawn_qr_code(Vector2(5550, 500), 150, "c", &"c");
-	_spawn_qr_code(Vector2(5550, 700), 150, "d", &"d");
+	if Config.setup and Config.setup.has("qr"):
+		for item in Config.setup["qr"]:
+			_spawn_qr_code(
+				InteractionHelpers.vector_from_setup_dict(item.position),
+				item.size,
+				item.id,
+				item.style
+			)
+	else:
+		print("Could not spawn qr codes: No setup data.")
 	
 	if run_id == "":
 		run_id = str(str(randf_range(0.0, 1.0)).hash())
