@@ -47,7 +47,9 @@ static var app_interaction_boundary_topleft := Vector2i(0, 0)
 static var app_interaction_boundary_bottomright := Vector2i(app_render_width, app_render_height)
 static var app_enable_displacers = true
 static var app_displacement_speed := 20.0
-static var app_setup_file := "setup.json"
+
+static var args_ini_file = "lifecodes.ini"
+static var args_setup_file := "setup.json"
 
 static var debug_test_interaction_integrity := false
 static var debug_verbose := false
@@ -61,6 +63,9 @@ static var setup = null
 # members here and not have a look-up structure ... this is very finicky unfortunately!
 
 static func _static_init():
+	
+	_read_args()
+		
 	# let's have all the default values here
 	var _config := ConfigFile.new()
 	
@@ -116,21 +121,20 @@ static func _static_init():
 	
 	_config.set_value("app", "enable_displacers", app_enable_displacers)
 	_config.set_value("app", "displacement_speed", app_displacement_speed)
-	
-	_config.set_value("app", "setup_file", app_setup_file)
-	
+		
 	_config.set_value("debug", "test_interaction_integrity", debug_test_interaction_integrity)
 	_config.set_value("debug", "verbose", debug_verbose)
 	
 	_config.set_value("grid", "divisions_x", grid_divisions_x)
 	_config.set_value("grid", "divisions_y", grid_divisions_y)
 	
+	print("--ini-file=" + args_ini_file)
 		
 	# load values on top
-	_config.load("./lifecodes.ini")
+	_config.load("./" + args_ini_file)
 	
 	# save everything
-	_config.save("./lifecodes.ini")
+	_config.save("./" + args_ini_file)
 	
 	# we apply all the values to the class
 	osc_receiver_host = _config.get_value("osc", "receiver_host") as String
@@ -176,7 +180,6 @@ static func _static_init():
 	app_long_inactivity_time = _config.get_value("app", "long_inactivity_time") as float
 	app_enable_displacers = _config.get_value("app", "enable_displacers") as bool
 	app_displacement_speed = _config.get_value("app", "displacement_speed") as float
-	app_setup_file = _config.get_value("app", "setup_file") as String
 	
 	app_interaction_boundary_topleft = Vector2(
 		_config.get_value("app", "interaction_boundary_left") as int,
@@ -195,11 +198,32 @@ static func _static_init():
 	grid_divisions_y = _config.get_value("grid", "divisions_y") as int
 	
 	_read_setup()
+	print("")
+
+static func _read_args():
+	var arguments = {}
+	for argument in OS.get_cmdline_args():
+		if argument.contains("="):
+			var key_value = argument.split("=")
+			arguments[key_value[0].trim_prefix("--")] = key_value[1]
+		else:
+			# Options without an argument will be present in the dictionary,
+			# with the value set to an empty string.
+			arguments[argument.trim_prefix("--")] = ""
+	
+	if arguments.has("ini-file"):
+		args_ini_file = arguments["ini-file"]
+	
+	if arguments.has("setup-file"):
+		args_ini_file = arguments["setup-file"]
+
 
 static func _read_setup():
-	var json_as_text = FileAccess.get_file_as_string(app_setup_file)
+	print("--setup-file=" + args_setup_file)
+	
+	var json_as_text = FileAccess.get_file_as_string(args_setup_file)
 	if not json_as_text:
-		print(app_setup_file + " not found ...")
+		print(args_setup_file + " not found ...")
 		return
 	
 	setup = JSON.parse_string(json_as_text)
