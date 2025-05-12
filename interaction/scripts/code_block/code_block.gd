@@ -121,17 +121,22 @@ func _update_strings():
 			display = argument.display()
 		
 		if display:
+			var value_string = str(value)
+			
+			if parameter.type == CodeBlockParameter.Type.NUMBER and float(int(value)) == value:
+				value_string = str(int(value))
+			
 			if not alt_decoration:
-				display_string = display_string + " " + str(value)
+				display_string = display_string + " " + value_string
 			else:
-				var v = str(value)
-				# if value is String:
-				#	v = "\"" + v + "\""
 				if not first_display_parameter:
 					display_string = display_string + ", "
-				display_string = display_string + v
+				display_string = display_string + value_string
 			
-			code_string = code_string + "," + parameter.type_tag() + str(value)
+			# TODO: THIS IS PROBABLY WRONG - THE CODE STRING SHOULD ALSO BE APPENDED IF IT IS NOT DISPLAYED
+			# ..... AT SOME POINT TAKE THIS OUT OF THE CONDITION.
+			
+			code_string = code_string + "," + parameter.type_tag() + value_string
 			first_display_parameter = false
 	
 	if do_decorate:
