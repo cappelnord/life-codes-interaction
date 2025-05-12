@@ -215,13 +215,13 @@ static func _read_args():
 		args_ini_file = arguments["ini-file"]
 	
 	if arguments.has("setup-file"):
-		args_ini_file = arguments["setup-file"]
+		args_setup_file = arguments["setup-file"]
 
 
 static func _read_setup():
 	print("--setup-file=" + args_setup_file)
 	
-	var json_as_text = FileAccess.get_file_as_string(args_setup_file)
+	var json_as_text = FileAccess.get_file_as_string("./" + args_setup_file)
 	if not json_as_text:
 		print(args_setup_file + " not found ...")
 		return
