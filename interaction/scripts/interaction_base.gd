@@ -3,6 +3,7 @@ extends Node2D
 var mouse_cursor_controller: MouseCursorController
 var osc_manager: OSCManager
 var overlay: Sprite2D
+var resolution_test: Sprite2D
 var grid: GridOverlay
 var displacer_manager: DisplacerManager
 
@@ -15,6 +16,7 @@ func _ready():
 	osc_manager = find_child("OSCManager") as OSCManager
 	overlay = find_child("Overlay") as Sprite2D
 	grid = find_child("GridOverlay") as GridOverlay
+	resolution_test = find_child("ResolutionTest") as Sprite2D
 	displacer_manager = find_child("DisplacerManager") as DisplacerManager
  	
 	viewport.size = Vector2i(Config.app_render_width, Config.app_render_height)
@@ -33,6 +35,9 @@ func _input(event):
 		osc_manager._input(event)
 	
 	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_T:
+			if resolution_test:
+				resolution_test.visible = not resolution_test.visible
 		if event.keycode == KEY_O:
 			if overlay:
 				overlay.visible = not overlay.visible
