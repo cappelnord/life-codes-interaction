@@ -44,7 +44,7 @@ centered = false
 
 [node name="ResolutionTest" type="Sprite2D" parent="Interaction"]
 visible = false
-position = Vector2(16, 16)
+position = Vector2(512, 512)
 texture = ExtResource("9_rfe1h")
 centered = false
 
