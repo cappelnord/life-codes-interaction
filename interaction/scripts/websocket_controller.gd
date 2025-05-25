@@ -153,6 +153,7 @@ func _process(delta):
 
 func _check_for_lifebeat():
 	if not _connected: return
+	if _last_lifebeat_received == -1: return
 	
 	if _last_lifebeat_received + (Config.websocket_time_until_lifebeat_timeout * 1000) < Time.get_ticks_msec():
 		_lifebeat_timeout()
@@ -161,7 +162,8 @@ func _lifebeat_timeout():
 	print("lifeBeat timeout ...")
 	_socket.close()
 	_clear_websocket()
-	_server_has_restarted()
+	_last_lifebeat_received = -1
+	_hard_reset()
 
 func _send_ping():
 	if not _connected or not Config.websocket_record_ping_log: return
@@ -428,14 +430,18 @@ func _process_cursor_device_orientation(msg: Variant):
 		_cursor_manager.device_orientation(slot.id, msg.absolute, msg.alpha, msg.beta, msg.gamma)
 
 func _hard_reset_qr_slot(qr_slot: QRCodeSlot):
+	print("Hard QR code slot reset.")
 	if qr_slot.spawned:
 		_cursor_manager.despawn(qr_slot.id)
 	qr_slot.reset()
 
 func _server_has_restarted():
-	print("Server has restarted since last connection. Hard Reset.")
+	print("Server has restarted since last connection.")
+	_hard_reset()
+
+func _hard_reset():
 	for qr_slot in _qr_slots:
-		_hard_reset_qr_slot(qr_slot)
+		_hard_reset_qr_slot(qr_slot)	
 
 func _on_cursor_feedback(cursor_id: String, feedback: Cursor.Feedback):
 	if _connected:
