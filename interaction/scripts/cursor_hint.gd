@@ -8,9 +8,9 @@ var cursor: Cursor
 func _ready():
 	var tween_time := 1.25
 	var tween := create_tween()
-	
+		
 	tween.tween_property(self, "scale", Vector2(0, 0), tween_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(self, "modulate", Color(0.75, 0.75, 0.75, 0.75), tween_time)
+	tween.parallel().tween_property(self, "modulate", Color(1, 1, 1, 0.5), tween_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	tween.tween_callback(self.queue_free)
 
 
