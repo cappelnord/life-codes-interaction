@@ -79,11 +79,14 @@ func _ready():
 		print("Could not spawn qr codes: No setup data.")
 	
 	if run_id == "":
-		run_id = str(str(randf_range(0.0, 1.0)).hash())
-		print("Initialized WebSocket Client with runID: " + run_id)
+		_reset_run_id()
 	
 	_reset_http_request()
 
+
+func _reset_run_id():
+	run_id = str(str(randf_range(0.0, 1.0)).hash())
+	print("Initialized WebSocket Client with runID: " + run_id)
 
 func _reset_http_request():
 	if _http_request:
@@ -430,7 +433,6 @@ func _process_cursor_device_orientation(msg: Variant):
 		_cursor_manager.device_orientation(slot.id, msg.absolute, msg.alpha, msg.beta, msg.gamma)
 
 func _hard_reset_qr_slot(qr_slot: QRCodeSlot):
-	print("Hard QR code slot reset.")
 	if qr_slot.spawned:
 		_cursor_manager.despawn(qr_slot.id)
 	qr_slot.reset()
@@ -440,6 +442,7 @@ func _server_has_restarted():
 	_hard_reset()
 
 func _hard_reset():
+	print("Hard Reset - resetting all QR codes.")
 	for qr_slot in _qr_slots:
 		_hard_reset_qr_slot(qr_slot)	
 
